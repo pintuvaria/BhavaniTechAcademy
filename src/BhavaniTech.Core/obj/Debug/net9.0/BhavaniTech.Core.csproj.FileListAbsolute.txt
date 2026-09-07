@@ -1,0 +1,12 @@
+D:\AntiGravity\Kids Game\src\BhavaniTech.Core\bin\Debug\net9.0\BhavaniTech.Core.deps.json
+D:\AntiGravity\Kids Game\src\BhavaniTech.Core\bin\Debug\net9.0\BhavaniTech.Core.dll
+D:\AntiGravity\Kids Game\src\BhavaniTech.Core\bin\Debug\net9.0\BhavaniTech.Core.pdb
+D:\AntiGravity\Kids Game\src\BhavaniTech.Core\obj\Debug\net9.0\BhavaniTech.Core.csproj.AssemblyReference.cache
+D:\AntiGravity\Kids Game\src\BhavaniTech.Core\obj\Debug\net9.0\BhavaniTech.Core.GeneratedMSBuildEditorConfig.editorconfig
+D:\AntiGravity\Kids Game\src\BhavaniTech.Core\obj\Debug\net9.0\BhavaniTech.Core.AssemblyInfoInputs.cache
+D:\AntiGravity\Kids Game\src\BhavaniTech.Core\obj\Debug\net9.0\BhavaniTech.Core.AssemblyInfo.cs
+D:\AntiGravity\Kids Game\src\BhavaniTech.Core\obj\Debug\net9.0\BhavaniTech.Core.csproj.CoreCompileInputs.cache
+D:\AntiGravity\Kids Game\src\BhavaniTech.Core\obj\Debug\net9.0\BhavaniTech.Core.dll
+D:\AntiGravity\Kids Game\src\BhavaniTech.Core\obj\Debug\net9.0\refint\BhavaniTech.Core.dll
+D:\AntiGravity\Kids Game\src\BhavaniTech.Core\obj\Debug\net9.0\BhavaniTech.Core.pdb
+D:\AntiGravity\Kids Game\src\BhavaniTech.Core\obj\Debug\net9.0\ref\BhavaniTech.Core.dll

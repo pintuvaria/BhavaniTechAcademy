@@ -1,0 +1,3 @@
+D:\AntiGravity\Kids Game\publish\BhavaniTech.UI.pdb
+D:\AntiGravity\Kids Game\publish\BhavaniTech.Core.pdb
+D:\AntiGravity\Kids Game\publish\BhavaniTech.UI.exe

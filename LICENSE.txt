@@ -1,0 +1,21 @@
+END USER LICENSE AGREEMENT (EULA) & PROPRIETARY LICENSE
+
+Copyright (c) 2026. All Rights Reserved.
+
+1. PROPRIETARY SOFTWARE
+This software application ("Bhavani Tech Academy") and all associated source code, binaries, graphical assets, curriculum, and documentation are the sole and exclusive property of the creator/author.
+
+2. NO MODIFICATION OR COPYING
+You are granted a limited, non-exclusive, non-transferable right to USE the application for its intended educational purposes. You may NOT:
+- Copy, duplicate, or reproduce the software or its source code in any form.
+- Modify, adapt, translate, reverse engineer, decompile, or disassemble the software.
+- Create derivative works based on any part of this application.
+- Extract or reuse any curriculum, assets, or gamification logic.
+
+3. REDISTRIBUTION
+You may share the FINAL COMPILED EXECUTABLE publicly as-is, provided no modifications are made and this license file accompanies the distribution. You may NOT distribute the source code.
+
+4. NO WARRANTY
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY.
+
+By using this software, you agree to these terms. Any violation of these terms will result in immediate revocation of your right to use the software and may face legal action.

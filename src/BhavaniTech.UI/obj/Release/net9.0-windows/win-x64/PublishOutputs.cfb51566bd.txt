@@ -1,0 +1,3 @@
+d:\AntiGravity\Kids Game\build\portable\BhavaniTech.UI.pdb
+d:\AntiGravity\Kids Game\build\portable\BhavaniTech.Core.pdb
+d:\AntiGravity\Kids Game\build\portable\BhavaniTech.UI.exe
