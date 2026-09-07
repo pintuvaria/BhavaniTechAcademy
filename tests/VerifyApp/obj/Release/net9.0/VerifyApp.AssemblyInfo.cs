@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("VerifyApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3528ccfae124d3876d88788094d409c2c5889ecd")]
 [assembly: System.Reflection.AssemblyProductAttribute("VerifyApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("VerifyApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

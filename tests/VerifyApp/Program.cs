@@ -764,10 +764,29 @@ namespace VerifyApp
                 Console.WriteLine("    Phase 9 Grey Hat Security Labs PASSED ✅");
             }
 
+            // 27. OS Mastery, Registry & GPEDIT Curriculum
+            Console.WriteLine("\n[TEST 27] OS Mastery (Registry, GPEDIT, OS Types)...");
+            var osCurriculum = new WindowsInternalsService().GetOsCurriculum();
+            Console.WriteLine($" -> OS Curriculum Loaded: {osCurriculum.Count} advanced lessons.");
+            foreach (var lesson in osCurriculum)
+            {
+                Console.WriteLine($"    - {lesson.Title} (Precautions length: {lesson.Precautions.Length})");
+            }
+
+            if (osCurriculum.Count < 3)
+            {
+                Console.WriteLine("    FAILED: OS Curriculum");
+                failed++;
+            }
+            else
+            {
+                Console.WriteLine("    OS Mastery Curriculum PASSED ✅");
+            }
+
             Console.WriteLine("\n=================================================================");
             if (failed == 0)
             {
-                Console.WriteLine("ALL 26 COMPREHENSIVE TEST SUITES PASSED PERFECTLY! (0 Failures) ✅");
+                Console.WriteLine("ALL 27 COMPREHENSIVE TEST SUITES PASSED PERFECTLY! (0 Failures) ✅");
                 Console.WriteLine("=================================================================");
                 return 0;
             }

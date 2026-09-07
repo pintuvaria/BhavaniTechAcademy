@@ -10,3 +10,4 @@ D:\AntiGravity\Kids Game\src\BhavaniTech.Core\obj\Release\net9.0\BhavaniTech.Cor
 D:\AntiGravity\Kids Game\src\BhavaniTech.Core\obj\Release\net9.0\refint\BhavaniTech.Core.dll
 D:\AntiGravity\Kids Game\src\BhavaniTech.Core\obj\Release\net9.0\BhavaniTech.Core.pdb
 D:\AntiGravity\Kids Game\src\BhavaniTech.Core\obj\Release\net9.0\ref\BhavaniTech.Core.dll
+D:\AntiGravity\Kids Game\src\BhavaniTech.Core\obj\Release\net9.0\BhavaniTech.Core.sourcelink.json

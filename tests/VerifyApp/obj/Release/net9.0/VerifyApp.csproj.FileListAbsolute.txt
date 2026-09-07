@@ -44,3 +44,4 @@ D:\AntiGravity\Kids Game\tests\VerifyApp\obj\Release\net9.0\VerifyApp.genruntime
 D:\AntiGravity\Kids Game\tests\VerifyApp\obj\Release\net9.0\ref\VerifyApp.dll
 D:\AntiGravity\Kids Game\tests\VerifyApp\bin\Release\net9.0\System.Speech.dll
 D:\AntiGravity\Kids Game\tests\VerifyApp\bin\Release\net9.0\runtimes\win\lib\net9.0\System.Speech.dll
+D:\AntiGravity\Kids Game\tests\VerifyApp\obj\Release\net9.0\VerifyApp.sourcelink.json

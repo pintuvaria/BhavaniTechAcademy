@@ -367,3 +367,19 @@ The final application has been built, self-contained, and compressed into a sing
 - **PE Header Inspector:** Parses simulated Portable Executable byte arrays to extract 'Suspicious Imports' (e.g., VirtualAlloc, SetWindowsHookEx) to teach IoC discovery safely.
 - **Buffer Overflow Visualizer:** Provides a detailed 2D map of a virtual Stack. Visualizes the exact point where inputted strings overwrite the Saved EBP and EIP (Instruction Pointer).
 
+
+---
+
+## 15. OS Mastery: Operating Systems, Registry & GPEDIT
+
+### ?? OS Architecture
+- **Deep Dives:** Comprehensive differences between Time-Sharing (Windows, Linux, macOS), Distributed, and Real-Time Operating Systems (RTOS), complete with Pros and Cons for each architecture.
+
+### ?? Windows Registry Engine
+- **Hive Exploration:** Understanding HKLM vs HKCU.
+- **Power Tweaks:** Safely modifying Context Menus and Telemetry settings via regedit, with strict emphasis on database backups and system corruption precautions.
+
+### ??? Group Policy (GPEDIT.MSC) Administration
+- **System Hardening:** Enforcing strict password policies and blocking removable storage devices.
+- **Sandbox Configurations:** Safely disabling Windows Defender specifically for isolated malware analysis VMs.
+

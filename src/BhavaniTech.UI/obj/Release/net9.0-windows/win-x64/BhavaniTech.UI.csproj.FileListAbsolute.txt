@@ -416,3 +416,4 @@ D:\AntiGravity\Kids Game\src\BhavaniTech.UI\obj\Release\net9.0-windows\win-x64\B
 D:\AntiGravity\Kids Game\src\BhavaniTech.UI\obj\Release\net9.0-windows\win-x64\BhavaniTech.UI.genruntimeconfig.cache
 D:\AntiGravity\Kids Game\src\BhavaniTech.UI\obj\Release\net9.0-windows\win-x64\ref\BhavaniTech.UI.dll
 D:\AntiGravity\Kids Game\src\BhavaniTech.UI\bin\Release\net9.0-windows\win-x64\System.Speech.dll
+D:\AntiGravity\Kids Game\src\BhavaniTech.UI\obj\Release\net9.0-windows\win-x64\BhavaniTech.UI.sourcelink.json
