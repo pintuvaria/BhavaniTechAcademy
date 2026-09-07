@@ -396,3 +396,19 @@ The final application has been built, self-contained, and compressed into a sing
 ### ?? CCNA Mock Exam Engine
 - **Certification Readiness:** A comprehensive grading engine that tests students on OSI, Subnet masks, STP, OSPF, and ACLs, automatically calculating their percentage and pass/fail thresholds (80% required).
 
+
+---
+
+## 17. BCA & MCA University Curriculum Mastery
+
+### ?? BCA (Bachelor of Computer Applications)
+- **C Programming & Data Structures:** Pointers, dynamic memory allocation, and foundational structures (Stacks, Queues, Linked Lists).
+- **DBMS & Web Tech:** Relational models, strict database normalization (1NF-3NF), and client-side DOM manipulation.
+
+### ?? MCA (Master of Computer Applications)
+- **Advanced Architecture:** Software engineering design patterns (Singleton, Factory) and Agile SDLC.
+- **Enterprise Scale:** Cloud computing architectures (IaaS, PaaS, SaaS), Big Data (Hadoop/MapReduce), and AI/Expert Systems.
+
+### ?? University Grading Engine
+- **Dual Degree Examinations:** Two separate advanced mock examination tracks testing BCA fundamentals and MCA advanced topics, dynamically parsed and graded with a strict 75% university pass requirement.
+

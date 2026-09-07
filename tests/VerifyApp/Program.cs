@@ -804,10 +804,36 @@ namespace VerifyApp
                 Console.WriteLine("    CCNA Mastery Curriculum PASSED ✅");
             }
 
+            // 29. BCA & MCA University Degree Curriculum & Exams
+            Console.WriteLine("\n[TEST 29] University Mastery (BCA & MCA Tutorials & Exams)...");
+            var university = new UniversityCurriculumService();
+            var modules = university.GetModules();
+            Console.WriteLine($" -> University Modules Loaded: {modules.Count} (BCA/MCA tracks)");
+            
+            // Simulate a perfect BCA exam run
+            var bcaAnswers = new List<int> { 0, 3, 1 }; 
+            var bcaGrade = university.GradeExam("BCA", bcaAnswers);
+            Console.WriteLine($" -> BCA Final Exam: Scored {bcaGrade.Score}/{bcaGrade.TotalQuestions} ({bcaGrade.Percentage}%) - Passed: {bcaGrade.Passed}");
+
+            // Simulate a perfect MCA exam run
+            var mcaAnswers = new List<int> { 2, 2, 1 }; 
+            var mcaGrade = university.GradeExam("MCA", mcaAnswers);
+            Console.WriteLine($" -> MCA Final Exam: Scored {mcaGrade.Score}/{mcaGrade.TotalQuestions} ({mcaGrade.Percentage}%) - Passed: {mcaGrade.Passed}");
+
+            if (modules.Count < 8 || !bcaGrade.Passed || !mcaGrade.Passed)
+            {
+                Console.WriteLine("    FAILED: BCA/MCA Curriculum & Exams");
+                failed++;
+            }
+            else
+            {
+                Console.WriteLine("    University Mastery Curriculum PASSED ✅");
+            }
+
             Console.WriteLine("\n=================================================================");
             if (failed == 0)
             {
-                Console.WriteLine("ALL 28 COMPREHENSIVE TEST SUITES PASSED PERFECTLY! (0 Failures) ✅");
+                Console.WriteLine("ALL 29 COMPREHENSIVE TEST SUITES PASSED PERFECTLY! (0 Failures) ✅");
                 Console.WriteLine("=================================================================");
                 return 0;
             }
