@@ -783,10 +783,31 @@ namespace VerifyApp
                 Console.WriteLine("    OS Mastery Curriculum PASSED ✅");
             }
 
+            // 28. CCNA Complete Tutorials & Exams
+            Console.WriteLine("\n[TEST 28] CCNA Certification Mastery (Tutorials & Exams)...");
+            var ccna = new CcnaCurriculumService();
+            var tutorials = ccna.GetTutorials();
+            Console.WriteLine($" -> CCNA Modules Loaded: {tutorials.Count}");
+            
+            // Simulate a perfect exam run
+            var answers = new List<int> { 2, 2, 2, 1, 2 }; 
+            var grade = ccna.GradeExam(answers);
+            Console.WriteLine($" -> CCNA Final Exam: Scored {grade.Score}/{grade.TotalQuestions} ({grade.Percentage}%) - Passed: {grade.Passed}");
+
+            if (tutorials.Count < 6 || !grade.Passed)
+            {
+                Console.WriteLine("    FAILED: CCNA Curriculum & Exams");
+                failed++;
+            }
+            else
+            {
+                Console.WriteLine("    CCNA Mastery Curriculum PASSED ✅");
+            }
+
             Console.WriteLine("\n=================================================================");
             if (failed == 0)
             {
-                Console.WriteLine("ALL 27 COMPREHENSIVE TEST SUITES PASSED PERFECTLY! (0 Failures) ✅");
+                Console.WriteLine("ALL 28 COMPREHENSIVE TEST SUITES PASSED PERFECTLY! (0 Failures) ✅");
                 Console.WriteLine("=================================================================");
                 return 0;
             }

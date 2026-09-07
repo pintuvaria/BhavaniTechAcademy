@@ -383,3 +383,16 @@ The final application has been built, self-contained, and compressed into a sing
 - **System Hardening:** Enforcing strict password policies and blocking removable storage devices.
 - **Sandbox Configurations:** Safely disabling Windows Defender specifically for isolated malware analysis VMs.
 
+
+---
+
+## 16. CCNA Certification Mastery
+
+### ?? Complete Cisco Tutorials
+- **OSI & Subnetting:** Full coverage of the 7-Layer OSI model, IPv4 classes, and VLSM math.
+- **Switching & Routing:** Interactive tutorials covering VLAN segmentation, STP (Spanning Tree Protocol) loop prevention, and OSPF Link-State Routing algorithms.
+- **Network Security:** Detailed breakdowns of Standard vs. Extended Access Control Lists (ACLs) and implicit deny rules.
+
+### ?? CCNA Mock Exam Engine
+- **Certification Readiness:** A comprehensive grading engine that tests students on OSI, Subnet masks, STP, OSPF, and ACLs, automatically calculating their percentage and pass/fail thresholds (80% required).
+
