@@ -1,15 +1,15 @@
 # Bhavani Technology - Technology Learning & Coding Academy
 
-![Dashboard View](assets/dashboard.jpg)
+![Dashboard View](https://raw.githubusercontent.com/pintuvaria/BhavaniTechAcademy/master/assets/dashboard.jpg)
 *The main learning dashboard with Gamification, Streaks, and Course Pathways.*
 
-![Sandbox View](assets/sandbox.jpg)
+![Sandbox View](https://raw.githubusercontent.com/pintuvaria/BhavaniTechAcademy/master/assets/sandbox.jpg)
 *The interactive Grey Hat Cybersecurity & Polyglot Coding Sandbox.*
 
-![CCNA Networking Labs](assets/ccna.jpg)
+![CCNA Networking Labs](https://raw.githubusercontent.com/pintuvaria/BhavaniTechAcademy/master/assets/ccna.jpg)
 *Interactive CCNA Networking Labs & Topology Simulation.*
 
-![BCA & MCA University Portal](assets/university.jpg)
+![BCA & MCA University Portal](https://raw.githubusercontent.com/pintuvaria/BhavaniTechAcademy/master/assets/university.jpg)
 *BCA & MCA University Degree Portals with specialized tracks.*
 
 **Founder & Chief Architect:** Dharmesh Varia  
@@ -200,6 +200,7 @@ dotnet build BhavaniTechAcademy.sln -c Release
 ```powershell
 dotnet publish src/BhavaniTech.UI/BhavaniTech.UI.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:EnableCompressionInSingleFile=true -o build/portable
 ```
+
 
 
 
