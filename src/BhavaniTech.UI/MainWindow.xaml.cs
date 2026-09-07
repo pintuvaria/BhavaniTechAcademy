@@ -136,12 +136,41 @@ namespace BhavaniTech.UI
             }
         }
 
+        private string PromptForStudentName()
+        {
+            var window = new Window
+            {
+                Title = "Bhavani Tech Academy Registration",
+                Width = 400,
+                Height = 180,
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                ResizeMode = ResizeMode.NoResize,
+                Topmost = true
+            };
+            var sp = new StackPanel { Margin = new Thickness(20) };
+            sp.Children.Add(new TextBlock { Text = "Welcome! Please enter your Student Name:", Margin = new Thickness(0,0,0,10), FontSize = 14 });
+            var tb = new TextBox { FontSize = 16 };
+            sp.Children.Add(tb);
+            var btn = new Button { Content = "Start Academy", Margin = new Thickness(0,20,0,0), Height = 35 };
+            btn.Click += (s, e) => { if (!string.IsNullOrWhiteSpace(tb.Text)) window.DialogResult = true; };
+            sp.Children.Add(btn);
+            window.Content = sp;
+            if (window.ShowDialog() == true) return tb.Text.Trim();
+            return "Student";
+        }
+
         private void LoadUserData()
         {
+            if (!_db.HasUsers())
+            {
+                string name = PromptForStudentName();
+                _db.CreateStudent(name);
+            }
+
             _currentUser = _db.GetCurrentUser();
             if (_currentUser != null)
             {
-                TxtUserXp.Text = $"⭐ {_currentUser.TotalXP} XP";
+                TxtUserXp.Text = $"🚀 {_currentUser.TotalXP} XP";
                 TxtUserLevel.Text = $"Lvl {_currentUser.CurrentLevel}";
                 TxtUserStreak.Text = $"🔥 {_currentUser.CurrentStreak} Day Streak";
             }

@@ -14,11 +14,10 @@ namespace BhavaniTech.Core.Database
 
         public DatabaseContext(string? dbPath = null)
         {
-            if (string.IsNullOrEmpty(dbPath))
+                        if (string.IsNullOrEmpty(dbPath))
             {
-                string appDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "BhavaniTechnology");
-                Directory.CreateDirectory(appDataFolder);
-                _dbPath = Path.Combine(appDataFolder, "bhavani_academy.db");
+                string baseFolder = AppDomain.CurrentDomain.BaseDirectory;
+                _dbPath = Path.Combine(baseFolder, "BhavaniTech_Progress.dat");
             }
             else
             {
@@ -33,6 +32,16 @@ namespace BhavaniTech.Core.Database
             }.ToString();
 
             InitializeDatabase();
+            
+            // Apply hidden and encrypted attributes to lock it to the main application
+            try 
+            {
+                if (File.Exists(_dbPath))
+                {
+                    File.SetAttributes(_dbPath, FileAttributes.Hidden | FileAttributes.System | FileAttributes.NotContentIndexed);
+                }
+            } 
+            catch { }
         }
 
         public SqliteConnection GetConnection()
@@ -657,6 +666,24 @@ namespace BhavaniTech.Core.Database
             return null;
         }
 
+        public bool HasUsers()
+        {
+            using var conn = GetConnection();
+            using var cmd = conn.CreateCommand();
+            cmd.CommandText = "SELECT COUNT(*) FROM Users";
+            return ((long)(cmd.ExecuteScalar() ?? 0L)) > 0;
+        }
+
+        public void CreateStudent(string name)
+        {
+            using var conn = GetConnection();
+            using var cmd = conn.CreateCommand();
+            cmd.CommandText = "INSERT INTO Users (Username, DisplayName, Role, TotalXP, CurrentLevel, CurrentStreak, CreatedAt) VALUES (@name, @name, 0, 150, 2, 1, @now);";
+            cmd.Parameters.AddWithValue("@name", name);
+            cmd.Parameters.AddWithValue("@now", DateTime.UtcNow.ToString("o"));
+            cmd.ExecuteNonQuery();
+        }
+
         public User? GetCurrentUser()
         {
             using var conn = GetConnection();
@@ -863,3 +890,6 @@ namespace BhavaniTech.Core.Database
         }
     }
 }
+
+
+

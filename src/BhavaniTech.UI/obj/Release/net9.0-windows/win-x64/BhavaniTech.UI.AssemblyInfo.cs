@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BhavaniTech.UI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3404613ccef8575ea8e0428d75c272c134228596")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0fe15e32b9ddd586987b4c397ff926b44a2a5c8b")]
 [assembly: System.Reflection.AssemblyProductAttribute("BhavaniTech.UI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BhavaniTech.UI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
