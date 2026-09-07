@@ -204,27 +204,209 @@ namespace BhavaniTech.UI
 
         private void ShowCertificate(string name, string dob, string achievement)
         {
-            var window = new Window
+            // ── Professional Certificate Window ──────────────────────────────────────
+            var win = new Window
             {
-                Title = "Bhavani Tech Academy - Certificate of Excellence",
-                Width = 750,
-                Height = 550,
+                Title = "Bhavani Technology Academy — Certificate of Excellence",
+                Width = 900, Height = 640,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1E293B")),
-                Topmost = true
+                ResizeMode = ResizeMode.CanMinimize,
+                Topmost = true,
+                Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#0F172A"))
             };
-            var border = new Border { BorderBrush = Brushes.Gold, BorderThickness = new Thickness(10), Margin = new Thickness(10), Background = Brushes.White };
-            var sp = new StackPanel { HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
-            sp.Children.Add(new TextBlock { Text = "CERTIFICATE OF EXCELLENCE", FontSize = 36, FontWeight = FontWeights.Bold, Foreground = Brushes.DarkBlue, HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0,0,0,20) });
-            sp.Children.Add(new TextBlock { Text = "This is proudly presented to", FontSize = 20, Foreground = Brushes.Gray, HorizontalAlignment = HorizontalAlignment.Center });
-            sp.Children.Add(new TextBlock { Text = name, FontSize = 48, FontWeight = FontWeights.Bold, FontStyle = FontStyles.Italic, Foreground = Brushes.Black, HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0,10,0,10) });
-            sp.Children.Add(new TextBlock { Text = $"Date of Birth: {dob}", FontSize = 16, Foreground = Brushes.Gray, HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0,0,0,30) });
-            sp.Children.Add(new TextBlock { Text = "For successfully passing the examination and mastering:", FontSize = 18, Foreground = Brushes.Black, HorizontalAlignment = HorizontalAlignment.Center });
-            sp.Children.Add(new TextBlock { Text = achievement, FontSize = 24, FontWeight = FontWeights.SemiBold, Foreground = Brushes.DarkRed, HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0,10,0,30), TextAlignment = TextAlignment.Center, TextWrapping = TextWrapping.Wrap });
-            sp.Children.Add(new TextBlock { Text = $"Issued by Bhavani Technology on {DateTime.Now.ToString("MMMM dd, yyyy")}", FontSize = 14, FontWeight = FontWeights.Bold, Foreground = Brushes.Black, HorizontalAlignment = HorizontalAlignment.Center });
-            border.Child = sp;
-            window.Content = border;
-            window.ShowDialog();
+
+            // Outer gold frame
+            var outerBorder = new Border
+            {
+                Margin = new Thickness(14),
+                BorderBrush = new LinearGradientBrush(
+                    new GradientStopCollection
+                    {
+                        new GradientStop((Color)ColorConverter.ConvertFromString("#D4AF37"), 0.0),
+                        new GradientStop((Color)ColorConverter.ConvertFromString("#FFF8DC"), 0.5),
+                        new GradientStop((Color)ColorConverter.ConvertFromString("#D4AF37"), 1.0)
+                    }, 45),
+                BorderThickness = new Thickness(8),
+                CornerRadius = new CornerRadius(4),
+                Background = Brushes.White
+            };
+
+            // Inner thin gold line
+            var innerBorder = new Border
+            {
+                Margin = new Thickness(8),
+                BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D4AF37")),
+                BorderThickness = new Thickness(2),
+                CornerRadius = new CornerRadius(2)
+            };
+
+            // Main content grid
+            var grid = new Grid { Margin = new Thickness(20) };
+            grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto }); // header logo row
+            grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto }); // title
+            grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto }); // divider
+            grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto }); // presented to
+            grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto }); // name
+            grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto }); // dob
+            grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto }); // for mastering
+            grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto }); // achievement
+            grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) }); // spacer
+            grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto }); // footer divider
+            grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto }); // signatures
+
+            // Row 0 — Logo / Academy name
+            var logoPanel = new StackPanel { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0,10,0,6) };
+            logoPanel.Children.Add(new TextBlock { Text = "⬡", FontSize = 40, Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D4AF37")), VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(0,0,10,0) });
+            var academyNamePanel = new StackPanel();
+            academyNamePanel.Children.Add(new TextBlock { Text = "BHAVANI TECHNOLOGY", FontSize = 18, FontWeight = FontWeights.Black, Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1E3A5F")) });
+            academyNamePanel.Children.Add(new TextBlock { Text = "A C A D E M Y", FontSize = 11, Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D4AF37")) });
+            logoPanel.Children.Add(academyNamePanel);
+            Grid.SetRow(logoPanel, 0);
+            grid.Children.Add(logoPanel);
+
+            // Row 1 — CERTIFICATE OF EXCELLENCE
+            var titleBlock = new TextBlock
+            {
+                Text = "CERTIFICATE OF EXCELLENCE",
+                FontSize = 32, FontWeight = FontWeights.Black,
+                Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1E3A5F")),
+                HorizontalAlignment = HorizontalAlignment.Center,
+                Margin = new Thickness(0,4,0,4)
+            };
+            Grid.SetRow(titleBlock, 1);
+            grid.Children.Add(titleBlock);
+
+            // Row 2 — Gold divider line
+            var divider = new Rectangle
+            {
+                Height = 3, Margin = new Thickness(60,4,60,14),
+                Fill = new LinearGradientBrush(
+                    new GradientStopCollection
+                    {
+                        new GradientStop(Colors.Transparent, 0.0),
+                        new GradientStop((Color)ColorConverter.ConvertFromString("#D4AF37"), 0.3),
+                        new GradientStop((Color)ColorConverter.ConvertFromString("#FFF8DC"), 0.5),
+                        new GradientStop((Color)ColorConverter.ConvertFromString("#D4AF37"), 0.7),
+                        new GradientStop(Colors.Transparent, 1.0)
+                    }, 0)
+            };
+            Grid.SetRow(divider, 2);
+            grid.Children.Add(divider);
+
+            // Row 3 — "This is proudly presented to"
+            var presentedTo = new TextBlock
+            {
+                Text = "This certificate is proudly presented to",
+                FontSize = 16, FontStyle = FontStyles.Italic,
+                Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#475569")),
+                HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0,0,0,4)
+            };
+            Grid.SetRow(presentedTo, 3);
+            grid.Children.Add(presentedTo);
+
+            // Row 4 — Student Name (large, elegant)
+            var nameBlock = new TextBlock
+            {
+                Text = name,
+                FontSize = 52, FontWeight = FontWeights.Bold, FontStyle = FontStyles.Italic,
+                Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1E3A5F")),
+                HorizontalAlignment = HorizontalAlignment.Center,
+                Margin = new Thickness(0,0,0,2),
+                FontFamily = new FontFamily("Georgia, Times New Roman, serif")
+            };
+            Grid.SetRow(nameBlock, 4);
+            grid.Children.Add(nameBlock);
+
+            // Row 5 — DOB
+            var dobBlock = new TextBlock
+            {
+                Text = $"Date of Birth: {dob}",
+                FontSize = 13,
+                Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#94A3B8")),
+                HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0,0,0,16)
+            };
+            Grid.SetRow(dobBlock, 5);
+            grid.Children.Add(dobBlock);
+
+            // Row 6 — "For mastering"
+            var forBlock = new TextBlock
+            {
+                Text = "For successfully completing the examination and demonstrating mastery of:",
+                FontSize = 15,
+                Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#334155")),
+                HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0,0,0,6)
+            };
+            Grid.SetRow(forBlock, 6);
+            grid.Children.Add(forBlock);
+
+            // Row 7 — Achievement
+            var achieveBorder = new Border
+            {
+                Margin = new Thickness(80,0,80,10),
+                Padding = new Thickness(16,8,16,8),
+                Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F8F4E3")),
+                BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D4AF37")),
+                BorderThickness = new Thickness(1,1,1,1),
+                CornerRadius = new CornerRadius(4)
+            };
+            var achieveBlock = new TextBlock
+            {
+                Text = achievement,
+                FontSize = 20, FontWeight = FontWeights.Bold,
+                Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#7C2D12")),
+                TextAlignment = TextAlignment.Center, TextWrapping = TextWrapping.Wrap
+            };
+            achieveBorder.Child = achieveBlock;
+            Grid.SetRow(achieveBorder, 7);
+            grid.Children.Add(achieveBorder);
+
+            // Row 9 — Footer divider
+            var divider2 = new Rectangle
+            {
+                Height = 1, Margin = new Thickness(40,8,40,8),
+                Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D4AF37"))
+            };
+            Grid.SetRow(divider2, 9);
+            grid.Children.Add(divider2);
+
+            // Row 10 — Signatures row
+            var sigGrid = new Grid { Margin = new Thickness(40,0,40,6) };
+            sigGrid.ColumnDefinitions.Add(new ColumnDefinition());
+            sigGrid.ColumnDefinitions.Add(new ColumnDefinition());
+            sigGrid.ColumnDefinitions.Add(new ColumnDefinition());
+
+            // Seal (centre)
+            var sealPanel = new StackPanel { HorizontalAlignment = HorizontalAlignment.Center };
+            sealPanel.Children.Add(new TextBlock { Text = "✦ OFFICIAL SEAL ✦", FontSize = 11, FontWeight = FontWeights.Bold, Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D4AF37")), HorizontalAlignment = HorizontalAlignment.Center });
+            sealPanel.Children.Add(new Border { Width = 70, Height = 70, CornerRadius = new CornerRadius(35), BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D4AF37")), BorderThickness = new Thickness(3), Margin = new Thickness(0,4,0,4), Child = new TextBlock { Text = "BTA", FontSize = 22, FontWeight = FontWeights.Black, Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1E3A5F")), HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center } });
+            Grid.SetColumn(sealPanel, 1);
+            sigGrid.Children.Add(sealPanel);
+
+            // Left signature
+            var sig1 = new StackPanel { HorizontalAlignment = HorizontalAlignment.Center };
+            sig1.Children.Add(new TextBlock { Text = "Dharmesh Varia", FontSize = 16, FontStyle = FontStyles.Italic, Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1E3A5F")), HorizontalAlignment = HorizontalAlignment.Center });
+            sig1.Children.Add(new Rectangle { Height = 1, Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#64748B")), Margin = new Thickness(0,4,0,2) });
+            sig1.Children.Add(new TextBlock { Text = "Founder & Chief Architect", FontSize = 10, Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#64748B")), HorizontalAlignment = HorizontalAlignment.Center });
+            sig1.Children.Add(new TextBlock { Text = "Bhavani Technology", FontSize = 10, FontWeight = FontWeights.Bold, Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#64748B")), HorizontalAlignment = HorizontalAlignment.Center });
+            Grid.SetColumn(sig1, 0);
+            sigGrid.Children.Add(sig1);
+
+            // Right — Issue info
+            var issuePanel = new StackPanel { HorizontalAlignment = HorizontalAlignment.Center };
+            issuePanel.Children.Add(new TextBlock { Text = $"Issued on", FontSize = 11, Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#64748B")), HorizontalAlignment = HorizontalAlignment.Center });
+            issuePanel.Children.Add(new TextBlock { Text = DateTime.Now.ToString("MMMM dd, yyyy"), FontSize = 15, FontWeight = FontWeights.Bold, Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1E3A5F")), HorizontalAlignment = HorizontalAlignment.Center });
+            issuePanel.Children.Add(new Rectangle { Height = 1, Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#64748B")), Margin = new Thickness(0,4,0,2) });
+            issuePanel.Children.Add(new TextBlock { Text = "Verified Offline Record", FontSize = 10, Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#64748B")), HorizontalAlignment = HorizontalAlignment.Center });
+            Grid.SetColumn(issuePanel, 2);
+            sigGrid.Children.Add(issuePanel);
+
+            Grid.SetRow(sigGrid, 10);
+            grid.Children.Add(sigGrid);
+
+            innerBorder.Child = grid;
+            outerBorder.Child = innerBorder;
+            win.Content = outerBorder;
+            win.ShowDialog();
         }
 
         private void LoadUserData()
@@ -4531,3 +4713,4 @@ namespace BhavaniTech.UI
         }
     }
 }
+
