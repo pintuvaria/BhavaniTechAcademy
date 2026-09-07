@@ -67,6 +67,7 @@ namespace BhavaniTech.Core.Database
                     Id INTEGER PRIMARY KEY AUTOINCREMENT,
                     Username TEXT UNIQUE NOT NULL,
                     DisplayName TEXT NOT NULL,
+                    DateOfBirth TEXT NOT NULL DEFAULT '',
                     Role INTEGER NOT NULL,
                     TotalXP INTEGER DEFAULT 0,
                     CurrentLevel INTEGER DEFAULT 1,
@@ -231,6 +232,15 @@ namespace BhavaniTech.Core.Database
                 CREATE INDEX IF NOT EXISTS IX_UserFlashcards_User ON UserFlashcards(UserId, CardId);
             ";
             cmd.ExecuteNonQuery();
+
+            // Migration: add DateOfBirth column to existing databases that don't have it
+            try
+            {
+                using var migCmd = conn.CreateCommand();
+                migCmd.CommandText = "ALTER TABLE Users ADD COLUMN DateOfBirth TEXT NOT NULL DEFAULT '';";
+                migCmd.ExecuteNonQuery();
+            }
+            catch { /* Column already exists — safe to ignore */ }
 
             SeedDefaultData(conn);
             CurriculumSeeder.EnsureCurriculumSeeded(conn);
@@ -647,7 +657,7 @@ namespace BhavaniTech.Core.Database
         {
             using var conn = GetConnection();
             using var cmd = conn.CreateCommand();
-            cmd.CommandText = "SELECT Id, Username, DisplayName, Role, TotalXP, CurrentLevel, CurrentStreak, CreatedAt FROM Users WHERE Id = @uId LIMIT 1";
+            cmd.CommandText = "SELECT Id, Username, DisplayName, DateOfBirth, Role, TotalXP, CurrentLevel, CurrentStreak, CreatedAt FROM Users WHERE Id = @uId LIMIT 1";
             cmd.Parameters.AddWithValue("@uId", userId);
             using var reader = cmd.ExecuteReader();
             if (reader.Read())
@@ -656,11 +666,12 @@ namespace BhavaniTech.Core.Database
                     reader.GetInt32(0),
                     reader.GetString(1),
                     reader.GetString(2),
-                    (UserRole)reader.GetInt32(3),
-                    reader.GetInt32(4),
+                    reader.IsDBNull(3) ? "" : reader.GetString(3),
+                    (UserRole)reader.GetInt32(4),
                     reader.GetInt32(5),
                     reader.GetInt32(6),
-                    DateTime.Parse(reader.GetString(7))
+                    reader.GetInt32(7),
+                    DateTime.Parse(reader.GetString(8))
                 );
             }
             return null;
@@ -674,21 +685,46 @@ namespace BhavaniTech.Core.Database
             return ((long)(cmd.ExecuteScalar() ?? 0L)) > 0;
         }
 
-        public void CreateStudent(string name)
+        public void CreateStudent(string name, string dob = "")
         {
             using var conn = GetConnection();
             using var cmd = conn.CreateCommand();
-            cmd.CommandText = "INSERT INTO Users (Username, DisplayName, Role, TotalXP, CurrentLevel, CurrentStreak, CreatedAt) VALUES (@name, @name, 0, 150, 2, 1, @now);";
+            cmd.CommandText = "INSERT INTO Users (Username, DisplayName, DateOfBirth, Role, TotalXP, CurrentLevel, CurrentStreak, CreatedAt) VALUES (@name, @name, @dob, 0, 150, 2, 1, @now);";
             cmd.Parameters.AddWithValue("@name", name);
+            cmd.Parameters.AddWithValue("@dob", dob);
             cmd.Parameters.AddWithValue("@now", DateTime.UtcNow.ToString("o"));
             cmd.ExecuteNonQuery();
+        }
+
+        public List<User> GetAllUsers()
+        {
+            var users = new List<User>();
+            using var conn = GetConnection();
+            using var cmd = conn.CreateCommand();
+            cmd.CommandText = "SELECT Id, Username, DisplayName, DateOfBirth, Role, TotalXP, CurrentLevel, CurrentStreak, CreatedAt FROM Users ORDER BY Id ASC";
+            using var reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                users.Add(new User(
+                    reader.GetInt32(0),
+                    reader.GetString(1),
+                    reader.GetString(2),
+                    reader.IsDBNull(3) ? "" : reader.GetString(3),
+                    (UserRole)reader.GetInt32(4),
+                    reader.GetInt32(5),
+                    reader.GetInt32(6),
+                    reader.GetInt32(7),
+                    DateTime.Parse(reader.GetString(8))
+                ));
+            }
+            return users;
         }
 
         public User? GetCurrentUser()
         {
             using var conn = GetConnection();
             using var cmd = conn.CreateCommand();
-            cmd.CommandText = "SELECT Id, Username, DisplayName, Role, TotalXP, CurrentLevel, CurrentStreak, CreatedAt FROM Users LIMIT 1";
+            cmd.CommandText = "SELECT Id, Username, DisplayName, DateOfBirth, Role, TotalXP, CurrentLevel, CurrentStreak, CreatedAt FROM Users ORDER BY Id ASC LIMIT 1";
             using var reader = cmd.ExecuteReader();
             if (reader.Read())
             {
@@ -696,11 +732,12 @@ namespace BhavaniTech.Core.Database
                     reader.GetInt32(0),
                     reader.GetString(1),
                     reader.GetString(2),
-                    (UserRole)reader.GetInt32(3),
-                    reader.GetInt32(4),
+                    reader.IsDBNull(3) ? "" : reader.GetString(3),
+                    (UserRole)reader.GetInt32(4),
                     reader.GetInt32(5),
                     reader.GetInt32(6),
-                    DateTime.Parse(reader.GetString(7))
+                    reader.GetInt32(7),
+                    DateTime.Parse(reader.GetString(8))
                 );
             }
             return null;

@@ -136,38 +136,100 @@ namespace BhavaniTech.UI
             }
         }
 
-        private string PromptForStudentName()
+        private User PromptForUserSelection()
+        {
+            var users = _db.GetAllUsers();
+            var window = new Window
+            {
+                Title = "Bhavani Tech Academy - Profile Selection",
+                Width = 450,
+                Height = 450,
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                ResizeMode = ResizeMode.NoResize,
+                Topmost = true,
+                Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#0F172A"))
+            };
+            var sp = new StackPanel { Margin = new Thickness(20) };
+            sp.Children.Add(new TextBlock { Text = "Welcome to Bhavani Technology", Foreground = Brushes.White, FontSize = 20, FontWeight = FontWeights.Bold, Margin = new Thickness(0,0,0,15), HorizontalAlignment = HorizontalAlignment.Center });
+            
+            var cboUsers = new ComboBox { FontSize = 16, Margin = new Thickness(0,0,0,15) };
+            foreach (var u in users) { cboUsers.Items.Add(u.DisplayName + " (DOB: " + u.DateOfBirth + ")"); }
+            if (users.Count > 0) cboUsers.SelectedIndex = 0;
+            
+            sp.Children.Add(new TextBlock { Text = "Select Existing Student:", Foreground = Brushes.LightGray, Margin = new Thickness(0,0,0,5) });
+            sp.Children.Add(cboUsers);
+            
+            var btnLogin = new Button { Content = "Login", Height = 35, Margin = new Thickness(0,0,0,15) };
+            sp.Children.Add(btnLogin);
+            
+            sp.Children.Add(new TextBlock { Text = "OR CREATE NEW STUDENT:", Foreground = Brushes.LightGray, Margin = new Thickness(0,10,0,5), HorizontalAlignment = HorizontalAlignment.Center, FontWeight = FontWeights.Bold });
+            
+            var tbName = new TextBox { FontSize = 16, Margin = new Thickness(0,0,0,10) };
+            var tbDob = new TextBox { FontSize = 16, Margin = new Thickness(0,0,0,15) };
+            sp.Children.Add(new TextBlock { Text = "Full Name:", Foreground = Brushes.LightGray, Margin = new Thickness(0,0,0,2) });
+            sp.Children.Add(tbName);
+            sp.Children.Add(new TextBlock { Text = "Date of Birth (MM/DD/YYYY):", Foreground = Brushes.LightGray, Margin = new Thickness(0,0,0,2) });
+            sp.Children.Add(tbDob);
+            
+            var btnCreate = new Button { Content = "Register & Login", Height = 35 };
+            sp.Children.Add(btnCreate);
+            
+            User selectedUser = null;
+            
+            btnLogin.Click += (s, e) => {
+                if (cboUsers.SelectedIndex >= 0) {
+                    selectedUser = users[cboUsers.SelectedIndex];
+                    window.DialogResult = true;
+                }
+            };
+            
+            btnCreate.Click += (s, e) => {
+                if (!string.IsNullOrWhiteSpace(tbName.Text) && !string.IsNullOrWhiteSpace(tbDob.Text)) {
+                    _db.CreateStudent(tbName.Text.Trim(), tbDob.Text.Trim());
+                    var newUsers = _db.GetAllUsers();
+                    selectedUser = newUsers[^1];
+                    window.DialogResult = true;
+                }
+            };
+            
+            window.Content = sp;
+            window.ShowDialog();
+            
+            if (selectedUser != null) return selectedUser;
+            if (users.Count > 0) return users[0];
+            
+            _db.CreateStudent("Student", "01/01/2000");
+            return _db.GetAllUsers()[^1];
+        }
+
+        private void ShowCertificate(string name, string dob, string achievement)
         {
             var window = new Window
             {
-                Title = "Bhavani Tech Academy Registration",
-                Width = 400,
-                Height = 180,
+                Title = "Bhavani Tech Academy - Certificate of Excellence",
+                Width = 750,
+                Height = 550,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                ResizeMode = ResizeMode.NoResize,
+                Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1E293B")),
                 Topmost = true
             };
-            var sp = new StackPanel { Margin = new Thickness(20) };
-            sp.Children.Add(new TextBlock { Text = "Welcome! Please enter your Student Name:", Margin = new Thickness(0,0,0,10), FontSize = 14 });
-            var tb = new TextBox { FontSize = 16 };
-            sp.Children.Add(tb);
-            var btn = new Button { Content = "Start Academy", Margin = new Thickness(0,20,0,0), Height = 35 };
-            btn.Click += (s, e) => { if (!string.IsNullOrWhiteSpace(tb.Text)) window.DialogResult = true; };
-            sp.Children.Add(btn);
-            window.Content = sp;
-            if (window.ShowDialog() == true) return tb.Text.Trim();
-            return "Student";
+            var border = new Border { BorderBrush = Brushes.Gold, BorderThickness = new Thickness(10), Margin = new Thickness(10), Background = Brushes.White };
+            var sp = new StackPanel { HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
+            sp.Children.Add(new TextBlock { Text = "CERTIFICATE OF EXCELLENCE", FontSize = 36, FontWeight = FontWeights.Bold, Foreground = Brushes.DarkBlue, HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0,0,0,20) });
+            sp.Children.Add(new TextBlock { Text = "This is proudly presented to", FontSize = 20, Foreground = Brushes.Gray, HorizontalAlignment = HorizontalAlignment.Center });
+            sp.Children.Add(new TextBlock { Text = name, FontSize = 48, FontWeight = FontWeights.Bold, FontStyle = FontStyles.Italic, Foreground = Brushes.Black, HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0,10,0,10) });
+            sp.Children.Add(new TextBlock { Text = $"Date of Birth: {dob}", FontSize = 16, Foreground = Brushes.Gray, HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0,0,0,30) });
+            sp.Children.Add(new TextBlock { Text = "For successfully passing the examination and mastering:", FontSize = 18, Foreground = Brushes.Black, HorizontalAlignment = HorizontalAlignment.Center });
+            sp.Children.Add(new TextBlock { Text = achievement, FontSize = 24, FontWeight = FontWeights.SemiBold, Foreground = Brushes.DarkRed, HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0,10,0,30), TextAlignment = TextAlignment.Center, TextWrapping = TextWrapping.Wrap });
+            sp.Children.Add(new TextBlock { Text = $"Issued by Bhavani Technology on {DateTime.Now.ToString("MMMM dd, yyyy")}", FontSize = 14, FontWeight = FontWeights.Bold, Foreground = Brushes.Black, HorizontalAlignment = HorizontalAlignment.Center });
+            border.Child = sp;
+            window.Content = border;
+            window.ShowDialog();
         }
 
         private void LoadUserData()
         {
-            if (!_db.HasUsers())
-            {
-                string name = PromptForStudentName();
-                _db.CreateStudent(name);
-            }
-
-            _currentUser = _db.GetCurrentUser();
+            _currentUser = PromptForUserSelection();
             if (_currentUser != null)
             {
                 TxtUserXp.Text = $"🚀 {_currentUser.TotalXP} XP";
@@ -559,6 +621,7 @@ namespace BhavaniTech.UI
             SystemDiagnostics.OptimizeMemoryUsage();
             double after = SystemDiagnostics.GetCurrentMemoryUsageMB();
             MessageBox.Show($"RAM Trimmed successfully!\nFreed: {(before - after):F1} MB", "Low Hardware Engine", MessageBoxButton.OK, MessageBoxImage.Information);
+                ShowCertificate(_currentUser?.DisplayName ?? "Student", _currentUser?.DateOfBirth ?? "Unknown", _currentPracticalExam.Title);
         }
 
         // COURSES & LESSONS (BASICS TO MASTERS)
@@ -675,6 +738,7 @@ namespace BhavaniTech.UI
             if (_currentQuiz == null)
             {
                 MessageBox.Show("Please select a lesson with an active quiz first.", "Quiz", MessageBoxButton.OK, MessageBoxImage.Information);
+                ShowCertificate(_currentUser?.DisplayName ?? "Student", _currentUser?.DateOfBirth ?? "Unknown", _currentPracticalExam.Title);
                 return;
             }
 
@@ -726,6 +790,7 @@ namespace BhavaniTech.UI
                     "Milestone Complete! 🏆",
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
+                ShowCertificate(_currentUser?.DisplayName ?? "Student", _currentUser?.DateOfBirth ?? "Unknown", _currentPracticalExam.Title);
 
                 // Auto-advance to next lesson in the current course or next recommended track
                 if (LstLessons != null && LstLessons.Items.Count > 0)
@@ -1117,6 +1182,7 @@ namespace BhavaniTech.UI
                 string filePath = System.IO.Path.Combine(exportDir, $"Website_Project_{DateTime.Now:yyyyMMdd_HHmmss}.html");
                 System.IO.File.WriteAllText(filePath, TxtWebHtmlInput.Text);
                 MessageBox.Show($"Website exported successfully!\n\nFile Location:\n{filePath}\n\nYou can open this file in any browser (Chrome, Edge, Firefox) offline.", "Website Export", MessageBoxButton.OK, MessageBoxImage.Information);
+                ShowCertificate(_currentUser?.DisplayName ?? "Student", _currentUser?.DateOfBirth ?? "Unknown", _currentPracticalExam.Title);
             }
             catch (Exception ex)
             {
@@ -1502,6 +1568,7 @@ namespace BhavaniTech.UI
             {
                 Clipboard.SetText(TxtCalcSourceCode.Text);
                 MessageBox.Show("Calculator Source Code copied to Clipboard!\nYou can paste it in the Code IDE or your external editor.", "Calculator Code", MessageBoxButton.OK, MessageBoxImage.Information);
+                ShowCertificate(_currentUser?.DisplayName ?? "Student", _currentUser?.DateOfBirth ?? "Unknown", _currentPracticalExam.Title);
             }
         }
 
@@ -2870,6 +2937,7 @@ namespace BhavaniTech.UI
                 string json = TxtProgressJsonOutput.Text;
                 var profile = ProgressPortabilityService.ImportProgressFromJson(json);
                 MessageBox.Show($"Progress JSON Imported Successfully!\nStudent: {profile.StudentName}\nLevel: {profile.Level}\nTotal XP: {profile.TotalXp}\nCertificates: {profile.Certificates.Count}", "Progress Portability", MessageBoxButton.OK, MessageBoxImage.Information);
+                ShowCertificate(_currentUser?.DisplayName ?? "Student", _currentUser?.DateOfBirth ?? "Unknown", _currentPracticalExam.Title);
                 int xp = _db.AddUserXp(50);
                 TxtUserXp.Text = $"⭐ {xp} XP";
             }
@@ -2921,6 +2989,7 @@ namespace BhavaniTech.UI
             if (_currentPracticalExam == null || _selectedLesson == null)
             {
                 MessageBox.Show("Please select a valid lesson with an active practical exam.", "Practical Exam", MessageBoxButton.OK, MessageBoxImage.Information);
+                ShowCertificate(_currentUser?.DisplayName ?? "Student", _currentUser?.DateOfBirth ?? "Unknown", _currentPracticalExam.Title);
                 return;
             }
 
@@ -2949,6 +3018,7 @@ namespace BhavaniTech.UI
                     "Practical Exam Certified! ✅",
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
+                ShowCertificate(_currentUser?.DisplayName ?? "Student", _currentUser?.DateOfBirth ?? "Unknown", _currentPracticalExam.Title);
             }
             else
             {
@@ -2972,6 +3042,7 @@ namespace BhavaniTech.UI
             if (_currentPracticalExam != null)
             {
                 MessageBox.Show($"💡 PRACTICAL EXAM HINT:\n\n{_currentPracticalExam.Hint}", "Exam Hint", MessageBoxButton.OK, MessageBoxImage.Information);
+                ShowCertificate(_currentUser?.DisplayName ?? "Student", _currentUser?.DateOfBirth ?? "Unknown", _currentPracticalExam.Title);
             }
         }
 
@@ -3045,6 +3116,7 @@ namespace BhavaniTech.UI
                 int newXp = _db.AddUserXp(100);
                 TxtUserXp.Text = $"⭐ {newXp} XP";
                 MessageBox.Show("🎉 ByteBot reached the Mainframe!\nLevel Completed! +100 XP awarded!", "Arcade Victory! 🤖", MessageBoxButton.OK, MessageBoxImage.Information);
+                ShowCertificate(_currentUser?.DisplayName ?? "Student", _currentUser?.DateOfBirth ?? "Unknown", _currentPracticalExam.Title);
             }
             else
             {
@@ -3197,6 +3269,7 @@ namespace BhavaniTech.UI
             else
             {
                 MessageBox.Show("Select a packet from the stream first.", "Firewall", MessageBoxButton.OK, MessageBoxImage.Information);
+                ShowCertificate(_currentUser?.DisplayName ?? "Student", _currentUser?.DateOfBirth ?? "Unknown", _currentPracticalExam.Title);
             }
         }
 
@@ -3221,6 +3294,7 @@ namespace BhavaniTech.UI
             else
             {
                 MessageBox.Show("Select a packet from the stream first.", "Firewall", MessageBoxButton.OK, MessageBoxImage.Information);
+                ShowCertificate(_currentUser?.DisplayName ?? "Student", _currentUser?.DateOfBirth ?? "Unknown", _currentPracticalExam.Title);
             }
         }
 
@@ -3309,6 +3383,7 @@ namespace BhavaniTech.UI
                 int newXp = _db.AddUserXp(100);
                 TxtUserXp.Text = $"⭐ {newXp} XP";
                 MessageBox.Show($"⚔️ SQL Quest {quest} Succeeded!\n+100 XP awarded!", "Dungeon Victory", MessageBoxButton.OK, MessageBoxImage.Information);
+                ShowCertificate(_currentUser?.DisplayName ?? "Student", _currentUser?.DateOfBirth ?? "Unknown", _currentPracticalExam.Title);
             }
         }
 
@@ -3567,6 +3642,7 @@ namespace BhavaniTech.UI
             if (selectedOpt == -1)
             {
                 MessageBox.Show("Please select an answer option to proceed.", "Diagnostic Question", MessageBoxButton.OK, MessageBoxImage.Information);
+                ShowCertificate(_currentUser?.DisplayName ?? "Student", _currentUser?.DateOfBirth ?? "Unknown", _currentPracticalExam.Title);
                 return;
             }
 
@@ -3654,6 +3730,7 @@ namespace BhavaniTech.UI
                 TxtUserXp.Text = $"⭐ {newXp} XP";
                 UpdateHeroRadarUI();
                 MessageBox.Show($"🎉 CONGRATULATIONS!\n\n{result.Summary}\n\nYou earned +{result.XpEarned} XP towards your Hero certification!", "Capstone Verified", MessageBoxButton.OK, MessageBoxImage.Information);
+                ShowCertificate(_currentUser?.DisplayName ?? "Student", _currentUser?.DateOfBirth ?? "Unknown", _currentPracticalExam.Title);
             }
         }
 
@@ -3753,6 +3830,7 @@ namespace BhavaniTech.UI
             System.IO.File.WriteAllText(exportPath, jsonStr);
 
             MessageBox.Show($"📜 Verified Engineer Portfolio Card Exported Successfully!\n\nFile saved to:\n{exportPath}\n\nHero Readiness: {report.OverallPercentage}% ({report.ReadinessTier})", "Portfolio Exported", MessageBoxButton.OK, MessageBoxImage.Information);
+                ShowCertificate(_currentUser?.DisplayName ?? "Student", _currentUser?.DateOfBirth ?? "Unknown", _currentPracticalExam.Title);
         }
 
         // =====================================================================
@@ -3946,6 +4024,7 @@ namespace BhavaniTech.UI
             else
             {
                 MessageBox.Show("Execution reached end of program breakpoint.", "Debugger", MessageBoxButton.OK, MessageBoxImage.Information);
+                ShowCertificate(_currentUser?.DisplayName ?? "Student", _currentUser?.DateOfBirth ?? "Unknown", _currentPracticalExam.Title);
             }
         }
 
@@ -4250,6 +4329,7 @@ namespace BhavaniTech.UI
             {
                 AwardUserXp(60);
                 MessageBox.Show("🎉 VICTORY! Micro-Bot executed assembly directives flawlessly and destroyed the malware drone! (+60 XP)", "Assembly Arena", MessageBoxButton.OK, MessageBoxImage.Information);
+                ShowCertificate(_currentUser?.DisplayName ?? "Student", _currentUser?.DateOfBirth ?? "Unknown", _currentPracticalExam.Title);
             }
         }
 
@@ -4277,6 +4357,7 @@ namespace BhavaniTech.UI
                 PnlWebcraftItems.VerticalAlignment = VerticalAlignment.Center;
                 AwardUserXp(50);
                 MessageBox.Show("🚀 RESCUE 1 COMPLETE! The astronaut module was successfully aligned! (+50 XP)", "Webcraft Rescuer", MessageBoxButton.OK, MessageBoxImage.Information);
+                ShowCertificate(_currentUser?.DisplayName ?? "Student", _currentUser?.DateOfBirth ?? "Unknown", _currentPracticalExam.Title);
             }
         }
 
@@ -4317,6 +4398,7 @@ namespace BhavaniTech.UI
             {
                 AwardUserXp(80);
                 MessageBox.Show($"🚩 FLAG CAPTURED!\n\n{result.Feedback}", "CTF Arena", MessageBoxButton.OK, MessageBoxImage.Information);
+                ShowCertificate(_currentUser?.DisplayName ?? "Student", _currentUser?.DateOfBirth ?? "Unknown", _currentPracticalExam.Title);
             }
         }
 
@@ -4418,6 +4500,7 @@ namespace BhavaniTech.UI
         {
             RefreshParentAudit();
             MessageBox.Show("Parent & Teacher audit metrics refreshed directly from SQLite database.", "Audit Refreshed", MessageBoxButton.OK, MessageBoxImage.Information);
+                ShowCertificate(_currentUser?.DisplayName ?? "Student", _currentUser?.DateOfBirth ?? "Unknown", _currentPracticalExam.Title);
         }
 
         private void BtnExportAuditReport_Click(object sender, RoutedEventArgs e)
@@ -4428,6 +4511,7 @@ namespace BhavaniTech.UI
             System.IO.File.WriteAllText(exportPath, json);
 
             MessageBox.Show($"📄 Certified Parent & Teacher Progress Audit Exported Successfully!\n\nSaved to:\n{exportPath}", "Audit Exported", MessageBoxButton.OK, MessageBoxImage.Information);
+                ShowCertificate(_currentUser?.DisplayName ?? "Student", _currentUser?.DateOfBirth ?? "Unknown", _currentPracticalExam.Title);
         }
 
         private void BtnBackupDatabase_Click(object sender, RoutedEventArgs e)
@@ -4438,6 +4522,7 @@ namespace BhavaniTech.UI
             {
                 TxtBackupStatus.Text = $"✅ Database snapshot verified and backed up to: {System.IO.Path.GetFileName(backupPath)}";
                 MessageBox.Show($"💾 SQLite Database Snapshot Created Successfully!\n\nBackup Path:\n{backupPath}", "Database Backup Complete", MessageBoxButton.OK, MessageBoxImage.Information);
+                ShowCertificate(_currentUser?.DisplayName ?? "Student", _currentUser?.DateOfBirth ?? "Unknown", _currentPracticalExam.Title);
             }
             else
             {

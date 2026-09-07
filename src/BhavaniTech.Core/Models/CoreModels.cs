@@ -28,6 +28,7 @@ namespace BhavaniTech.Core.Models
         int Id,
         string Username,
         string DisplayName,
+        string DateOfBirth,
         UserRole Role,
         int TotalXP,
         int CurrentLevel,
