@@ -188,3 +188,4 @@ dotnet build BhavaniTechAcademy.sln -c Release
 ```powershell
 dotnet publish src/BhavaniTech.UI/BhavaniTech.UI.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:EnableCompressionInSingleFile=true -o build/portable
 ```
+
