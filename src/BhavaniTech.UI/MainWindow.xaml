@@ -1481,46 +1481,111 @@
                             </Border>
                         </TabItem>
 
-                        <TabItem Header="🤖 Offline AI Learning Assistant" Padding="14,8">
-                            <Border Background="#1E293B" CornerRadius="8" Padding="16" Margin="0,8,0,0">
+                        <TabItem Header="🤖 Offline Neural Local AI" Padding="14,8">
+                            <Border Background="#0F172A" CornerRadius="10" Padding="16" Margin="0,8,0,0" BorderThickness="1" BorderBrush="#1E293B">
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="*"/>
+                                        <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
 
-                                    <!-- Domain Filter -->
-                                    <Grid Grid.Row="0" Margin="0,0,0,8">
+                                    <!-- Header Banner with Offline Badge -->
+                                    <Grid Grid.Row="0" Margin="0,0,0,10">
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="220"/>
                                             <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
                                         </Grid.ColumnDefinitions>
-                                        <TextBlock Text="Specialization Domain:" Foreground="#94A3B8" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,8,0"/>
-                                        <ComboBox x:Name="CmbAiDomain" Grid.Column="1" SelectedIndex="0" Padding="6,2">
-                                            <ComboBoxItem Content="All Domains"/>
-                                            <ComboBoxItem Content="Cybersecurity"/>
-                                            <ComboBoxItem Content="Fundamentals"/>
-                                            <ComboBoxItem Content="Programming"/>
-                                            <ComboBoxItem Content="Hardware"/>
-                                            <ComboBoxItem Content="Networking"/>
-                                            <ComboBoxItem Content="Linux"/>
-                                            <ComboBoxItem Content="Electronics"/>
-                                            <ComboBoxItem Content="ArtificialIntelligence"/>
-                                        </ComboBox>
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                            <TextBlock Text="🧠" FontSize="22" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                            <StackPanel>
+                                                <TextBlock Text="Bhavani Autonomous Neural Local AI (100% Offline)" Foreground="#F8FAFC" FontSize="16" FontWeight="Bold"/>
+                                                <TextBlock Text="Local Neural-Symbolic Reasoning Engine • Zero Internet Required • Private &amp; In-Memory" Foreground="#94A3B8" FontSize="12"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                        <Border Grid.Column="1" Background="#064E3B" BorderBrush="#10B981" BorderThickness="1" CornerRadius="20" Padding="12,5" VerticalAlignment="Center">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Ellipse Width="8" Height="8" Fill="#34D399" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                                <TextBlock Text="OFFLINE AIR-GAPPED" Foreground="#A7F3D0" FontSize="11" FontWeight="Bold"/>
+                                            </StackPanel>
+                                        </Border>
                                     </Grid>
 
-                                    <TextBox x:Name="TxtAiChatHistory" Grid.Row="1" IsReadOnly="True" Background="#020617" Foreground="#4ADE80" FontFamily="Consolas" FontSize="13" Padding="10" BorderThickness="1" BorderBrush="#334155" Margin="0,0,0,10" VerticalScrollBarVisibility="Auto"/>
+                                    <!-- Domain Filter & Preset Topic Selector -->
+                                    <Border Grid.Row="1" Background="#1E293B" CornerRadius="8" Padding="10" Margin="0,0,0,10">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="200"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="Specialization Domain:" Foreground="#CBD5E1" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                            <ComboBox x:Name="CmbAiDomain" Grid.Column="1" SelectedIndex="0" Padding="8,4" Background="#0F172A" Foreground="#F8FAFC">
+                                                <ComboBoxItem Content="All Domains"/>
+                                                <ComboBoxItem Content="Cybersecurity"/>
+                                                <ComboBoxItem Content="Fundamentals"/>
+                                                <ComboBoxItem Content="Programming"/>
+                                                <ComboBoxItem Content="Hardware"/>
+                                                <ComboBoxItem Content="Networking"/>
+                                                <ComboBoxItem Content="Linux"/>
+                                                <ComboBoxItem Content="Electronics"/>
+                                                <ComboBoxItem Content="ArtificialIntelligence"/>
+                                            </ComboBox>
+                                            
+                                            <!-- Quick Prompt Suggestions -->
+                                            <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                                                <Button Content="🛡️ SQLi Exploit" Click="BtnQuickAiPrompt_Click" Tag="Explain SQL Injection attack mechanics, bypass techniques, and parameterized defense" Background="#334155" Foreground="#E2E8F0" Padding="8,3" FontSize="11" Margin="4,0" BorderThickness="0" Cursor="Hand"/>
+                                                <Button Content="🌐 CCNA Subnets" Click="BtnQuickAiPrompt_Click" Tag="Explain IPv4 VLSM subnetting formulas and calculate usable hosts for a /27" Background="#334155" Foreground="#E2E8F0" Padding="8,3" FontSize="11" Margin="4,0" BorderThickness="0" Cursor="Hand"/>
+                                                <Button Content="⚛️ Bell State" Click="BtnQuickAiPrompt_Click" Tag="How does the quantum CNOT gate create a 2-qubit entangled Bell State?" Background="#334155" Foreground="#E2E8F0" Padding="8,3" FontSize="11" Margin="4,0" BorderThickness="0" Cursor="Hand"/>
+                                                <Button Content="🧠 Transformer MHA" Click="BtnQuickAiPrompt_Click" Tag="How does Transformer Multi-Head Attention split heads and compute scaled dot product attention?" Background="#334155" Foreground="#E2E8F0" Padding="8,3" FontSize="11" Margin="4,0" BorderThickness="0" Cursor="Hand"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+
+                                    <!-- Main Split Chat & CoT Reasoning Display -->
+                                    <Grid Grid.Row="2" Margin="0,0,0,10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="2.2*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        
+                                        <!-- Main Chat Transcript -->
+                                        <Border Grid.Column="0" Background="#020617" CornerRadius="8" BorderThickness="1" BorderBrush="#334155" Margin="0,0,6,0">
+                                            <TextBox x:Name="TxtAiChatHistory" IsReadOnly="True" Background="Transparent" Foreground="#4ADE80" FontFamily="Consolas" FontSize="13" Padding="12" BorderThickness="0" VerticalScrollBarVisibility="Auto"/>
+                                        </Border>
+
+                                        <!-- Chain-of-Thought Reasoning & Knowledge Radar -->
+                                        <Border Grid.Column="1" Background="#0B132B" CornerRadius="8" BorderThickness="1" BorderBrush="#1E293B" Padding="10" Margin="6,0,0,0">
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="*"/>
+                                                </Grid.RowDefinitions>
+                                                <StackPanel Grid.Row="0" Margin="0,0,0,6">
+                                                    <TextBlock Text="🔍 Neural-Symbolic Reasoning Trace" Foreground="#38BDF8" FontWeight="Bold" FontSize="12"/>
+                                                    <TextBlock Text="Offline inference step-by-step verification:" Foreground="#64748B" FontSize="10"/>
+                                                </StackPanel>
+                                                <TextBox x:Name="TxtAiReasoningTrace" Grid.Row="1" IsReadOnly="True" Background="#020617" Foreground="#38BDF8" FontFamily="Consolas" FontSize="11" Padding="8" BorderThickness="1" BorderBrush="#1E293B" VerticalScrollBarVisibility="Auto" Text="[IDLE] Offline AI Ready. Enter prompt or select quick chip above."/>
+                                            </Grid>
+                                        </Border>
+                                    </Grid>
                                     
-                                    <Grid Grid.Row="2">
+                                    <!-- Input Row -->
+                                    <Grid Grid.Row="3">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
                                         </Grid.ColumnDefinitions>
-                                        <TextBox x:Name="TxtAiQuestion" Text="Ask about Cyber Hacking, Python, C#, Networking, or Hardware..." FontSize="13" Padding="8"/>
-                                        <Button Grid.Column="1" Content="Send Question" Click="BtnSendAiQuestion_Click" Background="#16A34A" Foreground="White" Padding="14,6" FontWeight="Bold" BorderThickness="0" Margin="8,0,0,0" Cursor="Hand"/>
+                                        <TextBox x:Name="TxtAiQuestion" Text="Ask about Cyber Hacking, Python, C#, Networking, or Hardware..." FontSize="13" Padding="10,8" Background="#1E293B" Foreground="#F8FAFC" BorderBrush="#334155" KeyDown="TxtAiQuestion_KeyDown"/>
+                                        <Button Grid.Column="1" Content="🚀 Ask Local AI" Click="BtnSendAiQuestion_Click" Background="#16A34A" Foreground="White" Padding="18,8" FontWeight="Bold" BorderThickness="0" Margin="8,0,0,0" Cursor="Hand"/>
+                                        <Button Grid.Column="2" Content="🧹 Clear" Click="BtnClearAiChat_Click" Background="#475569" Foreground="White" Padding="12,8" FontWeight="SemiBold" BorderThickness="0" Margin="6,0,0,0" Cursor="Hand"/>
                                     </Grid>
+
+                                    <!-- Footer Status -->
+                                    <TextBlock Grid.Row="4" Text="🔒 100% Privacy Preserved • Zero Data Sent Outside • Model Weights Stored In-Memory • Pure C# .NET 9" Foreground="#64748B" FontSize="11" Margin="2,6,0,0"/>
                                 </Grid>
                             </Border>
                         </TabItem>

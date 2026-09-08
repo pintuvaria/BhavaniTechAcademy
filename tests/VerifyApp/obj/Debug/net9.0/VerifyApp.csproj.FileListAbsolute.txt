@@ -44,3 +44,4 @@ D:\AntiGravity\Kids Game\tests\VerifyApp\obj\Debug\net9.0\refint\VerifyApp.dll
 D:\AntiGravity\Kids Game\tests\VerifyApp\obj\Debug\net9.0\VerifyApp.pdb
 D:\AntiGravity\Kids Game\tests\VerifyApp\obj\Debug\net9.0\VerifyApp.genruntimeconfig.cache
 D:\AntiGravity\Kids Game\tests\VerifyApp\obj\Debug\net9.0\ref\VerifyApp.dll
+D:\AntiGravity\Kids Game\tests\VerifyApp\obj\Debug\net9.0\VerifyApp.sourcelink.json

@@ -416,3 +416,4 @@ D:\AntiGravity\Kids Game\src\BhavaniTech.UI\obj\Debug\net9.0-windows\win-x64\ref
 D:\AntiGravity\Kids Game\src\BhavaniTech.UI\obj\Debug\net9.0-windows\win-x64\BhavaniTech.UI.pdb
 D:\AntiGravity\Kids Game\src\BhavaniTech.UI\obj\Debug\net9.0-windows\win-x64\BhavaniTech.UI.genruntimeconfig.cache
 D:\AntiGravity\Kids Game\src\BhavaniTech.UI\obj\Debug\net9.0-windows\win-x64\ref\BhavaniTech.UI.dll
+D:\AntiGravity\Kids Game\src\BhavaniTech.UI\obj\Debug\net9.0-windows\win-x64\BhavaniTech.UI.sourcelink.json

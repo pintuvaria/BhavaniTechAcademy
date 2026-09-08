@@ -2162,23 +2162,62 @@ namespace BhavaniTech.UI
 
             var res = LocalAiEngine.QueryLocalAi(q, domain);
             var sb = new System.Text.StringBuilder();
-            sb.AppendLine($"\nStudent: {q}");
-            sb.AppendLine($"AI Tutor [{res.Topic} ({res.Domain} - {res.MasteryLevel}) - Confidence: {res.ConfidenceScore * 100:F0}%]:");
+            sb.AppendLine($"\n🧑‍💻 Student: {q}");
+            sb.AppendLine($"🤖 Bhavani Local AI [{res.Topic} ({res.Domain} - {res.MasteryLevel}) | Confidence: {res.ConfidenceScore * 100:F0}%]:");
             sb.AppendLine(res.AnswerText);
             if (!string.IsNullOrEmpty(res.CodeExample))
             {
-                sb.AppendLine("\nCODE EXAMPLE:");
+                sb.AppendLine("\n💻 CODE EXAMPLE:");
                 sb.AppendLine(res.CodeExample);
             }
             if (res.RecommendedFollowUps.Count > 0)
             {
-                sb.AppendLine("\nRECOMMENDED NEXT LESSONS:");
-                foreach (var f in res.RecommendedFollowUps) sb.AppendLine($" - 💡 {f}");
+                sb.AppendLine("\n🎯 RECOMMENDED NEXT LESSONS:");
+                foreach (var f in res.RecommendedFollowUps) sb.AppendLine($" • 💡 {f}");
             }
 
             TxtAiChatHistory.AppendText(sb.ToString() + "\n");
             TxtAiChatHistory.ScrollToEnd();
+
+            // Display Neural-Symbolic Reasoning Trace
+            if (res.ReasoningChain != null && res.ReasoningChain.Count > 0)
+            {
+                var rSb = new System.Text.StringBuilder();
+                rSb.AppendLine($"=== INFERENCE TRACE ({DateTime.Now:HH:mm:ss}) ===");
+                rSb.AppendLine($"Model Engine: {res.ModelPillar}");
+                rSb.AppendLine($"Topic Grounding: {res.Topic}");
+                rSb.AppendLine("Chain of Thought:");
+                foreach (var step in res.ReasoningChain)
+                {
+                    rSb.AppendLine($" • {step}");
+                }
+                TxtAiReasoningTrace.Text = rSb.ToString();
+            }
+
             TxtAiQuestion.Clear();
+        }
+
+        private void TxtAiQuestion_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                BtnSendAiQuestion_Click(sender, e);
+            }
+        }
+
+        private void BtnQuickAiPrompt_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.Tag is string prompt)
+            {
+                TxtAiQuestion.Text = prompt;
+                BtnSendAiQuestion_Click(sender, e);
+            }
+        }
+
+        private void BtnClearAiChat_Click(object sender, RoutedEventArgs e)
+        {
+            TxtAiChatHistory.Text = "🤖 Bhavani Local AI: Ready for queries. 100% offline self-contained neural engine.\n";
+            TxtAiReasoningTrace.Text = "[IDLE] Offline AI Ready. Enter prompt or select quick chip above.";
         }
 
         // ELECTRONICS ACADEMY

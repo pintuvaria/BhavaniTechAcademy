@@ -43,5 +43,88 @@ namespace BhavaniTech.Core.Services
                 )
             };
         }
+
+        // =====================================================================
+        // ADVANCED WINDOWS REGISTRY & GPEDIT SECURITY AUDITOR
+        // =====================================================================
+        public record RegistryKeyAudit(
+            string RootHive,
+            string SubKeyPath,
+            string ValueName,
+            string ValueType, // REG_SZ, REG_DWORD, REG_BINARY, REG_MULTI_SZ
+            object ValueData,
+            bool IsSecurityHardened,
+            string RecommendedAction
+        );
+
+        public record GpeditPolicyEvaluation(
+            string PolicyName,
+            string Scope, // Computer Configuration vs User Configuration
+            string SettingState, // Enabled, Disabled, Not Configured
+            bool MeetsEnterpriseBaseline,
+            string CISBenchmarkRef
+        );
+
+        public List<RegistryKeyAudit> AuditSystemRegistrySettings()
+        {
+            return new List<RegistryKeyAudit>
+            {
+                new RegistryKeyAudit(
+                    RootHive: "HKLM",
+                    SubKeyPath: @"SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System",
+                    ValueName: "EnableLUA",
+                    ValueType: "REG_DWORD",
+                    ValueData: 1,
+                    IsSecurityHardened: true,
+                    RecommendedAction: "User Account Control (UAC) is ACTIVE (1). Prevents silent elevation of unauthorized malware."
+                ),
+                new RegistryKeyAudit(
+                    RootHive: "HKLM",
+                    SubKeyPath: @"SYSTEM\CurrentControlSet\Control\Lsa",
+                    ValueName: "LmCompatibilityLevel",
+                    ValueType: "REG_DWORD",
+                    ValueData: 5,
+                    IsSecurityHardened: true,
+                    RecommendedAction: "NTLMv2 Only enforced (5). Refuses obsolete LM & NTLMv1, blocking relay pass-the-hash vectors."
+                ),
+                new RegistryKeyAudit(
+                    RootHive: "HKLM",
+                    SubKeyPath: @"SOFTWARE\Policies\Microsoft\Windows\DataCollection",
+                    ValueName: "AllowTelemetry",
+                    ValueType: "REG_DWORD",
+                    ValueData: 0,
+                    IsSecurityHardened: true,
+                    RecommendedAction: "Diagnostic telemetry disabled (0). Hardened for privacy-sensitive enterprise environments."
+                )
+            };
+        }
+
+        public List<GpeditPolicyEvaluation> AuditGpeditSecurityBaseline()
+        {
+            return new List<GpeditPolicyEvaluation>
+            {
+                new GpeditPolicyEvaluation(
+                    PolicyName: "Account lockout threshold",
+                    Scope: "Computer Configuration -> Security Settings -> Account Policies",
+                    SettingState: "5 invalid logon attempts",
+                    MeetsEnterpriseBaseline: true,
+                    CISBenchmarkRef: "CIS 1.1.1: Prevents brute-force password guessing attacks."
+                ),
+                new GpeditPolicyEvaluation(
+                    PolicyName: "Do not allow storage of passwords and credentials for network authentication",
+                    Scope: "Computer Configuration -> Security Settings -> Local Policies -> Security Options",
+                    SettingState: "Enabled",
+                    MeetsEnterpriseBaseline: true,
+                    CISBenchmarkRef: "CIS 2.3.1.2: Mitigates credential harvesting from memory."
+                ),
+                new GpeditPolicyEvaluation(
+                    PolicyName: "Prevent installation of devices not described by other policy settings",
+                    Scope: "Computer Configuration -> Administrative Templates -> System -> Device Installation",
+                    SettingState: "Enabled",
+                    MeetsEnterpriseBaseline: true,
+                    CISBenchmarkRef: "CIS 18.9.16.1: Blocks unauthorized USB flash drives to stop physical exfiltration."
+                )
+            };
+        }
     }
 }

@@ -237,5 +237,88 @@ namespace BhavaniTech.Core.Services
 
             return points;
         }
+
+        // =====================================================================
+        // PARALLEL CIRCUIT SIMULATION
+        // =====================================================================
+        public record ParallelCircuitState(
+            double SourceVoltage,
+            double TotalCurrentAmps,
+            double EquivalentResistanceOhms,
+            double TotalPowerWatts,
+            List<BreadboardComponent> BranchComponents,
+            string AnalysisSummary
+        );
+
+        public static ParallelCircuitState SimulateParallelCircuit(
+            double supplyVoltage,
+            List<BreadboardComponent> branchResistors)
+        {
+            if (branchResistors == null || branchResistors.Count == 0)
+            {
+                return new ParallelCircuitState(supplyVoltage, 0, 0, 0, new List<BreadboardComponent>(), "Open Circuit: No branches.");
+            }
+
+            double sumConductance = 0;
+            foreach (var b in branchResistors)
+            {
+                double r = Math.Max(0.1, b.Value);
+                sumConductance += (1.0 / r);
+            }
+
+            double rEq = sumConductance > 0 ? (1.0 / sumConductance) : 0;
+            double totalCurrent = rEq > 0 ? supplyVoltage / rEq : 0;
+            double totalPower = supplyVoltage * totalCurrent;
+
+            foreach (var b in branchResistors)
+            {
+                double r = Math.Max(0.1, b.Value);
+                b.VoltageDrop = supplyVoltage;
+                b.CurrentAmps = supplyVoltage / r;
+                b.PowerWatts = supplyVoltage * b.CurrentAmps;
+                b.Status = $"Branch Current: {b.CurrentAmps * 1000:F1} mA | Power: {b.PowerWatts * 1000:F1} mW";
+            }
+
+            string summary = $"Parallel Network Active: Req = {rEq:F2} Ω, Itotal = {totalCurrent * 1000:F1} mA, Ptotal = {totalPower * 1000:F1} mW. Branch voltages are identical ({supplyVoltage:F1}V).";
+            return new ParallelCircuitState(supplyVoltage, totalCurrent, rEq, totalPower, branchResistors, summary);
+        }
+
+        // =====================================================================
+        // SHOCKLEY DIODE / LED NON-LINEAR I-V CURVE MODEL
+        // I = Is * (e^(Vd / (n * Vt)) - 1)
+        // =====================================================================
+        public record DiodeIvPoint(double Voltage, double CurrentMilliAmps, double DynamicResistance);
+
+        public static List<DiodeIvPoint> CalculateShockleyDiodeCurve(
+            double saturationCurrentIs = 1e-12, // 1 pA typical for silicon
+            double idealityFactorN = 1.5,       // 1.0 - 2.0
+            double maxVoltage = 2.4,
+            int steps = 24)
+        {
+            var points = new List<DiodeIvPoint>();
+            double vt = 0.02585; // Thermal voltage at room temp 300K (kT/q ~ 25.85 mV)
+            double dv = maxVoltage / steps;
+
+            for (int i = 0; i <= steps; i++)
+            {
+                double vd = i * dv;
+                // Exponent clamp to avoid overflow
+                double exponent = Math.Min(60.0, vd / (idealityFactorN * vt));
+                double currentAmps = saturationCurrentIs * (Math.Exp(exponent) - 1.0);
+                if (currentAmps < 0) currentAmps = 0;
+
+                // Dynamic small-signal resistance rd = (n * Vt) / (I + Is)
+                double rd = (idealityFactorN * vt) / (currentAmps + saturationCurrentIs);
+
+                points.Add(new DiodeIvPoint(
+                    Voltage: Math.Round(vd, 3),
+                    CurrentMilliAmps: Math.Round(currentAmps * 1000.0, 4),
+                    DynamicResistance: Math.Round(Math.Min(1e6, rd), 1)
+                ));
+            }
+
+            return points;
+        }
     }
 }
+

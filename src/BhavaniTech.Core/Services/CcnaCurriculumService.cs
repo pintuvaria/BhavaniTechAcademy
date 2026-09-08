@@ -6,7 +6,7 @@ namespace BhavaniTech.Core.Services
     public class CcnaCurriculumService
     {
         public record CcnaModule(string Title, string Content);
-        public record CcnaExamQuestion(string Question, string[] Options, int CorrectIndex);
+        public record CcnaExamQuestion(string Question, string[] Options, int CorrectIndex, string Explanation = "");
         
         public List<CcnaModule> GetTutorials()
         {
@@ -25,27 +25,53 @@ namespace BhavaniTech.Core.Services
         {
             return new List<CcnaExamQuestion>
             {
-                new CcnaExamQuestion("Which layer of the OSI model does a router primarily operate on?", new[] { "Layer 1 (Physical)", "Layer 2 (Data Link)", "Layer 3 (Network)", "Layer 4 (Transport)" }, 2),
-                new CcnaExamQuestion("What is the default subnet mask for a Class C IPv4 address?", new[] { "255.0.0.0", "255.255.0.0", "255.255.255.0", "255.255.255.255" }, 2),
-                new CcnaExamQuestion("Which protocol is heavily utilized to prevent Layer 2 switching loops?", new[] { "OSPF", "BGP", "STP", "DHCP" }, 2),
-                new CcnaExamQuestion("In a multi-area OSPF deployment, what is the required significance of Area 0?", new[] { "It is the stub area", "It is the transit backbone area", "It is the Not-So-Stubby-Area (NSSA)", "It is used solely for external routes" }, 1),
-                new CcnaExamQuestion("When configuring an Extended IPv4 ACL, which elements can be matched?", new[] { "Source IP Only", "MAC Address Only", "Source IP, Dest IP, Protocol, and Port", "VLAN Tag Only" }, 2)
+                new CcnaExamQuestion("Which layer of the OSI model does a router primarily operate on?", new[] { "Layer 1 (Physical)", "Layer 2 (Data Link)", "Layer 3 (Network)", "Layer 4 (Transport)" }, 2, "Routers inspect Layer 3 IP headers to make path forwarding decisions."),
+                new CcnaExamQuestion("What is the default subnet mask for a Class C IPv4 address?", new[] { "255.0.0.0", "255.255.0.0", "255.255.255.0", "255.255.255.255" }, 2, "Class C addresses have a default 24-bit network prefix (255.255.255.0 or /24)."),
+                new CcnaExamQuestion("Which protocol is heavily utilized to prevent Layer 2 switching loops?", new[] { "OSPF", "BGP", "STP", "DHCP" }, 2, "Spanning Tree Protocol (STP - IEEE 802.1D) blocks redundant switch links to prevent broadcast storms."),
+                new CcnaExamQuestion("In a multi-area OSPF deployment, what is the required significance of Area 0?", new[] { "It is the stub area", "It is the transit backbone area", "It is the Not-So-Stubby-Area (NSSA)", "It is used solely for external routes" }, 1, "Area 0 (backbone) is required as the central hub through which all non-backbone areas exchange inter-area routing information."),
+                new CcnaExamQuestion("When configuring an Extended IPv4 ACL, which elements can be matched?", new[] { "Source IP Only", "MAC Address Only", "Source IP, Dest IP, Protocol, and Port", "VLAN Tag Only" }, 2, "Extended ACLs filter on source IP, destination IP, protocol (TCP, UDP, ICMP), and port numbers."),
+                new CcnaExamQuestion("How many usable host IP addresses are provided by a /27 subnet mask?", new[] { "14", "30", "62", "126" }, 1, "A /27 mask leaves 5 host bits (32 - 27 = 5). Usable hosts = 2^5 - 2 = 30."),
+                new CcnaExamQuestion("What is the inverse wildcard mask corresponding to a subnet mask of 255.255.255.240 (/28)?", new[] { "0.0.0.15", "0.0.0.31", "0.0.0.7", "0.0.0.255" }, 0, "Wildcard = 255.255.255.255 - 255.255.255.240 = 0.0.0.15."),
+                new CcnaExamQuestion("Which TCP port is used by SSH for secure remote shell management?", new[] { "21", "22", "23", "25" }, 1, "SSH operates on TCP port 22, replacing unencrypted Telnet (TCP 23)."),
+                new CcnaExamQuestion("What is the primary protocol used to dynamically assign IP addresses to network hosts?", new[] { "DNS", "SNMP", "DHCP", "NTP" }, 2, "Dynamic Host Configuration Protocol (DHCP) automatically assigns IP addresses, subnet masks, and default gateways."),
+                new CcnaExamQuestion("In Cisco IOS, what is the default administrative distance (AD) of OSPF?", new[] { "90", "110", "115", "120" }, 1, "OSPF has an administrative distance of 110 (EIGRP is 90, IS-IS is 115, RIP is 120)."),
+                new CcnaExamQuestion("Which type of IPv6 address starts with the prefix fe80::/10?", new[] { "Global Unicast", "Unique Local", "Link-Local", "Multicast" }, 2, "fe80::/10 identifies IPv6 Link-Local addresses used strictly within a single local link segment."),
+                new CcnaExamQuestion("What is the MAC address format length used in IEEE 802.3 Ethernet?", new[] { "32 bits (4 bytes)", "48 bits (6 bytes)", "64 bits (8 bytes)", "128 bits (16 bytes)" }, 1, "MAC addresses are 48 bits (6 bytes) long, represented in hexadecimal."),
+                new CcnaExamQuestion("Which state does an OSPF adjacency reach when link-state databases are fully synchronized?", new[] { "2-Way", "ExStart", "Loading", "Full" }, 3, "The 'Full' state indicates that both OSPF neighbors have fully synchronized Link-State Databases (LSDB)."),
+                new CcnaExamQuestion("What does the transport layer protocol TCP use to guarantee reliable data delivery?", new[] { "Best-effort UDP datagrams", "Three-way handshake, Sequence numbers, and ACKs", "CSMA/CD collision detection", "ARP broadcasting" }, 1, "TCP establishes connection via SYN-SYN/ACK-ACK handshake and uses sequence numbers and ACKs for retransmission."),
+                new CcnaExamQuestion("Which command in Cisco IOS switches is used to configure an interface as an 802.1Q trunk port?", new[] { "switchport mode access", "switchport mode trunk", "spanning-tree portfast", "ip routing" }, 1, "'switchport mode trunk' sets the interface to multiplex multiple VLANs tagged with 802.1Q headers."),
+                new CcnaExamQuestion("What is the primary function of the Address Resolution Protocol (ARP)?", new[] { "Resolve hostnames to IP addresses", "Map known IP addresses to local MAC addresses", "Filter unauthorized switch packets", "Route packets between autonomous systems" }, 1, "ARP broadcasts at Layer 2 to discover the MAC address associated with a given Layer 3 IPv4 address."),
+                new CcnaExamQuestion("What address is the IPv4 loopback address reserved for local system testing?", new[] { "0.0.0.0", "127.0.0.1", "192.168.1.1", "255.255.255.255" }, 1, "127.0.0.1 (or 127.0.0.0/8) is reserved as the local host loopback interface."),
+                new CcnaExamQuestion("In Cisco Spanning Tree Protocol (STP), what is the default bridge priority value?", new[] { "0", "4096", "32768", "65535" }, 2, "The default STP bridge priority is 32768 (plus the sys-id-ext VLAN number)."),
+                new CcnaExamQuestion("Which NAT technique allows multiple private internal IP addresses to share a single public IP address using unique port numbers?", new[] { "Static NAT", "Dynamic NAT Pool", "PAT (Port Address Translation / NAT Overload)", "Carrier Grade BGP NAT" }, 2, "PAT (NAT Overload) multiplexes private hosts onto a single public IPv4 address using source TCP/UDP ports."),
+                new CcnaExamQuestion("What happens to an inbound packet if it does not match any permit statements in an IPv4 ACL?", new[] { "It is forwarded to the default gateway", "It is dropped due to the implicit deny any rule at the end", "It is logged and forwarded without filtering", "It is bounced back to the sender via ICMP Echo Request" }, 1, "All Cisco ACLs end with an invisible implicit 'deny any' statement that drops unmatched packets.")
             };
         }
 
-        public record ExamGradeResult(int Score, int TotalQuestions, bool Passed, double Percentage);
+        public record ExamGradeResult(int Score, int TotalQuestions, bool Passed, double Percentage, List<string> Explanations);
 
         public ExamGradeResult GradeExam(List<int> studentAnswers)
         {
             var questions = GetExamQuestions();
             int score = 0;
+            var explanations = new List<string>();
+
             for (int i = 0; i < studentAnswers.Count && i < questions.Count; i++)
             {
-                if (studentAnswers[i] == questions[i].CorrectIndex) score++;
+                var q = questions[i];
+                if (studentAnswers[i] == q.CorrectIndex)
+                {
+                    score++;
+                    explanations.Add($"Q{i + 1}: Correct! {q.Explanation}");
+                }
+                else
+                {
+                    explanations.Add($"Q{i + 1}: Incorrect. You selected '{q.Options[studentAnswers[i]]}'. Correct answer: '{q.Options[q.CorrectIndex]}'. {q.Explanation}");
+                }
             }
             
             double percentage = ((double)score / questions.Count) * 100;
-            return new ExamGradeResult(score, questions.Count, percentage >= 80.0, percentage);
+            return new ExamGradeResult(score, questions.Count, percentage >= 80.0, percentage, explanations);
         }
     }
 }

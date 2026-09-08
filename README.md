@@ -3,6 +3,12 @@
 ![Dashboard View](https://raw.githubusercontent.com/pintuvaria/BhavaniTechAcademy/master/assets/dashboard.jpg)
 *Main dashboard with Gamification, Streaks, and Course Pathways.*
 
+![Bhavani Autonomous Neural Local AI](https://raw.githubusercontent.com/pintuvaria/BhavaniTechAcademy/master/assets/local_ai.jpg)
+*Bhavani Autonomous Neural Local AI (100% Offline, Air-Gapped, CoT Reasoning Trace, Syntax-Highlighted Code Generation).*
+
+![Quantum & Transformer Simulation Labs](https://raw.githubusercontent.com/pintuvaria/BhavaniTechAcademy/master/assets/quantum_ai.jpg)
+*Quantum Gates 2-Qubit Entanglement & Transformer Multi-Head Attention Visualization.*
+
 ![Sandbox View](https://raw.githubusercontent.com/pintuvaria/BhavaniTechAcademy/master/assets/sandbox.jpg)
 *Interactive Grey Hat Cybersecurity and Polyglot Coding Sandbox.*
 
@@ -21,13 +27,44 @@
 **Founder & Chief Architect:** Dharmesh Varia  
 **Application Type:** Standalone Windows Application (.NET 9 WPF, 100% Offline, Self-Contained)  
 **Target Hardware:** 1.2 GHz Single-Core CPU | 2 GB RAM | HDD | Integrated Graphics  
-**Runtime Footprint:** ~42 MB Working Set RAM | < 1% CPU Idle | Zero External Host Dependencies
+**Runtime Footprint:** ~45 MB Working Set RAM | < 1% CPU Idle | Zero External Host Dependencies
 
 ---
 
 ## 🌟 Overview
 
 **Bhavani Technology Academy** is a comprehensive, self-contained educational workstation designed to teach computer science and technology from **elementary basics to master/cutting-edge levels**. It requires **zero host prerequisites** (no pre-installed .NET runtime, Python, or Node.js required) and operates **100% offline** with zero external network calls.
+
+---
+
+## 🚀 Key Highlights & New Enhancements
+
+### 🧠 1. Autonomous Neural Local AI (100% Offline & Air-Gapped)
+- **Zero Internet Requirement**: Completely self-contained neural-symbolic inference running in-memory.
+- **Chain-of-Thought (CoT) Reasoning Trace**: Live inspection showing step-by-step reasoning (Query Analysis $\rightarrow$ Knowledge Retrieval $\rightarrow$ Concept Mapping $\rightarrow$ Synthesized Explanation $\rightarrow$ Code Generation).
+- **Domain Specialization Filters**: Instant domain adaptation across Cybersecurity, Programming, Networking, Hardware, Fundamentals, Linux, Electronics, and AI.
+- **Quick-Prompt Discovery Chips**: Single-click access to complex subjects like `🛡️ SQLi Exploit`, `🌐 CCNA Subnets`, `⚛️ Bell State`, and `🧠 Transformer MHA`.
+- **Syntax-Highlighted Code Generation**: Formatted snippets for multi-language exploration.
+
+### ⚛️ 2. Advanced Quantum & AI Simulation Engines
+- **2-Qubit Entangled Quantum Lab**: Pauli-X/Y/Z, Phase, T, Hadamard, and CNOT gates. Generates the maximally entangled Bell State $|\Phi^+\rangle = \frac{1}{\sqrt{2}}(|00\rangle + |11\rangle)$ with state amplitude vector calculations.
+- **Transformer Multi-Head Attention (MHA)**: Simulates query/key/value projections ($Q, K, V$), $h$ parallel attention heads, scaled dot-product attention softmax distributions, context matrix concatenation, and LayerNorm residual connections.
+
+### 🔬 3. Scientific Computing & Hardware Physics
+- **Upgraded Scientific Calculator**: Full Dijkstra Shunting-Yard algorithm supporting parenthesis parsing, operator precedence, trigonometric functions (`sin`, `cos`, `tan`), logarithmic functions (`log`, `ln`), and powers (`^`).
+- **Non-Linear Breadboard Physics**: Shockley Diode equation solver ($I = I_s(e^{V_D/nV_T} - 1)$), dynamic diode resistance curves, and parallel circuit equivalent resistance solvers alongside RC transient charging analysis.
+- **Operating Systems Internals**: FIFO and Belady's Optimal (MIN) page replacement algorithms, and Preemptive Shortest Remaining Time First (SRTF) CPU scheduling.
+
+### 🛡️ 4. Grey Hat Offensive Security & Forensics
+- **SQLi AST Classification Engine**: Automatically analyzes payloads for Tautology, UNION-based, and Blind Time-based patterns, detecting inline comment (`/**/`) WAF evasion techniques.
+- **Binary PCAP Frame Forensics**: Decodes Ethernet II, IPv4 headers, checksums, TCP flags (SYN/ACK/FIN), and extracts plaintext HTTP/FTP credentials from base64 authentication headers.
+- **Compiler Stack Canary & ASLR Sandbox**: Visualizes buffer overflow detection, canary tripping (`0xDEADBEEF`, `__stack_chk_fail`), Address Space Layout Randomization (ASLR), and DEP/NX execution protection.
+
+### 🎓 5. Academic & University Curriculums
+- **Relational Database Normalization Engine**: Validates table schemas through 1NF, 2NF, 3NF, and BCNF, decomposing multi-valued attributes and resolving partial functional dependencies.
+- **C Pointer & Memory Arithmetic Simulator**: Visualizes pointer variable addresses, dereferencing, and pointer increment steps in hexadecimal format.
+- **CCNA Certification Exam Bank**: Expanded to a comprehensive 20-question certification bank with detailed explanations.
+- **CIS Benchmark & Windows Registry Auditor**: Programmatic registry security inspection and Group Policy baseline auditing.
 
 ---
 
@@ -192,7 +229,7 @@ Simply double-click the portable executable in the project root:
 ```
 
 ### Running the Automated Verification Suite
-Run the 12-test verification suite to validate database persistence, continuity resume, cryptography math, simulator logic, course blueprints, multi-language runners, and calculator engine:
+Run the 29-test verification suite to validate database persistence, continuity resume, local AI inference, quantum circuits, transformer MHA, offensive security classifiers, CCNA exams, university modules, and calculator engine:
 ```powershell
 dotnet run --project tests/VerifyApp/VerifyApp.csproj -c Release
 ```

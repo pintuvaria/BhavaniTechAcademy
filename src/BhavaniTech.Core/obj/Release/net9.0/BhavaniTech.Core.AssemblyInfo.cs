@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BhavaniTech.Core")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+21b264f4581542833fe533d7aa1a26395ad8bf5b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f11b90c274ac118a4aabc6c8566e859d841211d2")]
 [assembly: System.Reflection.AssemblyProductAttribute("BhavaniTech.Core")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BhavaniTech.Core")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

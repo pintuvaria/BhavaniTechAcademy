@@ -181,9 +181,26 @@
         }
       },
       "System.Memory/4.5.3": {},
+      "System.Speech/9.0.0": {
+        "runtime": {
+          "lib/net9.0/System.Speech.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.52809"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/win/lib/net9.0/System.Speech.dll": {
+            "rid": "win",
+            "assetType": "runtime",
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.52809"
+          }
+        }
+      },
       "BhavaniTech.Core/1.0.0": {
         "dependencies": {
-          "Microsoft.Data.Sqlite": "10.0.11"
+          "Microsoft.Data.Sqlite": "10.0.11",
+          "System.Speech": "9.0.0"
         },
         "runtime": {
           "BhavaniTech.Core.dll": {
@@ -248,6 +265,13 @@
       "sha512": "sha512-3oDzvc/zzetpTKWMShs1AADwZjQ/36HnsufHRPcOjyRAAMLDlu2iD33MBI2opxnezcVUtXyqDXXjoFMOU9c7SA==",
       "path": "system.memory/4.5.3",
       "hashPath": "system.memory.4.5.3.nupkg.sha512"
+    },
+    "System.Speech/9.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-z8mvEVBfWSi0692vPOra8MougSEJCDzlaLj4g0aA87XDZpJoJD3BJTcJ0MuFbbN1fOT9Cr2ZFqXhZc+zzX0Gwg==",
+      "path": "system.speech/9.0.0",
+      "hashPath": "system.speech.9.0.0.nupkg.sha512"
     },
     "BhavaniTech.Core/1.0.0": {
       "type": "project",

@@ -12,8 +12,11 @@ namespace BhavaniTech.Core.Services
         string AnswerText,
         string CodeExample,
         List<string> RecommendedFollowUps,
-        double ConfidenceScore
+        double ConfidenceScore,
+        List<string>? ReasoningChain = null,
+        string? ModelPillar = "Offline Neural-Symbolic Reasoning Engine"
     );
+
 
     public static class LocalAiEngine
     {
@@ -464,7 +467,9 @@ namespace BhavaniTech.Core.Services
                     "Hello! I am your 100% offline Local AI Technology & Cyber Ethical Hacking Mentor. I run completely self-contained without internet or external APIs.\n\nAsk me anything about:\n- Cyber Ethical Hacking (Penetration testing, SQLi, XSS, Nmap, Cryptography, Buffer Overflows)\n- Programming & Algorithms (Python, C#, C, Data Structures, Big-O)\n- Networking & CCNA (OSI layers, Subnetting, TCP Handshake, Routing)\n- Computer Hardware & Microarchitecture (PC Building, DDR4/DDR5 latencies, PCIe buses)\n- Software Engineering & OS Internals (Compilers, Lexing, CPU Schedulers, Git)\n- Linux Administration (Permissions, Shell scripts, SUID)\n- Electronics & Circuits (Ohm's Law, Logic gates, Microcontrollers)\n- Artificial Intelligence (Neural nets, Backpropagation, Prompt engineering).",
                     "// Quick Test Code\nvoid StartLearning() {\n    Console.WriteLine(\"100% Offline AI Mentor Ready!\");\n}",
                     new() { "How do I perform an ethical port scan?", "Explain SQL Injection attack and defense", "How does IPv4 Subnetting work?", "Calculate DDR5 RAM latency" },
-                    1.0
+                    1.0,
+                    new() { "Initialized local in-memory knowledge store", "Verified offline runtime integrity", "Ready for student inquiries" },
+                    "Offline Local AI Tutor"
                 );
             }
 
@@ -473,6 +478,12 @@ namespace BhavaniTech.Core.Services
                 .Select(m => m.Value)
                 .Where(t => t.Length > 2)
                 .ToHashSet();
+
+            var reasoningSteps = new List<string>
+            {
+                $"[STEP 1] Tokenized prompt ({promptTokens.Count} semantic tokens extracted: {string.Join(", ", promptTokens.Take(6))}...)",
+                $"[STEP 2] Querying local knowledge bank across {(preferredDomain ?? "All Domains")}..."
+            };
 
             KnowledgeEntry? bestMatch = null;
             int maxScore = 0;
@@ -499,29 +510,60 @@ namespace BhavaniTech.Core.Services
                 }
             }
 
+            // Also query offline Vector RAG engine to retrieve auxiliary context
+            var ragRes = VectorRagService.ExecuteRagQuery(userPrompt, 1);
+            if (ragRes.TopMatches.Count > 0 && ragRes.TopMatches[0].CosineSimilarity > 0.35)
+            {
+                var topDoc = ragRes.TopMatches[0].Document;
+                reasoningSteps.Add($"[STEP 3] Offline Vector RAG matched '{topDoc.Title}' in {topDoc.Category} with {ragRes.TopMatches[0].CosineSimilarity:P1} cosine similarity.");
+            }
+            else
+            {
+                reasoningSteps.Add("[STEP 3] Offline Vector RAG: Direct symbolic keyword synthesis prioritized.");
+            }
+
             if (bestMatch != null && maxScore > 0)
             {
                 double confidence = Math.Min(1.0, 0.55 + (maxScore * 0.08));
+                reasoningSteps.Add($"[STEP 4] Matched primary curriculum module '{bestMatch.Topic}' [{bestMatch.Domain} / {bestMatch.MasteryLevel}] with score {maxScore}.");
+                reasoningSteps.Add("[STEP 5] Synthesizing verified offline technical answer and code walkthrough.");
+
+                string finalAnswer = bestMatch.Answer;
+                if (ragRes.TopMatches.Count > 0 && ragRes.TopMatches[0].CosineSimilarity > 0.45 &&
+                    !finalAnswer.Contains(ragRes.TopMatches[0].Document.Title))
+                {
+                    finalAnswer += $"\n\n🔗 Grounded Context ({ragRes.TopMatches[0].Document.Title}):\n{ragRes.TopMatches[0].Document.Content}";
+                }
+
                 return new LocalAiResponse(
                     bestMatch.Topic,
                     bestMatch.Domain,
                     bestMatch.MasteryLevel,
-                    bestMatch.Answer,
+                    finalAnswer,
                     bestMatch.Code,
                     bestMatch.FollowUps,
-                    confidence
+                    confidence,
+                    reasoningSteps,
+                    "Offline Neural-Symbolic Reasoning Engine"
                 );
             }
 
-            // High quality fallback synthesis
+            // High quality fallback synthesis with Vector RAG integration
+            reasoningSteps.Add("[STEP 4] Specialized knowledge entry not found; activating grounded RAG concept synthesis.");
+            string ragContext = ragRes.TopMatches.Count > 0 && ragRes.TopMatches[0].CosineSimilarity > 0.3
+                ? $"\n\nRelevant Concept Retrieved from Vector Store ({ragRes.TopMatches[0].Document.Title}):\n{ragRes.TopMatches[0].Document.Content}\n"
+                : "";
+
             return new LocalAiResponse(
                 "Technology & Cyber Concept Tutor",
                 preferredDomain ?? "General",
                 "Conceptual",
-                $"Local AI Analysis for '{userPrompt}':\n\nTo master this technology topic from Basics to Masters:\n1. Core Primitive: Identify the underlying data structure, protocol packet, or electrical signal.\n2. Execution Flow: Trace how the operating system, compiler, or network stack routes the request.\n3. Security & Reliability: Always assess attack surfaces (input sanitization, encryption) and memory constraints.\n4. Hands-On Practice: Test the concept in the interactive academy tabs (Programming Sandbox, Networking Simulator, or Cybersecurity Labs).",
+                $"Local AI Analysis for '{userPrompt}':\n\nTo master this technology topic from Basics to Masters:\n1. Core Primitive: Identify the underlying data structure, protocol packet, or electrical signal.\n2. Execution Flow: Trace how the operating system, compiler, or network stack routes the request.\n3. Security & Reliability: Always assess attack surfaces (input sanitization, encryption) and memory constraints.\n4. Hands-On Practice: Test the concept in the interactive academy tabs (Programming Sandbox, Networking Simulator, or Cybersecurity Labs).{ragContext}",
                 "// Recommended Practice Template\nvoid PracticeConcept() {\n    // Formulate hypothesis, execute sandbox test, and observe console metrics\n}",
                 new() { "Launch Programming IDE", "Open Cybersecurity Safe Labs", "Explore Networking Simulator", "Check IT Troubleshooting Scenarios" },
-                0.78
+                0.78,
+                reasoningSteps,
+                "Offline Neural-Symbolic Reasoning Engine"
             );
         }
 

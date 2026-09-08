@@ -57,5 +57,101 @@ namespace BhavaniTech.Core.Services
             double percentage = questions.Count > 0 ? ((double)score / questions.Count) * 100 : 0;
             return new DegreeGradeResult(degreeType, score, questions.Count, percentage >= 75.0, percentage); // 75% required to pass university exams
         }
+
+        // =====================================================================
+        // ADVANCED UNIVERSITY LAB: DATABASE NORMALIZATION ENGINE (1NF -> BCNF)
+        // =====================================================================
+        public record NormalizationAnalysis(
+            string CurrentNormalForm,
+            bool HasNonAtomicValues,
+            bool HasPartialDependencies,
+            bool HasTransitiveDependencies,
+            List<string> RecommendedDecompositions,
+            string Explanation
+        );
+
+        public NormalizationAnalysis AnalyzeTableSchema(
+            List<string> candidateKey,
+            List<string> allAttributes,
+            List<(List<string> Determinant, List<string> Dependent)> functionalDependencies)
+        {
+            bool hasPartial = false;
+            bool hasTransitive = false;
+            var decompositions = new List<string>();
+
+            // Check for partial dependencies (Determinant is a proper subset of candidateKey)
+            foreach (var (det, dep) in functionalDependencies)
+            {
+                bool isSubset = det.TrueForAll(d => candidateKey.Contains(d)) && det.Count < candidateKey.Count;
+                if (isSubset)
+                {
+                    hasPartial = true;
+                    decompositions.Add($"Decompose table for 2NF: Split ({string.Join(", ", det)} -> {string.Join(", ", dep)}) into separate relation.");
+                }
+            }
+
+            // Check for transitive dependencies (Determinant is not candidateKey nor superkey, and dependent is non-prime)
+            foreach (var (det, dep) in functionalDependencies)
+            {
+                bool isDetCandidate = det.Count == candidateKey.Count && det.TrueForAll(d => candidateKey.Contains(d));
+                bool isDepCandidate = dep.TrueForAll(d => candidateKey.Contains(d));
+                if (!isDetCandidate && !isDepCandidate && !hasPartial)
+                {
+                    hasTransitive = true;
+                    decompositions.Add($"Decompose table for 3NF: Split transitive dependency ({string.Join(", ", det)} -> {string.Join(", ", dep)}) into separate relation.");
+                }
+            }
+
+            string nf = "1NF";
+            string expl;
+            if (hasPartial)
+            {
+                nf = "1NF";
+                expl = "Schema is in 1NF only: It contains Partial Functional Dependencies (non-prime attributes depend on only part of a composite candidate key). Must eliminate to reach 2NF.";
+            }
+            else if (hasTransitive)
+            {
+                nf = "2NF";
+                expl = "Schema is in 2NF: All partial dependencies resolved, but Transitive Dependencies exist (non-prime attribute depends on another non-prime attribute). Must eliminate to reach 3NF.";
+            }
+            else
+            {
+                nf = "3NF / BCNF";
+                expl = "Schema satisfies 3NF and Boyce-Codd Normal Form (BCNF): Every determinant is a superkey and zero transitive/partial redundancies remain.";
+            }
+
+            return new NormalizationAnalysis(nf, false, hasPartial, hasTransitive, decompositions, expl);
+        }
+
+        // =====================================================================
+        // ADVANCED UNIVERSITY LAB: C POINTER & MEMORY ARITHMETIC SIMULATION
+        // =====================================================================
+        public record PointerMemoryStep(
+            string Expression,
+            string MemoryAddressHex,
+            int DereferencedValue,
+            int ByteOffset,
+            string Explanation
+        );
+
+        public List<PointerMemoryStep> SimulatePointerArithmetic(int[] array, int baseAddress = 0x7FFE0010)
+        {
+            var steps = new List<PointerMemoryStep>();
+            int intSize = 4; // sizeof(int) on 32/64-bit platforms
+
+            for (int i = 0; i < array.Length; i++)
+            {
+                int currentAddr = baseAddress + (i * intSize);
+                steps.Add(new PointerMemoryStep(
+                    Expression: $"*(ptr + {i}) == arr[{i}]",
+                    MemoryAddressHex: $"0x{currentAddr:X8}",
+                    DereferencedValue: array[i],
+                    ByteOffset: i * intSize,
+                    Explanation: $"Base 0x{baseAddress:X8} + ({i} * {intSize} bytes) = 0x{currentAddr:X8}. Contains integer value {array[i]}."
+                ));
+            }
+
+            return steps;
+        }
     }
 }

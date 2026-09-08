@@ -47,3 +47,6 @@ D:\AntiGravity\Kids Game\src\BhavaniTech.Benchmark\obj\Debug\net9.0-windows\refi
 D:\AntiGravity\Kids Game\src\BhavaniTech.Benchmark\obj\Debug\net9.0-windows\BhavaniTech.Benchmark.pdb
 D:\AntiGravity\Kids Game\src\BhavaniTech.Benchmark\obj\Debug\net9.0-windows\BhavaniTech.Benchmark.genruntimeconfig.cache
 D:\AntiGravity\Kids Game\src\BhavaniTech.Benchmark\obj\Debug\net9.0-windows\ref\BhavaniTech.Benchmark.dll
+D:\AntiGravity\Kids Game\src\BhavaniTech.Benchmark\bin\Debug\net9.0-windows\System.Speech.dll
+D:\AntiGravity\Kids Game\src\BhavaniTech.Benchmark\bin\Debug\net9.0-windows\runtimes\win\lib\net9.0\System.Speech.dll
+D:\AntiGravity\Kids Game\src\BhavaniTech.Benchmark\obj\Debug\net9.0-windows\BhavaniTech.Benchmark.sourcelink.json

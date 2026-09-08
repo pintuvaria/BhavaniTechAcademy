@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using BhavaniTech.Core.Database;
 using BhavaniTech.Core.Hardware;
 using BhavaniTech.Core.Models;
@@ -114,6 +115,24 @@ namespace VerifyApp
             Console.WriteLine($" -> Breadboard Series Current: {bbRes.TotalCurrentAmps * 1000:F2} mA (Expected: 10.0 mA)");
             if (Math.Abs(bbRes.TotalCurrentAmps - 0.010) > 0.001) { Console.WriteLine("    FAILED: Breadboard Ohm's law loop calculation"); failed++; }
             else Console.WriteLine("    Breadboard Circuit Simulator PASSED ✅");
+
+            var parallelComps = new List<BreadboardComponent>
+            {
+                new() { Name = "R1", Type = CircuitComponentType.Resistor, Value = 100 },
+                new() { Name = "R2", Type = CircuitComponentType.Resistor, Value = 100 }
+            };
+            var parallelRes = BreadboardSimulationService.SimulateParallelCircuit(10.0, parallelComps);
+            Console.WriteLine($" -> Parallel Req: {parallelRes.EquivalentResistanceOhms:F1} Ω, Total I: {parallelRes.TotalCurrentAmps * 1000:F1} mA");
+            var diodeCurve = BreadboardSimulationService.CalculateShockleyDiodeCurve(1e-12, 1.5, 2.0, 10);
+            if (Math.Abs(parallelRes.EquivalentResistanceOhms - 50.0) > 0.1 || diodeCurve.Count != 11)
+            {
+                Console.WriteLine("    FAILED: Parallel circuit or Shockley diode model");
+                failed++;
+            }
+            else
+            {
+                Console.WriteLine("    Parallel Network & Shockley Diode Non-Linear Physics PASSED ✅");
+            }
 
             var uC = MicrocontrollerStudioService.ExecuteSketch("servo", 128, 512);
             Console.WriteLine($" -> Microcontroller Servo Angle: {uC.ServoAngleDegrees}° (Expected: ~90.4°)");
@@ -263,7 +282,20 @@ namespace VerifyApp
                 Console.WriteLine("    FAILED: Scientific math operations");
                 failed++;
             }
+
+            // Dijkstra Shunting-Yard Advanced Expressions: Nested Parentheses, Functions & Exponents
+            var cResAdv = calc.Evaluate("((3 + 5) * 2) ^ 2 - sqrt(100)");
+            Console.WriteLine($" -> Shunting-Yard Complex: '((3 + 5) * 2) ^ 2 - sqrt(100)' = {cResAdv.FormattedResult} (Expected: 246)");
+            if (Math.Abs(cResAdv.Value - 246) > 0.001)
+            {
+                Console.WriteLine("    FAILED: Dijkstra Shunting-Yard nested expression evaluation");
+                failed++;
+            }
             else
+            {
+                Console.WriteLine("    Dijkstra Shunting-Yard & Scientific RPN Engine PASSED ✅");
+            }
+
             // 12. Student Learning Lifecycle & Compounding Progress
             Console.WriteLine("\n[TEST 12] Student Learning Lifecycle (Open App -> Learn -> Close -> Reopen Continuity)...");
             string lifecycleDb = Path.Combine(Path.GetTempPath(), $"bhavani_lifecycle_{Guid.NewGuid():N}.db");
@@ -684,38 +716,56 @@ namespace VerifyApp
             // 24. Advanced Learnings: Phase 7 OS, Distributed, AI, Quantum
             Console.WriteLine("\n[TEST 24] Advanced Learnings (Phase 7 OS, Distributed, AI, Quantum)...");
             var osSvc = new OsSimulationService();
-            var lru = osSvc.SimulatePagingLRU(new[] { 1, 2, 3, 4, 1, 2, 5, 1, 2, 3, 4, 5 }, 3);
-            Console.WriteLine($" -> Paging LRU: Faults={lru.PageFaults}, Hits={lru.PageHits}");
+            int[] pages = new[] { 1, 2, 3, 4, 1, 2, 5, 1, 2, 3, 4, 5 };
+            var procs = new List<OsSimulationService.ProcessInfo>
+            {
+                new("P1", 0, 8, 8),
+                new("P2", 1, 4, 4),
+                new("P3", 2, 9, 9),
+                new("P4", 3, 5, 5)
+            };
+            var lru = osSvc.SimulatePagingLRU(pages, 3);
+            var fifo = osSvc.SimulatePagingFIFO(pages, 3);
+            var opt = osSvc.SimulatePagingOptimal(pages, 3);
+            Console.WriteLine($" -> Paging Comparison: LRU Faults={lru.PageFaults}, FIFO Faults={fifo.PageFaults}, Optimal Faults={opt.PageFaults}");
             
-            var dsSvc = new DistributedSystemsService();
-            var raft = dsSvc.SimulateLeaderElection(new List<DistributedSystemsService.RaftNode> { 
-                new DistributedSystemsService.RaftNode { Id = "N1" }, 
-                new DistributedSystemsService.RaftNode { Id = "N2" }, 
-                new DistributedSystemsService.RaftNode { Id = "N3" } 
-            }, "N1");
+            var srtf = osSvc.SimulateSRTF(procs);
+            Console.WriteLine($" -> SRTF Scheduling: Avg Wait={srtf.AverageWaitingTime:F2}, Turnaround={srtf.AverageTurnaroundTime:F2}");
+
+            var raftSvc = new DistributedSystemsService();
+            var nodes = new List<DistributedSystemsService.RaftNode>
+            {
+                new() { Id = "N1" },
+                new() { Id = "N2" },
+                new() { Id = "N3" }
+            };
+            var raft = raftSvc.SimulateLeaderElection(nodes, "N1");
             Console.WriteLine($" -> Raft Leader Election: New Leader={raft.NewLeader}, Term={raft.Term}");
-            
+
             var trSvc = new TransformerVisualizerService();
             double[,] qMat = { { 1, 0 }, { 0, 1 } };
             double[,] kMat = { { 1, 0 }, { 0, 1 } };
             double[,] vMat = { { 1, 0 }, { 0, 1 } };
             var attn = trSvc.CalculateSelfAttention(qMat, kMat, vMat);
-            Console.WriteLine($" -> Transformer Attention: Scores[{attn.SoftmaxScores.GetLength(0)}x{attn.SoftmaxScores.GetLength(1)}]");
+            var mha = trSvc.CalculateMultiHeadAttention(qMat, 2);
+            Console.WriteLine($" -> Transformer MHA: Heads={mha.NumHeads}, ResidualNorm[0,0]={mha.ResidualAddedNorm[0, 0]:F2}");
             
             var qcSvc = new QuantumComputingService();
             var qb = new QuantumComputingService.Qubit(new QuantumComputingService.ComplexNumber(1, 0), new QuantumComputingService.ComplexNumber(0, 0));
             var hGate = qcSvc.GetHadamardGate();
             var qbH = qcSvc.ApplyGate(qb, hGate);
+            var bell = qcSvc.CreateBellStatePhiPlus();
             Console.WriteLine($" -> Quantum Hadamard Gate: {qbH}");
+            Console.WriteLine($" -> Bell State |Phi+>: {bell}");
 
-            if (lru.PageFaults == 0 || raft.NewLeader != "N1" || attn.SoftmaxScores.Length == 0 || qbH.ProbabilityZero < 0.49)
+            if (lru.PageFaults == 0 || fifo.PageFaults == 0 || opt.PageFaults == 0 || raft.NewLeader != "N1" || mha.ResidualAddedNorm.Length == 0 || Math.Abs(bell.Prob00 - 0.5) > 0.01)
             {
-                Console.WriteLine("    FAILED: Phase 7 Advanced Learnings");
+                Console.WriteLine("    FAILED: Phase 7 Advanced Learnings (Paging, MHA, Bell State)");
                 failed++;
             }
             else
             {
-                Console.WriteLine("    Phase 7 Advanced Learnings PASSED ✅");
+                Console.WriteLine("    Phase 7 Advanced Learnings (Optimal Paging, Multi-Head Attention, Bell State) PASSED ✅");
             }
 
             // 25. Phase 8: Gamification & Omni-Domain Improvements
@@ -744,64 +794,67 @@ namespace VerifyApp
             
             var webSec = new WebSecuritySimulatorService();
             var sqli = webSec.SimulateLogin("admin", "' OR '1'='1", false);
-            Console.WriteLine($" -> SQLi Sandbox: Bypassed={sqli.IsBypassed}, Reason: {sqli.Explanation}");
+            var sqliUnion = webSec.SimulateLogin("admin", "' UNION/**/SELECT username, password FROM users --", false, true);
+            Console.WriteLine($" -> SQLi Sandbox: Bypassed={sqli.IsBypassed}, Type={sqli.InjectionType}, WAF Evaded={sqliUnion.WafBypassed}");
 
             var forensics = new NetworkForensicsService();
-            var pcap = forensics.AnalyzeSimulatedPcap("FTP", "USER admin\r\nPASS secret123\r\n");
-            Console.WriteLine($" -> PCAP Analyzer: Found Auth={pcap.FoundCleartextAuth}, Bytes: {pcap.HexDump.Length}");
+            var pcap = forensics.AnalyzeSimulatedPcap("HTTP", "GET /admin HTTP/1.1\r\nAuthorization: Basic YWRtaW46c2VjcmV0MTIz\r\n\r\n");
+            Console.WriteLine($" -> PCAP Analyzer: Decoded Auth={pcap.ExtractedData}, SourceIP={pcap.DecodedFrame?.IpSource}");
 
             var malware = new MalwareAnalysisSandboxService();
-            var buffer = malware.SimulateBufferOverflow("AAAAAAAAAAAAAAAAAAAAAA", 12);
-            Console.WriteLine($" -> Stack Visualizer: EIP Overwritten={buffer.EipOverwritten}, Written={buffer.BytesWritten}");
+            var bufferNormal = malware.SimulateBufferOverflow("AAAAAAAAAAAAAAAAAAAAAA", 12, false);
+            var bufferCanary = malware.SimulateBufferOverflow("AAAAAAAAAAAAAAAAAAAAAA", 12, true);
+            Console.WriteLine($" -> Stack Visualizer: EIP Overwritten={bufferNormal.EipOverwritten}, Canary Tripped={bufferCanary.CanaryTripped}");
 
-            if (!sqli.IsBypassed || !pcap.FoundCleartextAuth || !buffer.EipOverwritten)
+            if (!sqli.IsBypassed || !sqliUnion.WafBypassed || !pcap.FoundCleartextAuth || !bufferNormal.EipOverwritten || !bufferCanary.CanaryTripped)
             {
-                Console.WriteLine("    FAILED: Phase 9 Grey Hat Security Labs");
+                Console.WriteLine("    FAILED: Phase 9 Grey Hat Security Labs (SQLi, PCAP Frames, Stack Canaries)");
                 failed++;
             }
             else
             {
-                Console.WriteLine("    Phase 9 Grey Hat Security Labs PASSED ✅");
+                Console.WriteLine("    Phase 9 Grey Hat Security Labs (WAF Evasion, Frame Decoding, Stack Canaries) PASSED ✅");
             }
 
             // 27. OS Mastery, Registry & GPEDIT Curriculum
             Console.WriteLine("\n[TEST 27] OS Mastery (Registry, GPEDIT, OS Types)...");
-            var osCurriculum = new WindowsInternalsService().GetOsCurriculum();
+            var winInternals = new WindowsInternalsService();
+            var osCurriculum = winInternals.GetOsCurriculum();
+            var regAudits = winInternals.AuditSystemRegistrySettings();
+            var gpAudits = winInternals.AuditGpeditSecurityBaseline();
             Console.WriteLine($" -> OS Curriculum Loaded: {osCurriculum.Count} advanced lessons.");
-            foreach (var lesson in osCurriculum)
-            {
-                Console.WriteLine($"    - {lesson.Title} (Precautions length: {lesson.Precautions.Length})");
-            }
+            Console.WriteLine($" -> Registry Audits Hardened: {regAudits.Count(r => r.IsSecurityHardened)}/{regAudits.Count}, GPEDIT CIS Policies: {gpAudits.Count}");
 
-            if (osCurriculum.Count < 3)
+            if (osCurriculum.Count < 3 || regAudits.Count < 3 || gpAudits.Count < 3)
             {
-                Console.WriteLine("    FAILED: OS Curriculum");
+                Console.WriteLine("    FAILED: OS Curriculum, Registry Audits, or GPEDIT Policies");
                 failed++;
             }
             else
             {
-                Console.WriteLine("    OS Mastery Curriculum PASSED ✅");
+                Console.WriteLine("    OS Mastery Curriculum & Registry / GPEDIT Security Auditor PASSED ✅");
             }
 
             // 28. CCNA Complete Tutorials & Exams
             Console.WriteLine("\n[TEST 28] CCNA Certification Mastery (Tutorials & Exams)...");
             var ccna = new CcnaCurriculumService();
             var tutorials = ccna.GetTutorials();
-            Console.WriteLine($" -> CCNA Modules Loaded: {tutorials.Count}");
+            var examQuestions = ccna.GetExamQuestions();
+            Console.WriteLine($" -> CCNA Modules Loaded: {tutorials.Count}, Question Bank: {examQuestions.Count}");
             
-            // Simulate a perfect exam run
-            var answers = new List<int> { 2, 2, 2, 1, 2 }; 
+            // Simulate an exam run answering all questions correctly
+            var answers = examQuestions.Select(q => q.CorrectIndex).ToList(); 
             var grade = ccna.GradeExam(answers);
-            Console.WriteLine($" -> CCNA Final Exam: Scored {grade.Score}/{grade.TotalQuestions} ({grade.Percentage}%) - Passed: {grade.Passed}");
+            Console.WriteLine($" -> CCNA Final Exam: Scored {grade.Score}/{grade.TotalQuestions} ({grade.Percentage:F1}%) - Passed: {grade.Passed}");
 
-            if (tutorials.Count < 6 || !grade.Passed)
+            if (tutorials.Count < 6 || examQuestions.Count < 20 || !grade.Passed)
             {
-                Console.WriteLine("    FAILED: CCNA Curriculum & Exams");
+                Console.WriteLine("    FAILED: CCNA Curriculum & 20+ Question Bank");
                 failed++;
             }
             else
             {
-                Console.WriteLine("    CCNA Mastery Curriculum PASSED ✅");
+                Console.WriteLine("    CCNA Mastery Curriculum & Comprehensive 20-Question Exam Bank PASSED ✅");
             }
 
             // 29. BCA & MCA University Degree Curriculum & Exams
@@ -810,6 +863,21 @@ namespace VerifyApp
             var modules = university.GetModules();
             Console.WriteLine($" -> University Modules Loaded: {modules.Count} (BCA/MCA tracks)");
             
+            // Database Normalization Engine Test
+            var candKey = new List<string> { "StudentID", "CourseID" };
+            var allAttrs = new List<string> { "StudentID", "CourseID", "StudentName", "Grade" };
+            var fds = new List<(List<string> Det, List<string> Dep)>
+            {
+                (new List<string> { "StudentID" }, new List<string> { "StudentName" }), // Partial dependency
+                (new List<string> { "StudentID", "CourseID" }, new List<string> { "Grade" })
+            };
+            var normAnalysis = university.AnalyzeTableSchema(candKey, allAttrs, fds);
+            Console.WriteLine($" -> DB Normalization: Current NF={normAnalysis.CurrentNormalForm}, Partial={normAnalysis.HasPartialDependencies}");
+
+            // C Pointer Memory Arithmetic Test
+            var pointerTrace = university.SimulatePointerArithmetic(new[] { 10, 20, 30, 40 });
+            Console.WriteLine($" -> C Pointer Arithmetic: Steps={pointerTrace.Count}, FirstAddr={pointerTrace[0].MemoryAddressHex}");
+
             // Simulate a perfect BCA exam run
             var bcaAnswers = new List<int> { 0, 3, 1 }; 
             var bcaGrade = university.GradeExam("BCA", bcaAnswers);
@@ -820,14 +888,14 @@ namespace VerifyApp
             var mcaGrade = university.GradeExam("MCA", mcaAnswers);
             Console.WriteLine($" -> MCA Final Exam: Scored {mcaGrade.Score}/{mcaGrade.TotalQuestions} ({mcaGrade.Percentage}%) - Passed: {mcaGrade.Passed}");
 
-            if (modules.Count < 8 || !bcaGrade.Passed || !mcaGrade.Passed)
+            if (modules.Count < 8 || !bcaGrade.Passed || !mcaGrade.Passed || !normAnalysis.HasPartialDependencies || pointerTrace.Count != 4)
             {
-                Console.WriteLine("    FAILED: BCA/MCA Curriculum & Exams");
+                Console.WriteLine("    FAILED: BCA/MCA Curriculum, Normalization Engine, or Pointer Arithmetic");
                 failed++;
             }
             else
             {
-                Console.WriteLine("    University Mastery Curriculum PASSED ✅");
+                Console.WriteLine("    University Mastery (BCA/MCA, Normalization Engine & C Pointer Simulation) PASSED ✅");
             }
 
             Console.WriteLine("\n=================================================================");
