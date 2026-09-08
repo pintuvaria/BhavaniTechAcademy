@@ -339,6 +339,32 @@ namespace BhavaniTech.Core.Services
         {
             return (1, DateTime.UtcNow.AddDays(1));
         }
+
+        public static (int Repetitions, double EaseFactor, int IntervalDays, DateTime NextReview) CalculateSm2Interval(int repetitions, double easeFactor, int quality)
+        {
+            // Quality scale: 0-2 (Again / Fail), 3 (Hard), 4 (Good), 5 (Easy)
+            quality = Math.Clamp(quality, 0, 5);
+            double newEf = easeFactor + (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02));
+            if (newEf < 1.3) newEf = 1.3;
+
+            int newReps;
+            int newInterval;
+
+            if (quality < 3)
+            {
+                newReps = 0;
+                newInterval = 1;
+            }
+            else
+            {
+                newReps = repetitions + 1;
+                if (newReps == 1) newInterval = 1;
+                else if (newReps == 2) newInterval = 6;
+                else newInterval = Math.Max(7, (int)Math.Round(6 * Math.Pow(newEf, newReps - 2)));
+            }
+
+            return (newReps, Math.Round(newEf, 2), newInterval, DateTime.UtcNow.AddDays(newInterval));
+        }
     }
 
     // =========================================================================

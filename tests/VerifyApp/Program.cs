@@ -958,10 +958,69 @@ namespace VerifyApp
                 try { if (File.Exists(aiTestDb)) File.Delete(aiTestDb); } catch { }
             }
 
+            // 31. Socratic AI Tutoring, Offline Code Reviewer, SM-2 Flashcards & Certificate Generator
+            Console.WriteLine("\n[TEST 31] Socratic AI Mode, Code Security Auditor, SM-2 & Certificate Services...");
+
+            // 31.1 Socratic Tutoring Inquiry
+            var socraticRes = LocalAiEngine.QueryLocalAi("Explain SQL Injection", "Cybersecurity", 5, null, isSocraticMode: true);
+            Console.WriteLine($" -> Socratic Mode Answer Length: {socraticRes.AnswerText.Length} chars, Topic: {socraticRes.Topic}");
+            if (!socraticRes.AnswerText.Contains("Socratic Inquiry") || !socraticRes.AnswerText.Contains("Guiding Question"))
+            {
+                Console.WriteLine("    FAILED: Socratic mode inquiry not properly formatted");
+                failed++;
+            }
+            else
+            {
+                Console.WriteLine("    Socratic Tutoring Inquiry Mode PASSED ✅");
+            }
+
+            // 31.2 Offline Static Code Reviewer
+            string vulnCode = "void Hack(string u) {\n    string sql = \"SELECT * FROM Accounts WHERE User='\" + u + \"'\";\n    var conn = new SqlConnection();\n    try { conn.Open(); }\n    catch { }\n}";
+            var review = LocalAiEngine.ReviewCodeSnippet(vulnCode, "csharp");
+            Console.WriteLine($" -> Code Review Grade: {review.SecurityScore}, Issues Detected: {review.TotalIssues}");
+            if (review.TotalIssues < 2 || review.SecurityScore == "A+")
+            {
+                Console.WriteLine("    FAILED: Code reviewer failed to detect SQL injection or empty catch");
+                failed++;
+            }
+            else
+            {
+                Console.WriteLine("    Offline Static Code Security Auditor PASSED ✅");
+            }
+
+            // 31.3 SuperMemo SM-2 Algorithm
+            var sm2First = SpacedRepetitionService.CalculateSm2Interval(0, 2.5, 4); // Good
+            Console.WriteLine($" -> SM-2 First Review: Reps={sm2First.Repetitions}, EF={sm2First.EaseFactor}, Interval={sm2First.IntervalDays} days");
+            var sm2Second = SpacedRepetitionService.CalculateSm2Interval(sm2First.Repetitions, sm2First.EaseFactor, 4);
+            Console.WriteLine($" -> SM-2 Second Review: Reps={sm2Second.Repetitions}, Interval={sm2Second.IntervalDays} days");
+            if (sm2First.IntervalDays != 1 || sm2Second.IntervalDays != 6)
+            {
+                Console.WriteLine("    FAILED: SM-2 interval calculations did not match expected values (1, 6)");
+                failed++;
+            }
+            else
+            {
+                Console.WriteLine("    SuperMemo SM-2 Spaced Repetition Engine PASSED ✅");
+            }
+
+            // 31.4 Certificate Generation & Cryptographic Verification Hash
+            var certRecord = CertificateService.CreateCertificateRecord("Dharmesh Varia", "Grandmaster Technology Diploma", 66, 3500);
+            string certHtml = CertificateService.GenerateCertificateHtml(certRecord);
+            Console.WriteLine($" -> Certificate ID: {certRecord.CertificateId}, Hash: {certRecord.VerificationHash}, HTML: {certHtml.Length} chars");
+            if (string.IsNullOrEmpty(certRecord.VerificationHash) || !certRecord.VerificationHash.StartsWith("BTA-") || !certHtml.Contains("Certificate of Mastery"))
+            {
+                Console.WriteLine("    FAILED: Certificate generation or verification hash invalid");
+                failed++;
+            }
+            else
+            {
+                Console.WriteLine("    Cryptographic Certificate Generator PASSED ✅");
+            }
+
             Console.WriteLine("\n=================================================================");
             if (failed == 0)
             {
-                Console.WriteLine("ALL 30 COMPREHENSIVE TEST SUITES PASSED PERFECTLY! (0 Failures) ✅");
+                Console.WriteLine("ALL 31 COMPREHENSIVE TEST SUITES PASSED PERFECTLY! (0 Failures) ✅");
                 Console.WriteLine("=================================================================");
                 return 0;
             }

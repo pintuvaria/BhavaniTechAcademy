@@ -42,26 +42,34 @@
 ### 🧠 1. Autonomous Self-Learning Local AI (100% Offline & Air-Gapped)
 - **Zero Internet Requirement**: Completely self-contained neural-symbolic inference running in-memory with local SQLite persistence.
 - **Autonomous Knowledge Expansion**: The AI actively learns and assimilates new concepts in-memory and stores them in encrypted local SQLite (`LocalAiLearnedKnowledge`), expanding its knowledge without external internet or model re-downloading.
+- **🎓 Socratic Tutoring Mode**: Guided inquiry mode that asks probing questions and provides progressive conceptual hints instead of spoiling direct answers, cultivating critical problem-solving skills.
+- **🔍 Offline Static Code Reviewer & Bug Hunter**: Audits student code snippets for SQL Injection, memory/resource leaks (unclosed streams/connections), unsafe buffer overflows (`strcpy`/`gets`), empty catch blocks, and weak cryptography. Outputs a security score (A+ to F), issue descriptions, and an automated hardened patch.
 - **Interactive "Teach AI" Capability**: Students can teach the AI new lessons, algorithms, and concepts via `Teach AI: Topic | Domain | Details | Code` or direct conversation, fostering mastery through the **Protégé Effect**.
 - **Pedagogical Student Guidance Engine**: Dynamically analyzes the student's questions and learning milestones to formulate an adaptive study roadmap with personalized next-step suggestions.
 - **Chain-of-Thought (CoT) Reasoning Trace**: Live inspection showing step-by-step reasoning (Tokenization $\rightarrow$ Core & Learned Bank Retrieval $\rightarrow$ Vector RAG Similarity $\rightarrow$ Synthesized Explanation $\rightarrow$ Code Generation $\rightarrow$ Adaptive Guidance).
-- **Domain Specialization Filters & Quick-Chips**: Instant domain adaptation across Cybersecurity, Programming, Networking, Hardware, Fundamentals, Linux, Electronics, and AI.
+- **Curriculum Citations**: Displays exact domain and curriculum module links for every verified answer.
 
-### ⚛️ 2. Advanced Quantum & AI Simulation Engines
+### ⚡ 2. Global Command Palette & Modern UX
+- **🔍 Global Quick Jump (Ctrl+K)**: Instant fuzzy-search command palette accessible from anywhere in the app to jump between all 11 stations, workbenches, tools, and labs in milliseconds.
+- **📜 Verifiable Printable Certificate Generator**: Generates beautiful, official offline certificates (HTML/PDF) featuring gold borders, Bhavani Technology Academy watermark, student name, track mastery, and cryptographic SHA-256 validation hash (`BTA-...`).
+- **🎴 SuperMemo SM-2 Spaced Repetition Engine**: Calculates exact review intervals (`CalculateSm2Interval`) across all 11 disciplines based on ease factor and retention quality.
+- **🎨 Multi-Theme Customizer**: Switch seamlessly between `🌙 Cyber Dark`, `☀️ Daylight Light`, `📟 Terminal Green`, and `⚡ Cyberpunk Neon`.
+
+### ⚛️ 3. Advanced Quantum & AI Simulation Engines
 - **2-Qubit Entangled Quantum Lab**: Pauli-X/Y/Z, Phase, T, Hadamard, and CNOT gates. Generates the maximally entangled Bell State $|\Phi^+\rangle = \frac{1}{\sqrt{2}}(|00\rangle + |11\rangle)$ with state amplitude vector calculations.
 - **Transformer Multi-Head Attention (MHA)**: Simulates query/key/value projections ($Q, K, V$), $h$ parallel attention heads, scaled dot-product attention softmax distributions, context matrix concatenation, and LayerNorm residual connections.
 
-### 🔬 3. Scientific Computing & Hardware Physics
+### 🔬 4. Scientific Computing & Hardware Physics
 - **Upgraded Scientific Calculator**: Full Dijkstra Shunting-Yard algorithm supporting parenthesis parsing, operator precedence, trigonometric functions (`sin`, `cos`, `tan`), logarithmic functions (`log`, `ln`), and powers (`^`).
 - **Non-Linear Breadboard Physics**: Shockley Diode equation solver ($I = I_s(e^{V_D/nV_T} - 1)$), dynamic diode resistance curves, and parallel circuit equivalent resistance solvers alongside RC transient charging analysis.
 - **Operating Systems Internals**: FIFO and Belady's Optimal (MIN) page replacement algorithms, and Preemptive Shortest Remaining Time First (SRTF) CPU scheduling.
 
-### 🛡️ 4. Grey Hat Offensive Security & Forensics
+### 🛡️ 5. Grey Hat Offensive Security & Forensics
 - **SQLi AST Classification Engine**: Automatically analyzes payloads for Tautology, UNION-based, and Blind Time-based patterns, detecting inline comment (`/**/`) WAF evasion techniques.
 - **Binary PCAP Frame Forensics**: Decodes Ethernet II, IPv4 headers, checksums, TCP flags (SYN/ACK/FIN), and extracts plaintext HTTP/FTP credentials from base64 authentication headers.
 - **Compiler Stack Canary & ASLR Sandbox**: Visualizes buffer overflow detection, canary tripping (`0xDEADBEEF`, `__stack_chk_fail`), Address Space Layout Randomization (ASLR), and DEP/NX execution protection.
 
-### 🎓 5. Academic & University Curriculums
+### 🎓 6. Academic & University Curriculums
 - **Relational Database Normalization Engine**: Validates table schemas through 1NF, 2NF, 3NF, and BCNF, decomposing multi-valued attributes and resolving partial functional dependencies.
 - **C Pointer & Memory Arithmetic Simulator**: Visualizes pointer variable addresses, dereferencing, and pointer increment steps in hexadecimal format.
 - **CCNA Certification Exam Bank**: Expanded to a comprehensive 20-question certification bank with detailed explanations.

@@ -164,11 +164,14 @@
                         <Border Background="#334155" CornerRadius="4" Padding="8,4" Margin="4,0">
                             <TextBlock x:Name="TxtUserStreak" Text="🔥 3 Day Streak" FontSize="12" FontWeight="Bold" Foreground="#FB923C"/>
                         </Border>
+                        <Button x:Name="BtnCommandPalette" Content="🔍 Quick Jump (Ctrl+K)" Click="BtnCommandPalette_Click" Background="#0284C7" Foreground="White" Padding="8,4" FontSize="11" FontWeight="Bold" BorderThickness="0" Cursor="Hand" Margin="4,0" ToolTip="Global Quick Search (Ctrl+K) to jump across all modules &amp; labs"/>
+                        <Button x:Name="BtnExportCertHeader" Content="📜 Certificate" Click="BtnExportCertHeader_Click" Background="#D97706" Foreground="White" Padding="8,4" FontSize="11" FontWeight="Bold" BorderThickness="0" Cursor="Hand" Margin="4,0" ToolTip="Generate verified offline completion certificate"/>
                         <Button x:Name="BtnStopVoice" Content="⏹️ Stop Voice" Click="BtnStopVoice_Click" Background="#475569" Foreground="White" Padding="8,4" FontSize="11" FontWeight="Bold" BorderThickness="0" Cursor="Hand" Margin="4,0"/>
                         <ComboBox x:Name="CmbTheme" SelectionChanged="CmbTheme_SelectionChanged" Background="#0F172A" Foreground="White" Padding="6,2" FontSize="11" Margin="4,0" Cursor="Hand">
                             <ComboBoxItem Content="🌙 Cyber Dark" IsSelected="True"/>
                             <ComboBoxItem Content="☀️ Daylight Light"/>
                             <ComboBoxItem Content="📟 Terminal Green"/>
+                            <ComboBoxItem Content="⚡ Cyberpunk Neon"/>
                         </ComboBox>
                     </StackPanel>
                 </Grid>
@@ -1544,11 +1547,12 @@
                                             
                                             <!-- Quick Prompt Suggestions & Teach Button -->
                                             <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                                                <CheckBox x:Name="ChkSocraticMode" Content="🎓 Socratic Tutoring" Foreground="#FACC15" IsChecked="False" VerticalAlignment="Center" Margin="4,0" FontWeight="Bold" ToolTip="Guided inquiry mode: Asks probing questions and gives hints instead of spoiling answers"/>
+                                                <Button x:Name="BtnAiCodeReview" Content="🔍 Review Code" Click="BtnAiCodeReview_Click" Background="#0284C7" Foreground="White" Padding="8,3" FontSize="11" Margin="4,0" FontWeight="Bold" BorderThickness="0" Cursor="Hand" ToolTip="Inspect code snippet in query box for security vulnerabilities and bugs"/>
                                                 <Button Content="🎓 Teach AI" Click="BtnTeachAiPrompt_Click" ToolTip="Teach the Local AI a new concept permanently into its offline database" Background="#4F46E5" Foreground="White" Padding="9,3" FontSize="11" Margin="4,0" FontWeight="Bold" BorderThickness="0" Cursor="Hand"/>
                                                 <Button Content="🛡️ SQLi Exploit" Click="BtnQuickAiPrompt_Click" Tag="Explain SQL Injection attack mechanics, bypass techniques, and parameterized defense" Background="#334155" Foreground="#E2E8F0" Padding="8,3" FontSize="11" Margin="4,0" BorderThickness="0" Cursor="Hand"/>
                                                 <Button Content="🌐 CCNA Subnets" Click="BtnQuickAiPrompt_Click" Tag="Explain IPv4 VLSM subnetting formulas and calculate usable hosts for a /27" Background="#334155" Foreground="#E2E8F0" Padding="8,3" FontSize="11" Margin="4,0" BorderThickness="0" Cursor="Hand"/>
                                                 <Button Content="⚛️ Bell State" Click="BtnQuickAiPrompt_Click" Tag="How does the quantum CNOT gate create a 2-qubit entangled Bell State?" Background="#334155" Foreground="#E2E8F0" Padding="8,3" FontSize="11" Margin="4,0" BorderThickness="0" Cursor="Hand"/>
-                                                <Button Content="🧠 Transformer MHA" Click="BtnQuickAiPrompt_Click" Tag="How does Transformer Multi-Head Attention split heads and compute scaled dot product attention?" Background="#334155" Foreground="#E2E8F0" Padding="8,3" FontSize="11" Margin="4,0" BorderThickness="0" Cursor="Hand"/>
                                             </StackPanel>
                                         </Grid>
                                     </Border>
@@ -3535,6 +3539,64 @@
                     </TabControl>
                 </Grid>
             </Grid>
+        </Grid>
+
+        <!-- GLOBAL COMMAND PALETTE (CTRL+K) -->
+        <Grid x:Name="GridCommandPalette" Visibility="Collapsed" Panel.ZIndex="9999" Background="#B0000000">
+            <Border Width="620" Height="440" Background="#0F172A" BorderBrush="#0284C7" BorderThickness="2" CornerRadius="12" Padding="16" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0" Margin="0,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="⚡ Quick Jump &amp; Command Palette" Foreground="#38BDF8" FontSize="15" FontWeight="Bold"/>
+                            <Border Background="#1E293B" CornerRadius="4" Padding="6,2" Margin="10,0,0,0">
+                                <TextBlock Text="ESC to Close" Foreground="#94A3B8" FontSize="10"/>
+                            </Border>
+                        </StackPanel>
+                        <Button Grid.Column="1" Content="✕" Click="BtnCloseCommandPalette_Click" Background="Transparent" Foreground="#94A3B8" FontSize="14" FontWeight="Bold" BorderThickness="0" Cursor="Hand"/>
+                    </Grid>
+
+                    <Border Grid.Row="1" Background="#1E293B" BorderBrush="#334155" BorderThickness="1" CornerRadius="6" Padding="4" Margin="0,0,0,10">
+                        <TextBox x:Name="TxtPaletteSearch" Text="" TextChanged="TxtPaletteSearch_TextChanged" KeyDown="TxtPaletteSearch_KeyDown" Background="Transparent" Foreground="#F8FAFC" FontSize="14" BorderThickness="0" Padding="8,4"/>
+                    </Border>
+
+                    <ListBox x:Name="LstPaletteCommands" Grid.Row="2" Background="#020617" BorderBrush="#334155" BorderThickness="1" Foreground="#F8FAFC" MouseDoubleClick="LstPaletteCommands_MouseDoubleClick" KeyDown="LstPaletteCommands_KeyDown" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border Padding="8,6" BorderBrush="#1E293B" BorderThickness="0,0,0,1">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="32"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="{Binding Icon}" FontSize="16" VerticalAlignment="Center"/>
+                                        <StackPanel Grid.Column="1" Margin="6,0,0,0">
+                                            <TextBlock Text="{Binding Title}" FontWeight="Bold" Foreground="#F8FAFC" FontSize="13"/>
+                                            <TextBlock Text="{Binding Subtitle}" Foreground="#94A3B8" FontSize="11"/>
+                                        </StackPanel>
+                                        <Border Grid.Column="2" Background="#1E293B" CornerRadius="4" Padding="6,2" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding ActionKey}" Foreground="#38BDF8" FontSize="10" FontWeight="SemiBold"/>
+                                        </Border>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <TextBlock Grid.Row="3" Text="Press ↑/↓ to navigate, ENTER to jump, ESC to dismiss" Foreground="#64748B" FontSize="11" Margin="4,8,0,0"/>
+                </Grid>
+            </Border>
         </Grid>
     </Grid>
 </Window>

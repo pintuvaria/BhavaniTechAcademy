@@ -18,7 +18,8 @@ namespace BhavaniTech.Core.Services
         string? ModelPillar = "Autonomous Self-Learning Neural-Symbolic Engine",
         bool IsLearnedKnowledge = false,
         string? StudentGuidancePlan = null,
-        int TotalLearnedConcepts = 0
+        int TotalLearnedConcepts = 0,
+        string? CurriculumCitation = null
     );
 
 
@@ -602,7 +603,8 @@ namespace BhavaniTech.Core.Services
             string userPrompt,
             string? preferredDomain = null,
             int completedLessonCount = 0,
-            SqliteConnection? conn = null)
+            SqliteConnection? conn = null,
+            bool isSocraticMode = false)
         {
             // Auto sync DB if provided
             if (conn != null)
@@ -732,6 +734,21 @@ namespace BhavaniTech.Core.Services
                 reasoningSteps.Add("[STEP 5] Synthesizing verified offline technical answer, practical code, and tailored student next steps.");
 
                 string finalAnswer = bestMatch.Answer;
+
+                if (isSocraticMode)
+                {
+                    var lines = bestMatch.Answer.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+                    string hint1 = lines.Length > 0 ? lines[0] : "Focus on the foundational architecture and primary data flow.";
+                    string hint2 = lines.Length > 1 ? lines[1] : "Trace what happens at the machine or protocol layer.";
+
+                    finalAnswer = $"🎓 Socratic Inquiry: '{bestMatch.Topic}' [{bestMatch.Domain}]\n\n" +
+                                  $"🧭 Guiding Question:\nWhat problem does '{bestMatch.Topic}' solve, and what would fail if this component were removed?\n\n" +
+                                  $"💡 Conceptual Clue 1:\n{hint1}\n\n" +
+                                  $"🔍 Investigation Clue 2:\n{hint2}\n\n" +
+                                  $"❓ Active Student Challenge:\nBefore running the code below, predict what memory structures or network frames will be modified when it executes!\n\n" +
+                                  $"(Tip: Uncheck 'Socratic Mode' anytime to view the direct textbook reference.)";
+                }
+
                 if (ragRes.TopMatches.Count > 0 && ragRes.TopMatches[0].CosineSimilarity > 0.45 &&
                     !finalAnswer.Contains(ragRes.TopMatches[0].Document.Title))
                 {
@@ -740,6 +757,8 @@ namespace BhavaniTech.Core.Services
 
                 // Autonomously improve self-knowledge: Extract semantic association if question contains novel keywords
                 AutoSelfImproveKnowledge(userPrompt, bestMatch, conn);
+
+                string citation = $"{bestMatch.Domain} > Module: {bestMatch.Topic} [{bestMatch.MasteryLevel}]";
 
                 return new LocalAiResponse(
                     bestMatch.Topic,
@@ -753,7 +772,8 @@ namespace BhavaniTech.Core.Services
                     fromLearnedBank ? "Autonomous Self-Learned Knowledge" : "Autonomous Self-Learning Neural-Symbolic Engine",
                     fromLearnedBank,
                     studentGuidance,
-                    GetTotalLearnedCount()
+                    GetTotalLearnedCount(),
+                    citation
                 );
             }
 
@@ -903,6 +923,11 @@ namespace BhavaniTech.Core.Services
                 all.AddRange(LearnedKnowledgeBase);
                 return all;
             }
+        }
+
+        public static CodeReviewResult ReviewCodeSnippet(string code, string language = "csharp")
+        {
+            return CodeReviewerService.ReviewCode(code, language);
         }
     }
 }
