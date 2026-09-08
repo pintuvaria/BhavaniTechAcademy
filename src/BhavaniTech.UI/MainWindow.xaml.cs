@@ -106,7 +106,12 @@ namespace BhavaniTech.UI
             RefreshParentAudit();
             
             // Set initial chat response
-            TxtAiChatHistory.Text = "AI Tutor: Hello Young Innovator! I am your offline AI learning assistant. Ask me questions about Python, C#, Networking, Cybersecurity, or Hardware!\n";
+            int learnedCount = LocalAiEngine.GetTotalLearnedCount();
+            TxtAiChatHistory.Text = $"🤖 Bhavani Autonomous Self-Learning Local AI: Ready! (100% Offline, {learnedCount} self-learned concepts loaded).\nAsk me any question, or teach me new knowledge using 'Teach AI: Topic | Domain | Details'!\n";
+            if (TxtAiLearnedCount != null)
+            {
+                TxtAiLearnedCount.Text = $"{learnedCount} Learned Concepts";
+            }
             TxtCyberAiResponse.Text = "Cyber AI Mentor: Welcome to the Cyber Ethical Hacking Lab! Click any of the study chips above or type your question below to learn Penetration Testing, Exploitation, and Defense.\n";
         }
 
@@ -2160,16 +2165,28 @@ namespace BhavaniTech.UI
             string domain = (CmbAiDomain?.SelectedItem as ComboBoxItem)?.Content.ToString() ?? "All Domains";
             if (domain == "All Domains") domain = "All";
 
-            var res = LocalAiEngine.QueryLocalAi(q, domain);
+            int completedCount = _currentUser != null ? _db.GetCompletedLessonIds(_currentUser.Id).Count : 0;
+            using var conn = _db.GetConnection();
+            var res = LocalAiEngine.QueryLocalAi(q, domain, completedCount, conn);
+
             var sb = new System.Text.StringBuilder();
             sb.AppendLine($"\n🧑‍💻 Student: {q}");
-            sb.AppendLine($"🤖 Bhavani Local AI [{res.Topic} ({res.Domain} - {res.MasteryLevel}) | Confidence: {res.ConfidenceScore * 100:F0}%]:");
+            string learnedBadge = res.IsLearnedKnowledge ? " [✨ SELF-LEARNED CONCEPT]" : "";
+            sb.AppendLine($"🤖 Bhavani Local AI [{res.Topic} ({res.Domain} - {res.MasteryLevel}){learnedBadge} | Confidence: {res.ConfidenceScore * 100:F0}%]:");
             sb.AppendLine(res.AnswerText);
+
             if (!string.IsNullOrEmpty(res.CodeExample))
             {
-                sb.AppendLine("\n💻 CODE EXAMPLE:");
+                sb.AppendLine("\n💻 PRACTICAL CODE WALKTHROUGH:");
                 sb.AppendLine(res.CodeExample);
             }
+
+            if (!string.IsNullOrEmpty(res.StudentGuidancePlan))
+            {
+                sb.AppendLine("\n🗺️ ADAPTIVE LEARNING GUIDANCE:");
+                sb.AppendLine(res.StudentGuidancePlan);
+            }
+
             if (res.RecommendedFollowUps.Count > 0)
             {
                 sb.AppendLine("\n🎯 RECOMMENDED NEXT LESSONS:");
@@ -2179,22 +2196,40 @@ namespace BhavaniTech.UI
             TxtAiChatHistory.AppendText(sb.ToString() + "\n");
             TxtAiChatHistory.ScrollToEnd();
 
-            // Display Neural-Symbolic Reasoning Trace
+            // Display Neural-Symbolic & Self-Learning Reasoning Trace
             if (res.ReasoningChain != null && res.ReasoningChain.Count > 0)
             {
                 var rSb = new System.Text.StringBuilder();
-                rSb.AppendLine($"=== INFERENCE TRACE ({DateTime.Now:HH:mm:ss}) ===");
+                rSb.AppendLine($"=== SELF-LEARNING INFERENCE TRACE ({DateTime.Now:HH:mm:ss}) ===");
                 rSb.AppendLine($"Model Engine: {res.ModelPillar}");
                 rSb.AppendLine($"Topic Grounding: {res.Topic}");
+                rSb.AppendLine($"Total Learned Bank: {res.TotalLearnedConcepts} active self-evolved concepts");
                 rSb.AppendLine("Chain of Thought:");
                 foreach (var step in res.ReasoningChain)
                 {
                     rSb.AppendLine($" • {step}");
                 }
+                if (!string.IsNullOrEmpty(res.StudentGuidancePlan))
+                {
+                    rSb.AppendLine("\nPedagogical Guidance:");
+                    rSb.AppendLine(res.StudentGuidancePlan);
+                }
                 TxtAiReasoningTrace.Text = rSb.ToString();
             }
 
+            if (TxtAiLearnedCount != null)
+            {
+                TxtAiLearnedCount.Text = $"{res.TotalLearnedConcepts} Learned Concepts";
+            }
+
             TxtAiQuestion.Clear();
+        }
+
+        private void BtnTeachAiPrompt_Click(object sender, RoutedEventArgs e)
+        {
+            TxtAiQuestion.Text = "Teach AI: Quantum Key Distribution | Cybersecurity | QKD uses quantum entanglement and the no-cloning theorem to transmit uncrackable encryption keys across fiber optic channels. | // QKD BB84 Simulation in C#\nvoid SimulateQkd() { Console.WriteLine(\"QKD Entangled State Transmitted\"); }";
+            TxtAiQuestion.Focus();
+            TxtAiQuestion.SelectAll();
         }
 
         private void TxtAiQuestion_KeyDown(object sender, KeyEventArgs e)
@@ -2216,8 +2251,13 @@ namespace BhavaniTech.UI
 
         private void BtnClearAiChat_Click(object sender, RoutedEventArgs e)
         {
-            TxtAiChatHistory.Text = "🤖 Bhavani Local AI: Ready for queries. 100% offline self-contained neural engine.\n";
-            TxtAiReasoningTrace.Text = "[IDLE] Offline AI Ready. Enter prompt or select quick chip above.";
+            int total = LocalAiEngine.GetTotalLearnedCount();
+            TxtAiChatHistory.Text = $"🤖 Bhavani Local AI: Ready for queries. 100% offline self-learning neural engine ({total} self-learned concepts loaded).\n";
+            TxtAiReasoningTrace.Text = "[IDLE] Autonomous Self-Learning AI Ready. Ask a question or use 'Teach AI: Topic | Domain | Details'.";
+            if (TxtAiLearnedCount != null)
+            {
+                TxtAiLearnedCount.Text = $"{total} Learned Concepts";
+            }
         }
 
         // ELECTRONICS ACADEMY

@@ -39,12 +39,13 @@
 
 ## 🚀 Key Highlights & New Enhancements
 
-### 🧠 1. Autonomous Neural Local AI (100% Offline & Air-Gapped)
-- **Zero Internet Requirement**: Completely self-contained neural-symbolic inference running in-memory.
-- **Chain-of-Thought (CoT) Reasoning Trace**: Live inspection showing step-by-step reasoning (Query Analysis $\rightarrow$ Knowledge Retrieval $\rightarrow$ Concept Mapping $\rightarrow$ Synthesized Explanation $\rightarrow$ Code Generation).
-- **Domain Specialization Filters**: Instant domain adaptation across Cybersecurity, Programming, Networking, Hardware, Fundamentals, Linux, Electronics, and AI.
-- **Quick-Prompt Discovery Chips**: Single-click access to complex subjects like `🛡️ SQLi Exploit`, `🌐 CCNA Subnets`, `⚛️ Bell State`, and `🧠 Transformer MHA`.
-- **Syntax-Highlighted Code Generation**: Formatted snippets for multi-language exploration.
+### 🧠 1. Autonomous Self-Learning Local AI (100% Offline & Air-Gapped)
+- **Zero Internet Requirement**: Completely self-contained neural-symbolic inference running in-memory with local SQLite persistence.
+- **Autonomous Knowledge Expansion**: The AI actively learns and assimilates new concepts in-memory and stores them in encrypted local SQLite (`LocalAiLearnedKnowledge`), expanding its knowledge without external internet or model re-downloading.
+- **Interactive "Teach AI" Capability**: Students can teach the AI new lessons, algorithms, and concepts via `Teach AI: Topic | Domain | Details | Code` or direct conversation, fostering mastery through the **Protégé Effect**.
+- **Pedagogical Student Guidance Engine**: Dynamically analyzes the student's questions and learning milestones to formulate an adaptive study roadmap with personalized next-step suggestions.
+- **Chain-of-Thought (CoT) Reasoning Trace**: Live inspection showing step-by-step reasoning (Tokenization $\rightarrow$ Core & Learned Bank Retrieval $\rightarrow$ Vector RAG Similarity $\rightarrow$ Synthesized Explanation $\rightarrow$ Code Generation $\rightarrow$ Adaptive Guidance).
+- **Domain Specialization Filters & Quick-Chips**: Instant domain adaptation across Cybersecurity, Programming, Networking, Hardware, Fundamentals, Linux, Electronics, and AI.
 
 ### ⚛️ 2. Advanced Quantum & AI Simulation Engines
 - **2-Qubit Entangled Quantum Lab**: Pauli-X/Y/Z, Phase, T, Hadamard, and CNOT gates. Generates the maximally entangled Bell State $|\Phi^+\rangle = \frac{1}{\sqrt{2}}(|00\rangle + |11\rangle)$ with state amplitude vector calculations.

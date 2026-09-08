@@ -1481,7 +1481,7 @@
                             </Border>
                         </TabItem>
 
-                        <TabItem Header="🤖 Offline Neural Local AI" Padding="14,8">
+                        <TabItem Header="🤖 Self-Learning Offline AI" Padding="14,8">
                             <Border Background="#0F172A" CornerRadius="10" Padding="16" Margin="0,8,0,0" BorderThickness="1" BorderBrush="#1E293B">
                                 <Grid>
                                     <Grid.RowDefinitions>
@@ -1492,7 +1492,7 @@
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
 
-                                    <!-- Header Banner with Offline Badge -->
+                                    <!-- Header Banner with Offline Badge & Self-Learning Counter -->
                                     <Grid Grid.Row="0" Margin="0,0,0,10">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*"/>
@@ -1501,28 +1501,36 @@
                                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                             <TextBlock Text="🧠" FontSize="22" VerticalAlignment="Center" Margin="0,0,8,0"/>
                                             <StackPanel>
-                                                <TextBlock Text="Bhavani Autonomous Neural Local AI (100% Offline)" Foreground="#F8FAFC" FontSize="16" FontWeight="Bold"/>
-                                                <TextBlock Text="Local Neural-Symbolic Reasoning Engine • Zero Internet Required • Private &amp; In-Memory" Foreground="#94A3B8" FontSize="12"/>
+                                                <TextBlock Text="Bhavani Autonomous Self-Learning Local AI (100% Offline)" Foreground="#F8FAFC" FontSize="16" FontWeight="Bold"/>
+                                                <TextBlock Text="Self-Evolving Knowledge • Dynamic In-Memory Learning • Adaptive Student Guidance • Zero Telemetry" Foreground="#94A3B8" FontSize="12"/>
                                             </StackPanel>
                                         </StackPanel>
-                                        <Border Grid.Column="1" Background="#064E3B" BorderBrush="#10B981" BorderThickness="1" CornerRadius="20" Padding="12,5" VerticalAlignment="Center">
-                                            <StackPanel Orientation="Horizontal">
-                                                <Ellipse Width="8" Height="8" Fill="#34D399" Margin="0,0,6,0" VerticalAlignment="Center"/>
-                                                <TextBlock Text="OFFLINE AIR-GAPPED" Foreground="#A7F3D0" FontSize="11" FontWeight="Bold"/>
-                                            </StackPanel>
-                                        </Border>
+                                        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                                            <Border Background="#1E1B4B" BorderBrush="#6366F1" BorderThickness="1" CornerRadius="20" Padding="10,4" Margin="0,0,8,0" VerticalAlignment="Center">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="✨" FontSize="11" Margin="0,0,4,0"/>
+                                                    <TextBlock x:Name="TxtAiLearnedCount" Text="0 Learned Concepts" Foreground="#C7D2FE" FontSize="11" FontWeight="Bold"/>
+                                                </StackPanel>
+                                            </Border>
+                                            <Border Background="#064E3B" BorderBrush="#10B981" BorderThickness="1" CornerRadius="20" Padding="10,4" VerticalAlignment="Center">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Ellipse Width="8" Height="8" Fill="#34D399" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                                    <TextBlock Text="OFFLINE AIR-GAPPED" Foreground="#A7F3D0" FontSize="11" FontWeight="Bold"/>
+                                                </StackPanel>
+                                            </Border>
+                                        </StackPanel>
                                     </Grid>
 
-                                    <!-- Domain Filter & Preset Topic Selector -->
+                                    <!-- Domain Filter & Preset Topic Selector & Teach AI Quick Chip -->
                                     <Border Grid.Row="1" Background="#1E293B" CornerRadius="8" Padding="10" Margin="0,0,0,10">
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="Auto"/>
-                                                <ColumnDefinition Width="200"/>
+                                                <ColumnDefinition Width="180"/>
                                                 <ColumnDefinition Width="*"/>
                                             </Grid.ColumnDefinitions>
-                                            <TextBlock Text="Specialization Domain:" Foreground="#CBD5E1" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,8,0"/>
-                                            <ComboBox x:Name="CmbAiDomain" Grid.Column="1" SelectedIndex="0" Padding="8,4" Background="#0F172A" Foreground="#F8FAFC">
+                                            <TextBlock Text="Domain:" Foreground="#CBD5E1" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                            <ComboBox x:Name="CmbAiDomain" Grid.Column="1" SelectedIndex="0" Padding="6,4" Background="#0F172A" Foreground="#F8FAFC">
                                                 <ComboBoxItem Content="All Domains"/>
                                                 <ComboBoxItem Content="Cybersecurity"/>
                                                 <ComboBoxItem Content="Fundamentals"/>
@@ -1534,8 +1542,9 @@
                                                 <ComboBoxItem Content="ArtificialIntelligence"/>
                                             </ComboBox>
                                             
-                                            <!-- Quick Prompt Suggestions -->
+                                            <!-- Quick Prompt Suggestions & Teach Button -->
                                             <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                                                <Button Content="🎓 Teach AI" Click="BtnTeachAiPrompt_Click" ToolTip="Teach the Local AI a new concept permanently into its offline database" Background="#4F46E5" Foreground="White" Padding="9,3" FontSize="11" Margin="4,0" FontWeight="Bold" BorderThickness="0" Cursor="Hand"/>
                                                 <Button Content="🛡️ SQLi Exploit" Click="BtnQuickAiPrompt_Click" Tag="Explain SQL Injection attack mechanics, bypass techniques, and parameterized defense" Background="#334155" Foreground="#E2E8F0" Padding="8,3" FontSize="11" Margin="4,0" BorderThickness="0" Cursor="Hand"/>
                                                 <Button Content="🌐 CCNA Subnets" Click="BtnQuickAiPrompt_Click" Tag="Explain IPv4 VLSM subnetting formulas and calculate usable hosts for a /27" Background="#334155" Foreground="#E2E8F0" Padding="8,3" FontSize="11" Margin="4,0" BorderThickness="0" Cursor="Hand"/>
                                                 <Button Content="⚛️ Bell State" Click="BtnQuickAiPrompt_Click" Tag="How does the quantum CNOT gate create a 2-qubit entangled Bell State?" Background="#334155" Foreground="#E2E8F0" Padding="8,3" FontSize="11" Margin="4,0" BorderThickness="0" Cursor="Hand"/>
@@ -1564,10 +1573,10 @@
                                                     <RowDefinition Height="*"/>
                                                 </Grid.RowDefinitions>
                                                 <StackPanel Grid.Row="0" Margin="0,0,0,6">
-                                                    <TextBlock Text="🔍 Neural-Symbolic Reasoning Trace" Foreground="#38BDF8" FontWeight="Bold" FontSize="12"/>
-                                                    <TextBlock Text="Offline inference step-by-step verification:" Foreground="#64748B" FontSize="10"/>
+                                                    <TextBlock Text="🔍 Self-Learning Reasoning Trace" Foreground="#38BDF8" FontWeight="Bold" FontSize="12"/>
+                                                    <TextBlock Text="Offline cognitive steps &amp; adaptive learning pathway:" Foreground="#64748B" FontSize="10"/>
                                                 </StackPanel>
-                                                <TextBox x:Name="TxtAiReasoningTrace" Grid.Row="1" IsReadOnly="True" Background="#020617" Foreground="#38BDF8" FontFamily="Consolas" FontSize="11" Padding="8" BorderThickness="1" BorderBrush="#1E293B" VerticalScrollBarVisibility="Auto" Text="[IDLE] Offline AI Ready. Enter prompt or select quick chip above."/>
+                                                <TextBox x:Name="TxtAiReasoningTrace" Grid.Row="1" IsReadOnly="True" Background="#020617" Foreground="#38BDF8" FontFamily="Consolas" FontSize="11" Padding="8" BorderThickness="1" BorderBrush="#1E293B" VerticalScrollBarVisibility="Auto" Text="[IDLE] Autonomous Self-Learning AI Ready. Ask a question or use 'Teach AI: Topic | Domain | Details'."/>
                                             </Grid>
                                         </Border>
                                     </Grid>
@@ -1585,7 +1594,7 @@
                                     </Grid>
 
                                     <!-- Footer Status -->
-                                    <TextBlock Grid.Row="4" Text="🔒 100% Privacy Preserved • Zero Data Sent Outside • Model Weights Stored In-Memory • Pure C# .NET 9" Foreground="#64748B" FontSize="11" Margin="2,6,0,0"/>
+                                    <TextBlock Grid.Row="4" Text="🔒 100% Privacy Preserved • Autonomous Self-Learning Active • Zero Internet Needed • Stored In-Memory &amp; Local SQLite" Foreground="#64748B" FontSize="11" Margin="2,6,0,0"/>
                                 </Grid>
                             </Border>
                         </TabItem>

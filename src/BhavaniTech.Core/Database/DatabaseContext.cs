@@ -247,6 +247,7 @@ namespace BhavaniTech.Core.Database
             PracticalExamService.EnsurePracticalExamsSeeded(conn);
             EnsureHeroCapstonesSeeded(conn);
             EnsureFlashcardsSeeded(conn);
+            LocalAiEngine.SynchronizeLearnedKnowledgeFromDb(conn);
         }
 
         private static void EnsureFlashcardsSeeded(SqliteConnection conn)

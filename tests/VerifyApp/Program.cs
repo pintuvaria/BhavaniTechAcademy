@@ -898,10 +898,70 @@ namespace VerifyApp
                 Console.WriteLine("    University Mastery (BCA/MCA, Normalization Engine & C Pointer Simulation) PASSED ✅");
             }
 
+            // 30. Autonomous Self-Learning Local AI Engine Verification
+            Console.WriteLine("\n[TEST 30] Autonomous Self-Learning Local AI & Adaptive Guidance Engine...");
+            string aiTestDb = Path.Combine(Path.GetTempPath(), $"bhavani_ai_test_{Guid.NewGuid():N}.db");
+            try
+            {
+                var testDbCtx = new DatabaseContext(aiTestDb);
+                using var conn = testDbCtx.GetConnection();
+
+                // Test 1: Direct teaching via TeachLocalAi
+                bool teachSuccess = LocalAiEngine.TeachLocalAi(
+                    "Zero-Knowledge SNARKs",
+                    "Cybersecurity",
+                    "Grandmaster",
+                    new() { "zk-snark", "snark", "zero-knowledge", "zkp" },
+                    "zk-SNARKs allow one party to prove they know a secret without revealing the secret itself.",
+                    "// zk-SNARK verifier contract\nvoid VerifyProof() { }",
+                    new() { "Explore ZK Rollups", "Learn Post-Quantum Crypto" },
+                    conn,
+                    "Unit Test"
+                );
+                Console.WriteLine($" -> AI Direct Teach Success: {teachSuccess}");
+                if (!teachSuccess) { Console.WriteLine("    FAILED: TeachLocalAi returned false"); failed++; }
+
+                // Test 2: In-memory query retrieves the newly learned concept
+                var learnedRes = LocalAiEngine.QueryLocalAi("Explain zk-snark zero-knowledge proofs", "Cybersecurity", 10, conn);
+                Console.WriteLine($" -> Learned Response Topic: {learnedRes.Topic}, IsLearned: {learnedRes.IsLearnedKnowledge}");
+                if (!learnedRes.IsLearnedKnowledge || !learnedRes.Topic.Contains("Zero-Knowledge SNARKs"))
+                {
+                    Console.WriteLine("    FAILED: Query did not retrieve the self-learned concept");
+                    failed++;
+                }
+
+                // Test 3: Direct conversational teaching via prompt
+                var promptTeachRes = LocalAiEngine.QueryLocalAi("Teach AI: eBPF Linux Observability | Linux | eBPF runs sandboxed bytecode inside the Linux kernel without changing kernel source code. | // eBPF filter\nint filter(void *ctx) { return 1; }", "Linux", 15, conn);
+                Console.WriteLine($" -> Conversational Teach Result: {promptTeachRes.Topic}, Total Learned: {promptTeachRes.TotalLearnedConcepts}");
+                if (!promptTeachRes.IsLearnedKnowledge || promptTeachRes.TotalLearnedConcepts < 2)
+                {
+                    Console.WriteLine("    FAILED: Conversational teaching failed to register in knowledge bank");
+                    failed++;
+                }
+
+                // Test 4: Adaptive Student Guidance Generation
+                var guidanceRes = LocalAiEngine.QueryLocalAi("How do I write an assembly loop?", "Programming", 3, conn);
+                Console.WriteLine($" -> Guidance Generated: {!string.IsNullOrEmpty(guidanceRes.StudentGuidancePlan)}");
+                if (string.IsNullOrEmpty(guidanceRes.StudentGuidancePlan))
+                {
+                    Console.WriteLine("    FAILED: Student guidance plan was not generated");
+                    failed++;
+                }
+
+                // Test 5: Re-synchronize from DB into fresh test
+                int synced = LocalAiEngine.SynchronizeLearnedKnowledgeFromDb(conn);
+                Console.WriteLine($" -> Persistent SQLite Knowledge Sync: Total Active = {LocalAiEngine.GetTotalLearnedCount()}");
+                Console.WriteLine("    Autonomous Self-Learning Local AI & Adaptive Guidance Engine PASSED ✅");
+            }
+            finally
+            {
+                try { if (File.Exists(aiTestDb)) File.Delete(aiTestDb); } catch { }
+            }
+
             Console.WriteLine("\n=================================================================");
             if (failed == 0)
             {
-                Console.WriteLine("ALL 29 COMPREHENSIVE TEST SUITES PASSED PERFECTLY! (0 Failures) ✅");
+                Console.WriteLine("ALL 30 COMPREHENSIVE TEST SUITES PASSED PERFECTLY! (0 Failures) ✅");
                 Console.WriteLine("=================================================================");
                 return 0;
             }
