@@ -5,10 +5,10 @@
     "targetHardware":  "1.2 GHz single-core CPU, 2 GB RAM, HDD, integrated graphics, 100% offline",
     "architecture":  "win-x64",
     "runtime":  ".NET 9 Self-Contained Single-File (Zero host dependencies)",
-    "timestampUtc":  "2026-09-09T13.58.39Z",
+    "timestampUtc":  "2026-09-09T14.42.41Z",
     "executable":  {
                        "sizeBytes":  67246087,
-                       "sha256":  "F2F7CE4F4D7A2A2EC93694E6DA1D104C03A9F52E89D0C1F9C4D69543015E387F",
+                       "sha256":  "8E885AE52B08A9507FC5371A6D9D42A80BE366130C304D1750A13B461CE75E75",
                        "name":  "BhavaniTech.UI.exe",
                        "sizeMb":  64.13
                    },

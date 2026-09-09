@@ -9,6 +9,12 @@
 ![Quantum & Transformer Simulation Labs](https://raw.githubusercontent.com/pintuvaria/BhavaniTechAcademy/master/assets/quantum_ai.jpg)
 *Quantum Gates 2-Qubit Entanglement & Transformer Multi-Head Attention Visualization.*
 
+![Linux Containers, Docker & WebAssembly Studio](https://raw.githubusercontent.com/pintuvaria/BhavaniTechAcademy/master/assets/docker_wasm.jpg)
+*Linux Containers (Docker CLI, cgroups v2 & OverlayFS) and WebAssembly (WASM) Stack Machine Studio.*
+
+![Zero-Knowledge Proofs & Multi-Theme Customizer](https://raw.githubusercontent.com/pintuvaria/BhavaniTechAcademy/master/assets/zk_snarks.jpg)
+*Zero-Knowledge Proofs (Ali Baba Cave, Schnorr Protocol, R1CS Circuit) and High-Contrast Themes (OLED Deep Matrix & Retro Amber CRT).*
+
 ![Sandbox View](https://raw.githubusercontent.com/pintuvaria/BhavaniTechAcademy/master/assets/sandbox.jpg)
 *Interactive Grey Hat Cybersecurity and Polyglot Coding Sandbox.*
 
