@@ -1017,10 +1017,123 @@ namespace VerifyApp
                 Console.WriteLine("    Cryptographic Certificate Generator PASSED ✅");
             }
 
+            // 32. Docker & Linux Containerization Engine (Phase 10)
+            Console.WriteLine("\n[TEST 32] Docker & Linux Containerization Engine (Namespaces, cgroups v2, OverlayFS)...");
+            var containerLab = new ContainerLabService();
+            var spawned = containerLab.CreateContainer("test-app", "alpine:3.18", 128, 50);
+            var namespaces = spawned.GetNamespaces();
+            var cgroup = spawned.GetCgroupStatus();
+            var overlay = spawned.GetOverlayFs();
+            Console.WriteLine($" -> Container '{spawned.Name}': IP={spawned.IpAddress}, HostPID={spawned.HostRootPid}, Namespaces={namespaces.Count}");
+            if (namespaces.Count < 6 || cgroup.MemoryMaxMb != 128 || overlay.Count < 4)
+            {
+                Console.WriteLine("    FAILED: Container namespaces, cgroups or OverlayFS layers count mismatch");
+                failed++;
+            }
+            else
+            {
+                Console.WriteLine("    Linux Namespaces & OverlayFS Layering PASSED ✅");
+            }
+
+            // Test CLI & Resource Stress (OOM Killer trigger)
+            string psOutput = containerLab.ExecuteCli("docker ps");
+            string stressRes = containerLab.ApplyResourceStress(spawned.Id, 256, 90);
+            Console.WriteLine($" -> OOM Stress Result Status: {spawned.Status}, IsOomKilled: {spawned.IsOomKilled}");
+            if (!psOutput.Contains("test-app") || !spawned.IsOomKilled || !spawned.Status.Contains("137"))
+            {
+                Console.WriteLine("    FAILED: Docker CLI or cgroups OOM killer simulation failed");
+                failed++;
+            }
+            else
+            {
+                Console.WriteLine("    cgroups v2 OOM Killer & Docker CLI PASSED ✅");
+            }
+
+            // 33. WebAssembly (WASM) Stack Machine & Linear Memory Workbench
+            Console.WriteLine("\n[TEST 33] WebAssembly (WASM) Stack Machine & Linear Memory Studio...");
+            var wasmLab = new WebAssemblyLabService();
+            string watAdd = @"
+(module
+  (func $add (result i32)
+    i32.const 40
+    i32.const 2
+    i32.add))";
+            var wasmAddRes = wasmLab.ExecuteWatScript(watAdd);
+            Console.WriteLine($" -> WASM Execution: 40 + 2 = {wasmAddRes.ReturnValue}, Stack Frames: {wasmAddRes.Trace.Count}");
+            if (wasmAddRes.ReturnValue != 42 || wasmAddRes.Trace.Count < 3)
+            {
+                Console.WriteLine("    FAILED: WASM stack machine addition evaluation failed");
+                failed++;
+            }
+            else
+            {
+                Console.WriteLine("    WASM Operand Stack Evaluation PASSED ✅");
+            }
+
+            // Linear memory store & load
+            wasmLab.WriteByte(2048, 0x5A);
+            byte readB = wasmLab.ReadByte(2048);
+            var sections = wasmLab.DisassembleToBinarySections(watAdd);
+            Console.WriteLine($" -> WASM Linear Memory @ 2048: 0x{readB:X2} (Expected: 0x5A), Binary Sections: {sections.Count}");
+            if (readB != 0x5A || sections.Count < 5 || sections[0].HexDump != "00 61 73 6D 01 00 00 00")
+            {
+                Console.WriteLine("    FAILED: WASM linear memory or binary header disassembly mismatch");
+                failed++;
+            }
+            else
+            {
+                Console.WriteLine("    WASM 64KB Linear Memory & Binary Disassembly PASSED ✅");
+            }
+
+            // 34. Zero-Knowledge Proofs (ZK-SNARKs) Laboratory
+            Console.WriteLine("\n[TEST 34] Zero-Knowledge Proofs (ZK-SNARKs) Laboratory...");
+            var zkLab = new ZeroKnowledgeLabService();
+
+            // 34.1 Ali Baba Cave Simulation (Soundness error test)
+            var aliHonest = zkLab.SimulateAliBabaCave(10, true);
+            var aliCheater = zkLab.SimulateAliBabaCave(20, false);
+            Console.WriteLine($" -> Ali Baba Honest Rounds Passed: {aliHonest.All(r => r.Passed)} (10/10), Cheater Caught: {aliCheater.Any(r => !r.Passed)}");
+            if (!aliHonest.All(r => r.Passed) || !aliCheater.Any(r => !r.Passed))
+            {
+                Console.WriteLine("    FAILED: Ali Baba Cave soundness or completeness verification failed");
+                failed++;
+            }
+            else
+            {
+                Console.WriteLine("    Ali Baba Cave Interactive ZK Soundness PASSED ✅");
+            }
+
+            // 34.2 Schnorr Identification Protocol Verification
+            var schnorrRes = zkLab.ExecuteSchnorrProtocol(42, 731, 419);
+            Console.WriteLine($" -> Schnorr Verification: g^s ({schnorrRes.VerifierLhs}) == t*y^c ({schnorrRes.VerifierRhs}) -> {schnorrRes.IsVerified}");
+            if (!schnorrRes.IsVerified || schnorrRes.VerifierLhs != schnorrRes.VerifierRhs)
+            {
+                Console.WriteLine("    FAILED: Schnorr identification protocol mathematical proof verification failed");
+                failed++;
+            }
+            else
+            {
+                Console.WriteLine("    Schnorr Discrete Log Zero-Knowledge Protocol PASSED ✅");
+            }
+
+            // 34.3 R1CS Arithmetic Circuit Satisfaction (x^3 + x + 5 = 35 -> x=3)
+            var r1csHonest = zkLab.VerifyArithmeticCircuit(3, 35);
+            var r1csDishonest = zkLab.VerifyArithmeticCircuit(4, 35);
+            Console.WriteLine($" -> R1CS Circuit: x=3 Satisfied={r1csHonest.IsSatisfied}, x=4 Satisfied={r1csDishonest.IsSatisfied}");
+            if (!r1csHonest.IsSatisfied || r1csDishonest.IsSatisfied || r1csHonest.WireValues["w2 (w1 * x)"] != 27)
+            {
+                Console.WriteLine("    FAILED: R1CS arithmetic circuit constraint satisfaction failed");
+                failed++;
+            }
+            else
+            {
+                Console.WriteLine("    R1CS Arithmetic Circuit Constraint Satisfaction PASSED ✅");
+            }
+
             Console.WriteLine("\n=================================================================");
             if (failed == 0)
             {
-                Console.WriteLine("ALL 31 COMPREHENSIVE TEST SUITES PASSED PERFECTLY! (0 Failures) ✅");
+                Console.WriteLine("ALL 34 COMPREHENSIVE TEST SUITES PASSED PERFECTLY! (0 Failures) ✅");
                 Console.WriteLine("=================================================================");
                 return 0;
             }

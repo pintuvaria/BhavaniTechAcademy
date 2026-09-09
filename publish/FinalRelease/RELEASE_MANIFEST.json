@@ -1,0 +1,33 @@
+{
+    "product":  "Bhavani Technology - Lightweight Technology Learning and Coding Academy",
+    "version":  "2.5.0-UniversalMastery",
+    "founder":  "Dharmesh Varia",
+    "targetHardware":  "1.2 GHz single-core CPU, 2 GB RAM, HDD, integrated graphics, 100% offline",
+    "architecture":  "win-x64",
+    "runtime":  ".NET 9 Self-Contained Single-File (Zero host dependencies)",
+    "timestampUtc":  "2026-09-09T13.58.39Z",
+    "executable":  {
+                       "sizeBytes":  67246087,
+                       "sha256":  "F2F7CE4F4D7A2A2EC93694E6DA1D104C03A9F52E89D0C1F9C4D69543015E387F",
+                       "name":  "BhavaniTech.UI.exe",
+                       "sizeMb":  64.13
+                   },
+    "verification":  {
+                         "airGappedOffline":  true,
+                         "status":  "ALL_PASSED_ZERO_FAILURES",
+                         "measuredWorkingSetMb":  49,
+                         "memoryBudgetTargetMb":  150,
+                         "testSuitesTotal":  34
+                     },
+    "features":  [
+                     "Autonomous Self-Learning Local AI (100% Offline and Air-Gapped)",
+                     "Socratic Tutoring Inquiry Mode and Offline Static Code Security Reviewer",
+                     "SuperMemo SM-2 Spaced Repetition Flashcard Engine",
+                     "Official Verifiable Cryptographic Completion Certificate Generator",
+                     "Linux Containers and Docker CLI Engine (cgroups v2 and OverlayFS CoW)",
+                     "WebAssembly (WASM) Text and Binary Stack Machine Workbench",
+                     "Zero-Knowledge Proofs (ZK-SNARKs) Lab (Ali Baba, Schnorr, R1CS Circuits)",
+                     "Global Command Palette Quick Jump (Ctrl+K)",
+                     "Themes: Cyber Dark, Daylight Light, Terminal Green, Cyberpunk Neon, OLED Deep Matrix, Retro Amber CRT"
+                 ]
+}

@@ -53,9 +53,25 @@
 - **🔍 Global Quick Jump (Ctrl+K)**: Instant fuzzy-search command palette accessible from anywhere in the app to jump between all 11 stations, workbenches, tools, and labs in milliseconds.
 - **📜 Verifiable Printable Certificate Generator**: Generates beautiful, official offline certificates (HTML/PDF) featuring gold borders, Bhavani Technology Academy watermark, student name, track mastery, and cryptographic SHA-256 validation hash (`BTA-...`).
 - **🎴 SuperMemo SM-2 Spaced Repetition Engine**: Calculates exact review intervals (`CalculateSm2Interval`) across all 11 disciplines based on ease factor and retention quality.
-- **🎨 Multi-Theme Customizer**: Switch seamlessly between `🌙 Cyber Dark`, `☀️ Daylight Light`, `📟 Terminal Green`, and `⚡ Cyberpunk Neon`.
+- **🎨 Multi-Theme Customizer**: Switch seamlessly between `🌙 Cyber Dark`, `☀️ Daylight Light`, `📟 Terminal Green`, `⚡ Cyberpunk Neon`, `🌌 OLED Deep Matrix`, and `📻 Retro Amber CRT`.
 
-### ⚛️ 3. Advanced Quantum & AI Simulation Engines
+### 🐳 3. Linux Containers, Docker Engine & Systems Isolation
+- **Linux Namespaces**: Deep-dive interactive inspection of PID, NET, MNT, UTS, IPC, and USER namespaces. Demonstrates container PID 1 translation to host PID space.
+- **Control Groups (cgroups v2)**: Simulates CPU quota throttling (`cpu.max`) and memory limits (`memory.max`), including Linux kernel Out-Of-Memory (OOM) killer execution (Exit Code 137 / SIGKILL).
+- **OverlayFS Layered Storage**: Visualizes `lowerdir` (read-only base image layers), `upperdir` (read-write container diff), and `merged` unified mount with Copy-on-Write (CoW) semantics.
+- **Docker CLI Console**: Interactive execution for `docker ps`, `docker run`, `docker stop`, `docker inspect`, `docker top`, and container stress testing.
+
+### ⚡ 4. WebAssembly (WASM) Text & Binary Stack Machine
+- **WAT to WASM Bytecode Disassembler**: Analyzes WebAssembly Text (WAT) S-expressions and produces WASM binary headers (Magic `\0asm`, Version 1, and sections: Type, Function, Memory, Export, Code).
+- **Virtual Stack Machine Execution**: Step-by-step operand stack visualization for `i32.const`, `i32.add`, `i32.sub`, `i32.mul`, `i32.div_s`, `i32.lt_s`, and local variables.
+- **64 KB Linear Memory Inspector**: Full page memory allocator with hex dump inspection, string encoding, and byte-level memory operations (`i32.store8`, `i32.load8_u`).
+
+### 🔐 5. Zero-Knowledge Proofs (ZK-SNARKs) Laboratory
+- **Ali Baba Cave Interactive Protocol**: Interactive round-by-round simulation demonstrating Completeness, Soundness, and Zero-Knowledge with exponential error decay $(1/2)^k$ over $k$ rounds.
+- **Schnorr Identification Protocol**: Discrete logarithm Zero-Knowledge identification ($y = g^x \pmod p$) with commitment $t = g^r$, challenge $c$, and response $s = (r + c \cdot x) \pmod{p-1}$, mathematically proving $g^s \equiv t \cdot y^c \pmod p$ without revealing secret witness $x$.
+- **R1CS Arithmetic Circuit ($x^3 + x + 5 = 35$)**: Evaluates Rank-1 Constraint System wire allocations ($w_1, w_2, w_3, out$) and verifies quadratic arithmetic satisfaction without revealing the witness.
+
+### ⚛️ 6. Advanced Quantum & AI Simulation Engines
 - **2-Qubit Entangled Quantum Lab**: Pauli-X/Y/Z, Phase, T, Hadamard, and CNOT gates. Generates the maximally entangled Bell State $|\Phi^+\rangle = \frac{1}{\sqrt{2}}(|00\rangle + |11\rangle)$ with state amplitude vector calculations.
 - **Transformer Multi-Head Attention (MHA)**: Simulates query/key/value projections ($Q, K, V$), $h$ parallel attention heads, scaled dot-product attention softmax distributions, context matrix concatenation, and LayerNorm residual connections.
 

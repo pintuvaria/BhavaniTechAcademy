@@ -56,6 +56,11 @@ namespace BhavaniTech.UI
         private string _activeCheatCategory = "All Categories";
         private int _ctfActiveChallengeId = 1;
 
+        // NEW ADVANCED LAB SERVICES
+        private readonly ContainerLabService _containerLab = new();
+        private readonly WebAssemblyLabService _wasmLab = new();
+        private readonly ZeroKnowledgeLabService _zkLab = new();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -626,6 +631,27 @@ namespace BhavaniTech.UI
                     if (TabsMastery != null) TabsMastery.SelectedIndex = 3;
                     TxtActiveTabTitle.Text = "Mastery Station: Low-Hardware & Performance Settings";
                     if (NavMastery != null) NavMastery.IsChecked = true;
+                    break;
+
+                case "Containers":
+                    ViewLabs.Visibility = Visibility.Visible;
+                    if (TabsCreativeLabs != null) TabsCreativeLabs.SelectedIndex = 1;
+                    TxtActiveTabTitle.Text = "Creative Workbenches: Docker & Linux Containers";
+                    if (NavLabs != null) NavLabs.IsChecked = true;
+                    break;
+
+                case "WebAssembly":
+                    ViewLabs.Visibility = Visibility.Visible;
+                    if (TabsCreativeLabs != null) TabsCreativeLabs.SelectedIndex = 1;
+                    TxtActiveTabTitle.Text = "Creative Workbenches: WebAssembly (WASM) Stack Machine";
+                    if (NavLabs != null) NavLabs.IsChecked = true;
+                    break;
+
+                case "ZeroKnowledge":
+                    ViewLabs.Visibility = Visibility.Visible;
+                    if (TabsCreativeLabs != null) TabsCreativeLabs.SelectedIndex = 4;
+                    TxtActiveTabTitle.Text = "Creative Workbenches: Zero-Knowledge Proofs (ZK-SNARKs)";
+                    if (NavLabs != null) NavLabs.IsChecked = true;
                     break;
             }
 
@@ -2497,25 +2523,303 @@ namespace BhavaniTech.UI
         // =====================================================================
         private void BtnSimulateContainer_Click(object sender, RoutedEventArgs e)
         {
-            string name = string.IsNullOrWhiteSpace(TxtContainerName.Text) ? "bhavani-sandbox-v1" : TxtContainerName.Text.Trim();
-            int.TryParse(TxtContainerCpuQuota.Text, out int cpu);
-            int.TryParse(TxtContainerMemoryLimit.Text, out int mem);
+            string name = string.IsNullOrWhiteSpace(TxtContainerName?.Text) ? "bhavani-sandbox-v1" : TxtContainerName.Text.Trim();
+            int.TryParse(TxtContainerCpuQuota?.Text, out int cpu);
+            if (cpu <= 0) cpu = 50;
+            int.TryParse(TxtContainerMemoryLimit?.Text, out int mem);
+            if (mem <= 0) mem = 128;
 
-            var res = SoftwareSimulationService.SimulateContainerNamespaces(name, cpu, mem);
+            var c = _containerLab.CreateContainer(name, "alpine:latest", mem, cpu);
             var sb = new System.Text.StringBuilder();
-            sb.AppendLine(res.KernelExplanation);
-            sb.AppendLine("---------------------------------------------------------");
-            sb.AppendLine($"Container Instance  : {res.ContainerName}");
-            sb.AppendLine($"Host Process ID     : {res.HostPid} (External System PID)");
-            sb.AppendLine($"Container PID Tree  : PID {res.ContainerPid} (Namespaced /init)");
-            sb.AppendLine($"Rootfs Mount Point  : {res.RootFsMount}");
-            sb.AppendLine($"Virtual veth Pair   : {res.VirtualNetInterface} -> {res.AssignedIp}");
-            sb.AppendLine($"cgroups v2 cpu.max  : {res.CgroupsCpuLimit}");
-            sb.AppendLine($"cgroups v2 memory   : {res.CgroupsMemoryLimit}");
-            TxtContainerOutput.Text = sb.ToString();
+            sb.AppendLine($"🐳 [Docker Engine Simulation]: Successfully spawned container '{c.Name}' ({c.Id})");
+            sb.AppendLine("==========================================================================");
+            sb.AppendLine($"Status          : {c.Status}");
+            sb.AppendLine($"Host Root PID   : {c.HostRootPid} (mapped to Container PID 1)");
+            sb.AppendLine($"Network (veth)  : {c.IpAddress}/16 (connected to host docker0 bridge)");
+            sb.AppendLine($"cgroups cpu.max : {c.CpuQuotaPercent}% CPU quota allocated");
+            sb.AppendLine($"cgroups mem.max : {c.MemoryLimitMb} MB RAM limit enforced");
+            sb.AppendLine("\nISOLATED LINUX NAMESPACES (Kernel Boundaries):");
+            foreach (var ns in c.GetNamespaces())
+            {
+                sb.AppendLine($" • {ns.NamespaceType,-22}: Inside: {ns.ContainerView,-24} | Outside: {ns.HostView}");
+            }
+            sb.AppendLine("\nOVERLAYFS LAYERED FILESYSTEM MOUNT:");
+            foreach (var layer in c.GetOverlayFs())
+            {
+                sb.AppendLine($" • [{layer.LayerType,-18}]: {layer.Path} ({layer.Description})");
+            }
 
-            int totalXp = _db.AddUserXp(25);
-            TxtUserXp.Text = $"⭐ {totalXp} XP";
+            if (TxtContainerOutput != null) TxtContainerOutput.Text = sb.ToString();
+            int totalXp = _db.AddUserXp(30);
+            if (TxtUserXp != null) TxtUserXp.Text = $"⭐ {totalXp} XP";
+        }
+
+        private void BtnDockerCli_Click(object sender, RoutedEventArgs e)
+        {
+            string cmd = TxtDockerCliInput?.Text?.Trim() ?? "docker ps";
+            string output = _containerLab.ExecuteCli(cmd);
+            if (TxtContainerOutput != null)
+            {
+                TxtContainerOutput.Text = $"$ {cmd}\n{output}";
+            }
+            _db.AddUserXp(10);
+        }
+
+        private void BtnContainerStress_Click(object sender, RoutedEventArgs e)
+        {
+            var first = _containerLab.GetAllContainers().FirstOrDefault();
+            if (first == null)
+            {
+                if (TxtContainerOutput != null) TxtContainerOutput.Text = "No active containers to stress. Click '⚡ Spawn Container' first.";
+                return;
+            }
+
+            string stressLog = _containerLab.ApplyResourceStress(first.Id, first.MemoryLimitMb + 64, first.CpuQuotaPercent + 40);
+            if (TxtContainerOutput != null) TxtContainerOutput.Text = stressLog;
+            _db.AddUserXp(20);
+        }
+
+        private void BtnContainerCoW_Click(object sender, RoutedEventArgs e)
+        {
+            var first = _containerLab.GetAllContainers().FirstOrDefault();
+            if (first == null)
+            {
+                if (TxtContainerOutput != null) TxtContainerOutput.Text = "No active containers. Click '⚡ Spawn Container' first.";
+                return;
+            }
+
+            string result = _containerLab.WriteContainerFile(first.Id, "/etc/motd", "Welcome to Bhavani Technology Sandboxed Container!");
+            var sb = new System.Text.StringBuilder();
+            sb.AppendLine(result);
+            sb.AppendLine("\nActive OverlayFS Layers Snapshot:");
+            foreach (var l in first.GetOverlayFs())
+            {
+                sb.AppendLine($" • [{l.LayerType}]: {string.Join(", ", l.Files)}");
+            }
+            if (TxtContainerOutput != null) TxtContainerOutput.Text = sb.ToString();
+            _db.AddUserXp(20);
+        }
+
+        // =====================================================================
+        // WEBASSEMBLY (WASM) STACK MACHINE WORKBENCH HANDLERS
+        // =====================================================================
+        private void CmbWasmPreset_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (TxtWasmWatInput == null || CmbWasmPreset == null) return;
+            switch (CmbWasmPreset.SelectedIndex)
+            {
+                case 0:
+                    TxtWasmWatInput.Text =
+@"(module
+  ;; Stack-based addition of 25 and 15
+  (func $add (result i32)
+    i32.const 25
+    i32.const 15
+    i32.add)
+  (export ""add"" (func $add)))";
+                    break;
+
+                case 1:
+                    TxtWasmWatInput.Text =
+@"(module
+  ;; Linear Memory (64 KB Page) Store byte 88 (ASCII 'X') at offset 1024 and load
+  (memory 1)
+  (func $mem (result i32)
+    i32.const 1024
+    i32.const 88
+    i32.store8
+    i32.const 1024
+    i32.load8_u)
+  (export ""mem"" (func $mem)))";
+                    break;
+
+                case 2:
+                    TxtWasmWatInput.Text =
+@"(module
+  ;; Integer comparison: is 42 < 50?
+  (func $compare (result i32)
+    i32.const 42
+    i32.const 50
+    i32.lt_s)
+  (export ""compare"" (func $compare)))";
+                    break;
+
+                case 3:
+                    TxtWasmWatInput.Text =
+@"(module
+  ;; Multiplication and Addition: (7 * 6) + 10
+  (func $calc (result i32)
+    i32.const 7
+    i32.const 6
+    i32.mul
+    i32.const 10
+    i32.add)
+  (export ""calc"" (func $calc)))";
+                    break;
+            }
+        }
+
+        private void BtnRunWasm_Click(object sender, RoutedEventArgs e)
+        {
+            string wat = TxtWasmWatInput?.Text ?? "";
+            var result = _wasmLab.ExecuteWatScript(wat);
+
+            if (LstWasmStackFrames != null)
+            {
+                LstWasmStackFrames.Items.Clear();
+                foreach (var f in result.Trace)
+                {
+                    string stackStr = f.StackSnapshot.Count > 0 ? string.Join(", ", f.StackSnapshot) : "[empty]";
+                    LstWasmStackFrames.Items.Add($"Step {f.StepNumber:D2}: {f.Instruction} {f.Operand,-6} -> Stack: [{stackStr}]");
+                }
+            }
+
+            if (TxtWasmOutput != null)
+            {
+                var sb = new System.Text.StringBuilder();
+                sb.AppendLine("=== WEBASSEMBLY VIRTUAL STACK MACHINE EXECUTION ===");
+                sb.AppendLine(result.OutputLog);
+                sb.AppendLine("Step Trace Details:");
+                foreach (var f in result.Trace)
+                {
+                    sb.AppendLine($" • [Step {f.StepNumber}] {f.Instruction} {f.Operand}: {f.Description}");
+                }
+                TxtWasmOutput.Text = sb.ToString();
+            }
+
+            int xp = _db.AddUserXp(30);
+            if (TxtUserXp != null) TxtUserXp.Text = $"⭐ {xp} XP";
+        }
+
+        private void BtnWasmDisasm_Click(object sender, RoutedEventArgs e)
+        {
+            string wat = TxtWasmWatInput?.Text ?? "";
+            var sections = _wasmLab.DisassembleToBinarySections(wat);
+
+            var sb = new System.Text.StringBuilder();
+            sb.AppendLine("=== WASM BINARY MODULE SECTION DECODER (RFC-WASM-1.0) ===");
+            sb.AppendLine("SEC ID  SECTION NAME               SIZE (BYTES)  HEX BYTECODE DUMP");
+            sb.AppendLine("---------------------------------------------------------------------------------");
+            foreach (var sec in sections)
+            {
+                sb.AppendLine($"0x{sec.SectionId:X2}    {sec.SectionName,-26} {sec.SizeBytes,-13} {sec.HexDump}");
+                sb.AppendLine($"        Details: {sec.Details}\n");
+            }
+
+            if (TxtWasmOutput != null) TxtWasmOutput.Text = sb.ToString();
+            _db.AddUserXp(20);
+        }
+
+        private void BtnWasmMemory_Click(object sender, RoutedEventArgs e)
+        {
+            string dump = _wasmLab.GetMemoryHexDump(1024, 64);
+            var sb = new System.Text.StringBuilder();
+            sb.AppendLine("=== WEBASSEMBLY LINEAR MEMORY (64 KB / 1 PAGE ALLOCATOR) ===");
+            sb.AppendLine("Memory range: 0x00000400 - 0x00000440 (Offset 1024)\n");
+            sb.AppendLine(dump);
+            if (TxtWasmOutput != null) TxtWasmOutput.Text = sb.ToString();
+            _db.AddUserXp(15);
+        }
+
+        // =====================================================================
+        // ZERO-KNOWLEDGE PROOFS (ZK-SNARKs) LAB HANDLERS
+        // =====================================================================
+        private void CmbZkMode_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (CmbZkMode == null || LblZkParam1 == null || TxtZkParam1 == null) return;
+            int idx = CmbZkMode.SelectedIndex;
+            if (idx == 0) // Ali Baba Cave
+            {
+                LblZkParam1.Text = "Rounds (k):";
+                TxtZkParam1.Text = "10";
+                if (LblZkParam2 != null) LblZkParam2.Text = "Prover Knows Secret:";
+                if (TxtZkParam2 != null) TxtZkParam2.Text = "True";
+            }
+            else if (idx == 1) // Schnorr Protocol
+            {
+                LblZkParam1.Text = "Secret Witness x:";
+                TxtZkParam1.Text = "42";
+                if (LblZkParam2 != null) LblZkParam2.Text = "Random Nonce r:";
+                if (TxtZkParam2 != null) TxtZkParam2.Text = "731";
+            }
+            else // R1CS Circuit
+            {
+                LblZkParam1.Text = "Candidate Witness x:";
+                TxtZkParam1.Text = "3";
+                if (LblZkParam2 != null) LblZkParam2.Text = "Target Output:";
+                if (TxtZkParam2 != null) TxtZkParam2.Text = "35";
+            }
+        }
+
+        private void BtnRunZkProof_Click(object sender, RoutedEventArgs e)
+        {
+            int idx = CmbZkMode?.SelectedIndex ?? 0;
+            var sb = new System.Text.StringBuilder();
+
+            if (idx == 0) // Ali Baba Cave
+            {
+                int.TryParse(TxtZkParam1?.Text, out int rounds);
+                if (rounds <= 0) rounds = 10;
+                bool knows = !string.Equals(TxtZkParam2?.Text?.Trim(), "False", StringComparison.OrdinalIgnoreCase);
+
+                var roundResults = _zkLab.SimulateAliBabaCave(rounds, knows);
+                sb.AppendLine("=== ALI BABA CAVE ZERO-KNOWLEDGE PROTOCOL SIMULATION ===");
+                sb.AppendLine($"Configuration: Prover knows secret: {knows} | Planned rounds: {rounds}\n");
+                sb.AppendLine("ROUND   PROVER ENTERED   VERIFIER CALLED   PASSED?   VERIFIER CONFIDENCE (1 - 0.5^k)");
+                sb.AppendLine("--------------------------------------------------------------------------------");
+                foreach (var r in roundResults)
+                {
+                    sb.AppendLine($" {r.RoundNumber,2}        Path {r.ProverPathEntered}           Path {r.VerifierCallout}          {(r.Passed ? "YES ✅" : "NO ❌"),-8} {r.CheatConfidence * 100:F2}%");
+                }
+
+                sb.AppendLine("--------------------------------------------------------------------------------");
+                if (knows)
+                {
+                    sb.AppendLine($"🎉 SUCCESS: Honest prover convinced verifier with 100% success across all {rounds} rounds!");
+                    sb.AppendLine($"Probability of a random cheater passing this by luck is (1/2)^{rounds} = {(1.0 / Math.Pow(2, rounds)) * 100:F6}%.");
+                    sb.AppendLine("✨ ZERO-KNOWLEDGE GUARANTEE: Verifier learns ZERO characters of the magic cave password!");
+                }
+                else
+                {
+                    sb.AppendLine("🚨 CHEATER CAUGHT! Cheating prover cannot produce the correct exit path without knowing the password.");
+                }
+            }
+            else if (idx == 1) // Schnorr Protocol
+            {
+                long.TryParse(TxtZkParam1?.Text, out long x);
+                if (x <= 0) x = 42;
+                long.TryParse(TxtZkParam2?.Text, out long r);
+                if (r <= 0) r = 731;
+
+                var res = _zkLab.ExecuteSchnorrProtocol(x, r);
+                sb.AppendLine(res.MathematicalExplanation);
+            }
+            else // R1CS Circuit
+            {
+                int.TryParse(TxtZkParam1?.Text, out int x);
+                if (x == 0) x = 3;
+                int.TryParse(TxtZkParam2?.Text, out int target);
+                if (target == 0) target = 35;
+
+                var res = _zkLab.VerifyArithmeticCircuit(x, target);
+                sb.AppendLine("=== R1CS ARITHMETIC CIRCUIT ZERO-KNOWLEDGE VERIFICATION ===");
+                sb.AppendLine($"Circuit Equation: x^3 + x + 5 = {res.TargetOutput}\n");
+                sb.AppendLine("INTERMEDIATE WIRE ALLOCATIONS (Witness Evaluation):");
+                foreach (var kvp in res.WireValues)
+                {
+                    sb.AppendLine($" • {kvp.Key,-20} = {kvp.Value}");
+                }
+                sb.AppendLine("\nGATE CONSTRAINT SYSTEM CHECKS:");
+                foreach (var c in res.ConstraintsChecked)
+                {
+                    sb.AppendLine($" • {c}");
+                }
+                sb.AppendLine($"\nRESULT: {res.ProofSummary}");
+            }
+
+            if (TxtZkOutput != null) TxtZkOutput.Text = sb.ToString();
+            int xp = _db.AddUserXp(35);
+            if (TxtUserXp != null) TxtUserXp.Text = $"⭐ {xp} XP";
         }
 
         private void BtnSimulateRop_Click(object sender, RoutedEventArgs e)
@@ -4268,6 +4572,26 @@ namespace BhavaniTech.UI
                         TxtCodeInput.Foreground = (Brush)new BrushConverter().ConvertFrom("#22D3EE")!;
                     }
                 }
+                else if (theme.Contains("OLED"))
+                {
+                    Background = (Brush)new BrushConverter().ConvertFrom("#000000")!;
+                    Foreground = (Brush)new BrushConverter().ConvertFrom("#22C55E")!;
+                    if (TxtCodeInput != null)
+                    {
+                        TxtCodeInput.Background = (Brush)new BrushConverter().ConvertFrom("#050505")!;
+                        TxtCodeInput.Foreground = (Brush)new BrushConverter().ConvertFrom("#4ADE80")!;
+                    }
+                }
+                else if (theme.Contains("Amber"))
+                {
+                    Background = (Brush)new BrushConverter().ConvertFrom("#181000")!;
+                    Foreground = (Brush)new BrushConverter().ConvertFrom("#FFB000")!;
+                    if (TxtCodeInput != null)
+                    {
+                        TxtCodeInput.Background = (Brush)new BrushConverter().ConvertFrom("#120B00")!;
+                        TxtCodeInput.Foreground = (Brush)new BrushConverter().ConvertFrom("#FBBF24")!;
+                    }
+                }
                 else // Night (Dracula)
                 {
                     Background = (Brush)new BrushConverter().ConvertFrom("#0F172A")!;
@@ -4311,6 +4635,9 @@ namespace BhavaniTech.UI
                 new("👑", "Zero to Hero Capstones", "Grandmaster Diagnostic & Systems Projects", "Ctrl+3", "ZeroToHero"),
                 new("🎮", "Gaming Arcade", "5 Interactive Gamified Mini-Games", "Ctrl+4", "Gaming"),
                 new("💻", "Polyglot Programming Studio", "C#, Python, Rust, C++, Go, Assembly", "Code", "Programming"),
+                new("🐳", "Docker & Linux Container Sandbox", "Namespaces, cgroups v2, OverlayFS & CLI", "Docker", "Containers"),
+                new("⚡", "WebAssembly (WASM) Stack Machine", "WAT Parser, Stack Frames & Linear Memory", "Wasm", "WebAssembly"),
+                new("🔐", "Zero-Knowledge Proofs (ZK-SNARKs)", "Ali Baba Cave, Schnorr Protocol, R1CS", "ZK", "ZeroKnowledge"),
                 new("🛡️", "Cybersecurity & Ethical Hacking", "SQLi, XSS, Buffer Overflow, Penetration", "Cyber", "Cybersecurity"),
                 new("🌐", "CCNA Networking Academy", "Subnets, VLSM, OSI, Packet Tracer", "Net", "Networking"),
                 new("🤖", "Self-Learning Local AI Mentor", "100% Offline AI, Socratic Mode, Code Audit", "AI", "Ai"),
