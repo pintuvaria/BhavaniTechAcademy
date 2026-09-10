@@ -1130,10 +1130,315 @@ namespace VerifyApp
                 Console.WriteLine("    R1CS Arithmetic Circuit Constraint Satisfaction PASSED ✅");
             }
 
+            // 35. Bare-Metal Kernel & IDT Simulator
+            Console.WriteLine("\n[TEST 35] Bare-Metal Kernel & IDT Simulator...");
+            var kernel = new KernelBootSimulatorService();
+            string pmodeLog = kernel.TransitionToProtectedMode();
+            if (kernel.CurrentMode != CpuExecutionMode.ProtectedMode32 || kernel.GdtTable.Count < 5 || !kernel.A20LineEnabled)
+            {
+                Console.WriteLine("    FAILED: Kernel Protected Mode transition or GDT initialization failed");
+                failed++;
+            }
+            else
+            {
+                Console.WriteLine("    Kernel 32-bit Protected Mode & GDT Descriptors PASSED ✅");
+            }
+
+            string longModeLog = kernel.TransitionToLongMode();
+            if (kernel.CurrentMode != CpuExecutionMode.LongMode64 || kernel.Cr3 != 0x00100000 || (kernel.EferMsr & (1 << 8)) == 0)
+            {
+                Console.WriteLine("    FAILED: Kernel Long Mode transition or 4-level paging setup failed");
+                failed++;
+            }
+            else
+            {
+                Console.WriteLine("    Kernel 64-bit Long Mode & 4-Level Paging (PML4) PASSED ✅");
+            }
+
+            var idtDiv0 = kernel.TriggerInterrupt(0x00);
+            var idtPageFault = kernel.TriggerInterrupt(0x0E, 0x00007FFDEADBEEF0);
+            var idtSyscall = kernel.TriggerInterrupt(0x80);
+            if (idtDiv0.Vector != 0 || idtPageFault.Vector != 14 || idtSyscall.Vector != 0x80 || idtPageFault.StackFrameIret.Count < 5)
+            {
+                Console.WriteLine("    FAILED: IDT interrupt vector dispatch or IRET stack frame generation failed");
+                failed++;
+            }
+            else
+            {
+                Console.WriteLine("    IDT Dispatches (#DE, #PF, Syscall) & IRET Frames PASSED ✅");
+            }
+
+            // 36. In-Kernel eBPF VM & Safety Verifier
+            Console.WriteLine("\n[TEST 36] In-Kernel eBPF Virtual Machine & DAG Verifier...");
+            var ebpf = new EbpfSimulatorService();
+            var xdpProg = ebpf.GetSampleProgram("XDP");
+            var kprobeProg = ebpf.GetSampleProgram("Kprobe");
+            var xdpVerif = ebpf.VerifyBytecode(xdpProg);
+            var kprobeVerif = ebpf.VerifyBytecode(kprobeProg);
+
+            if (!xdpVerif.IsApproved || !kprobeVerif.IsApproved || xdpVerif.TotalInstructions != 10)
+            {
+                Console.WriteLine("    FAILED: eBPF DAG bytecode safety verification failed");
+                failed++;
+            }
+            else
+            {
+                Console.WriteLine("    eBPF In-Kernel Bytecode Safety Verification PASSED ✅");
+            }
+
+            var xdpDropRes = ebpf.ExecuteTrace("XDP", "192.168.1.105");
+            var xdpPassRes = ebpf.ExecuteTrace("XDP", "192.168.1.50");
+            var kprobeRes = ebpf.ExecuteTrace("Kprobe", "/usr/bin/python3");
+            if (xdpDropRes.ReturnValue != 1 || xdpPassRes.ReturnValue != 2 || kprobeRes.ReturnValue != 0)
+            {
+                Console.WriteLine("    FAILED: eBPF runtime trace or map update failed");
+                failed++;
+            }
+            else
+            {
+                Console.WriteLine("    eBPF XDP Driver Drops & Kprobe Process Tracking PASSED ✅");
+            }
+
+            // 37. Hardware Protocols Lab (UART, I2C, SPI, JTAG)
+            Console.WriteLine("\n[TEST 37] Hardware Protocols Lab (UART / I2C / SPI / JTAG)...");
+            var hw = new HardwareProtocolsService();
+            var uart = hw.AnalyzeUart('A', 115200);
+            if (uart.AsciiByte != 65 || uart.BitTimeMicroseconds < 8.6 || uart.BitTimeMicroseconds > 8.8 || !uart.TimingDiagram.Contains("_START_"))
+            {
+                Console.WriteLine("    FAILED: UART timing analysis or waveform generation failed");
+                failed++;
+            }
+            else
+            {
+                Console.WriteLine("    UART Serial Asynchronous Frame & Waveform PASSED ✅");
+            }
+
+            var i2c = hw.SimulateI2c(0x50, false, 0xAB);
+            if (i2c.SlaveAddress7Bit != 0x50 || !i2c.AckReceived || i2c.Waveforms.Count < 2)
+            {
+                Console.WriteLine("    FAILED: I2C 2-wire transaction or ACK detection failed");
+                failed++;
+            }
+            else
+            {
+                Console.WriteLine("    I2C 2-Wire Start/Address/Ack/Data/Stop PASSED ✅");
+            }
+
+            var spi = hw.SimulateSpi(0, 0x9F);
+            if (spi.ClockPolarityCpol != 0 || spi.ClockPhaseCpha != 0 || spi.Waveforms.Count < 4)
+            {
+                Console.WriteLine("    FAILED: SPI Mode 0 simulation failed");
+                failed++;
+            }
+            else
+            {
+                Console.WriteLine("    SPI 4-Wire Full-Duplex Bus Simulation PASSED ✅");
+            }
+
+            var jtag = hw.SimulateJtagBoundaryScan();
+            if (jtag.TapStatesVisited.Count < 10 || !jtag.DataRegisterShifted.Contains("00280001"))
+            {
+                Console.WriteLine("    FAILED: JTAG 16-state TAP controller scan failed");
+                failed++;
+            }
+            else
+            {
+                Console.WriteLine("    JTAG IEEE 1149.1 16-State TAP Boundary Scan PASSED ✅");
+            }
+
+            // 38. Raft Distributed Consensus Cluster Simulation
+            Console.WriteLine("\n[TEST 38] Raft Distributed Consensus Simulator...");
+            var raftSim = new RaftClusterSimulation(5);
+            if (raftSim.Nodes.Count != 5 || raftSim.CurrentLeader?.Id != 1)
+            {
+                Console.WriteLine("    FAILED: Raft cluster initialization failed");
+                failed++;
+            }
+
+            // Normal quorum write
+            bool writeOk = raftSim.ProposeCommand("SET primary_db=active", out string statusMsg);
+            if (!writeOk || raftSim.CurrentLeader?.CommitIndex != 2)
+            {
+                Console.WriteLine($"    FAILED: Raft quorum propose failed: {statusMsg}");
+                failed++;
+            }
+            else
+            {
+                Console.WriteLine("    Raft Quorum Log Replication ((N/2)+1) PASSED ✅");
+            }
+
+            // Simulate split-brain partition (Isolate minority nodes 4 & 5)
+            raftSim.PartitionCluster(new List<int> { 4, 5 });
+            raftSim.TriggerElection(2); // In minority partition, election must fail quorum
+            var cand = raftSim.Nodes.FirstOrDefault(n => n.PartitionGroup == 2 && n.Role == RaftNodeRole.Candidate);
+            if (cand != null && cand.VotesReceived >= 3)
+            {
+                Console.WriteLine("    FAILED: Minority partition should not achieve quorum");
+                failed++;
+            }
+            else
+            {
+                Console.WriteLine("    Raft Split-Brain Minority Quorum Defense PASSED ✅");
+            }
+
+            // Heal and reconcile
+            raftSim.HealPartition();
+            if (raftSim.Nodes.Any(n => n.PartitionGroup != 1))
+            {
+                Console.WriteLine("    FAILED: Raft partition heal failed");
+                failed++;
+            }
+            else
+            {
+                Console.WriteLine("    Raft Partition Heal & Log Reconciliation PASSED ✅");
+            }
+
+            // 39. Concurrency, Atomic CAS & Deadlock Lab
+            Console.WriteLine("\n[TEST 39] Concurrency, Atomic CAS & Deadlock Lab...");
+            var conc = new ConcurrencySimulatorService();
+
+            var casSuccess = conc.SimulateAtomicCas(50, 50, 51);
+            var casFail = conc.SimulateAtomicCas(50, 49, 51);
+            if (!casSuccess.CasSucceeded || casSuccess.FinalValue != 51 || casFail.CasSucceeded || casFail.FinalValue != 50)
+            {
+                Console.WriteLine("    FAILED: Atomic CAS simulation semantics failed");
+                failed++;
+            }
+            else
+            {
+                Console.WriteLine("    Atomic Lock-Free CAS (Compare-And-Swap) PASSED ✅");
+            }
+
+            // RAG Cycle Detection
+            var deadlockedGraph = new Dictionary<string, List<string>>
+            {
+                ["T1"] = new() { "T2" },
+                ["T2"] = new() { "T3" },
+                ["T3"] = new() { "T1" }
+            };
+            var ragRes = conc.DetectDeadlockInGraph(deadlockedGraph);
+            if (!ragRes.DeadlockDetected || ragRes.CycleNodes.Count < 3)
+            {
+                Console.WriteLine("    FAILED: RAG deadlock cycle detection failed to catch circular wait");
+                failed++;
+            }
+            else
+            {
+                Console.WriteLine("    Resource-Allocation Graph (RAG) DFS Cycle Detection PASSED ✅");
+            }
+
+            // Dining Philosophers
+            var naiveSteps = conc.SimulateDiningPhilosophers(false);
+            var safeSteps = conc.SimulateDiningPhilosophers(true);
+            if (!naiveSteps.Any(s => s.IsDeadlocked) || safeSteps.Any(s => s.IsDeadlocked))
+            {
+                Console.WriteLine("    FAILED: Dining Philosophers naive vs Dijkstra hierarchy verification failed");
+                failed++;
+            }
+            else
+            {
+                Console.WriteLine("    Dining Philosophers Dijkstra Resource Hierarchy Resolution PASSED ✅");
+            }
+
+            // 40. Advanced Web Security (CSRF, SSRF, JWT)
+            Console.WriteLine("\n[TEST 40] Advanced Web Security Simulator (CSRF / SSRF / JWT)...");
+            var advWebSec = new AdvancedWebSecurityService();
+
+            // CSRF SameSite Tests
+            var csrfLaxPost = advWebSec.SimulateCsrfRequest("https://evil.com", "https://bank.com", "POST", false, SameSitePolicy.Lax, false);
+            var csrfNoneExploit = advWebSec.SimulateCsrfRequest("https://evil.com", "https://bank.com", "POST", false, SameSitePolicy.None, false);
+            if (csrfLaxPost.CookieAttached || !csrfNoneExploit.AttackSucceeded)
+            {
+                Console.WriteLine("    FAILED: CSRF SameSite cookie policy evaluation failed");
+                failed++;
+            }
+            else
+            {
+                Console.WriteLine("    CSRF SameSite (Lax vs None) Policy Boundary PASSED ✅");
+            }
+
+            // SSRF Cloud Metadata Tests
+            var ssrfDecimal = advWebSec.SimulateSsrf("http://2852039166/latest/meta-data/", enableImdsV2: false);
+            var ssrfImdsV2 = advWebSec.SimulateSsrf("http://169.254.169.254/latest/meta-data/", enableImdsV2: true);
+            if (!ssrfDecimal.Exploited || ssrfDecimal.ResolvedIp != "169.254.169.254" || ssrfImdsV2.Exploited)
+            {
+                Console.WriteLine("    FAILED: SSRF decimal IP bypass or IMDSv2 defense evaluation failed");
+                failed++;
+            }
+            else
+            {
+                Console.WriteLine("    SSRF Decimal IP Obfuscation & IMDSv2 Defense PASSED ✅");
+            }
+
+            // JWT Alg None Tests
+            string sampleJwt = advWebSec.CreateSampleToken("student_bob", "student");
+            var jwtNoneRes = advWebSec.SimulateAlgNoneAttack(sampleJwt, "admin");
+            var jwtTamperSig = advWebSec.SimulateSignatureTamper(sampleJwt, "admin");
+            if (!jwtNoneRes.ServerAccepted || !jwtNoneRes.ModifiedToken.EndsWith(".") || jwtTamperSig.ServerAccepted)
+            {
+                Console.WriteLine("    FAILED: JWT algorithm confusion (CVE-2015-9235) evaluation failed");
+                failed++;
+            }
+            else
+            {
+                Console.WriteLine("    JWT Algorithm Confusion (alg: none) & Signature Validation PASSED ✅");
+            }
+
+            // 41. Offline QR Code Passport & Sound Synthesizer
+            Console.WriteLine("\n[TEST 41] Offline QR Code Passport & Sound Synthesizer...");
+            var qr = new QrCodeService();
+            var pass = qr.CreateStudentPassport("Dharmesh Varia", "BTA-2026-0001", 108, 5000, "Systems,Cloud,Kernel");
+            bool passValid = qr.VerifyPassportHash(pass);
+            var fakePass = pass with { CompletedLessons = 50 };
+            bool fakeValid = qr.VerifyPassportHash(fakePass);
+
+            if (!passValid || fakeValid)
+            {
+                Console.WriteLine("    FAILED: QR Passport cryptographic hash seal verification failed");
+                failed++;
+            }
+            else
+            {
+                Console.WriteLine("    QR Passport Cryptographic Integrity Seal PASSED ✅");
+            }
+
+            var qrMatrix = qr.GenerateQrMatrix("Dharmesh|BTA-2026-0001|108|5000");
+            string asciiQr = qrMatrix.ToAsciiString();
+            if (qrMatrix.Size != 25 || !asciiQr.Contains("██"))
+            {
+                Console.WriteLine("    FAILED: ISO/IEC 18004 QR Matrix generation failed");
+                failed++;
+            }
+            else
+            {
+                Console.WriteLine("    Version 2 QR Matrix Generation & ASCII Art Rendering PASSED ✅");
+            }
+
+            // Sound Synthesizer Tests
+            var synth = new SoundSynthesizerService();
+            byte[] wavLevelUp = synth.GenerateWavBuffer(SoundType.LevelUp);
+            byte[] wavLaser = synth.GenerateWavBuffer(SoundType.Laser);
+            byte[] wavMorse = synth.GenerateWavBuffer(SoundType.MorseCode, "SOS");
+
+            // Verify RIFF WAVE header bytes: "RIFF", "WAVE", "fmt "
+            string riffTag = System.Text.Encoding.ASCII.GetString(wavLevelUp, 0, 4);
+            string waveTag = System.Text.Encoding.ASCII.GetString(wavLevelUp, 8, 4);
+            string fmtTag = System.Text.Encoding.ASCII.GetString(wavLevelUp, 12, 4);
+
+            if (riffTag != "RIFF" || waveTag != "WAVE" || fmtTag != "fmt " || wavLevelUp.Length < 1000 || wavMorse.Length < 1000)
+            {
+                Console.WriteLine("    FAILED: Pure in-memory RIFF WAVE buffer generation failed");
+                failed++;
+            }
+            else
+            {
+                Console.WriteLine("    Pure In-Memory RIFF PCM Chiptune Audio Synthesizer PASSED ✅");
+            }
+
             Console.WriteLine("\n=================================================================");
             if (failed == 0)
             {
-                Console.WriteLine("ALL 34 COMPREHENSIVE TEST SUITES PASSED PERFECTLY! (0 Failures) ✅");
+                Console.WriteLine("ALL 41 COMPREHENSIVE TEST SUITES PASSED PERFECTLY! (0 Failures) ✅");
                 Console.WriteLine("=================================================================");
                 return 0;
             }

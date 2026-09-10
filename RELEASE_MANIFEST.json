@@ -1,25 +1,34 @@
 {
     "product":  "Bhavani Technology - Lightweight Technology Learning and Coding Academy",
-    "version":  "2.5.0-UniversalMastery",
+    "version":  "3.0.0-TitaniumMastery",
     "founder":  "Dharmesh Varia",
     "targetHardware":  "1.2 GHz single-core CPU, 2 GB RAM, HDD, integrated graphics, 100% offline",
     "architecture":  "win-x64",
     "runtime":  ".NET 9 Self-Contained Single-File (Zero host dependencies)",
-    "timestampUtc":  "2026-09-09T14.42.41Z",
+    "timestampUtc":  "2026-09-10T09.34.37Z",
     "executable":  {
-                       "sizeBytes":  67246087,
-                       "sha256":  "8E885AE52B08A9507FC5371A6D9D42A80BE366130C304D1750A13B461CE75E75",
+                       "sizeBytes":  67320272,
+                       "sha256":  "99F053C4D2DB5DA2454BB1B9135E2DE7F85921C06BFEFE1B6B5E986EBB8E9B6B",
                        "name":  "BhavaniTech.UI.exe",
-                       "sizeMb":  64.13
+                       "sizeMb":  64.2
                    },
     "verification":  {
                          "airGappedOffline":  true,
                          "status":  "ALL_PASSED_ZERO_FAILURES",
-                         "measuredWorkingSetMb":  49,
+                         "measuredWorkingSetMb":  52,
                          "memoryBudgetTargetMb":  150,
-                         "testSuitesTotal":  34
+                         "testSuitesTotal":  41
                      },
     "features":  [
+                     "Bare-Metal Kernel Boot \u0026 IDT Vector Dispatcher (Real Mode, Protected GDT, Long PML4)",
+                     "In-Kernel eBPF VM \u0026 DAG Safety Verifier (XDP packet filter, kprobe execve tracker)",
+                     "Hardware Protocol Logic Analyzer (UART baud waveform, I2C 2-wire, SPI 4-wire, JTAG TAP)",
+                     "Raft Distributed Consensus Simulator (Quorum log replication, split-brain heal)",
+                     "Concurrency \u0026 Deadlock Simulator (Atomic CAS lock-free, RAG cycle DFS, Dining Philosophers)",
+                     "Advanced Web Security Lab (CSRF SameSite matrix, SSRF decimal IP/IMDSv2, JWT alg: none)",
+                     "Offline QR Code Passport \u0026 Credential Generator (ISO/IEC 18004 v2 matrix + SHA-256 seal)",
+                     "Pure In-Memory RIFF PCM Chiptune Sound Synthesizer (Win32 winmm zero external audio)",
+                     "Side-by-Side Split Course Workbench with Live Interactive Code Scratchpad",
                      "Autonomous Self-Learning Local AI (100% Offline and Air-Gapped)",
                      "Socratic Tutoring Inquiry Mode and Offline Static Code Security Reviewer",
                      "SuperMemo SM-2 Spaced Repetition Flashcard Engine",

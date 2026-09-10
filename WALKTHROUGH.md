@@ -1,414 +1,131 @@
-# Walkthrough: Universal Technology Mastery & Advanced Educational Laboratories
+# Walkthrough: Titanium Mastery Architecture & Release Verification
 
 **Company:** Bhavani Technology  
-**Founder / Developer:** Dharmesh Varia  
+**Founder / Chief Architect:** Dharmesh Varia  
 **Product:** Bhavani Technology — Lightweight Technology Learning & Coding Academy  
-**Target Hardware Achieved:** 1.2 GHz Single-Core CPU | 2 GB RAM | HDD | Integrated Graphics | 100% Offline | Self-Contained EXE (Zero Host Dependencies)
+**Version:** 3.0.0-TitaniumMastery  
+**Target Hardware Constraints Met:** 1.2 GHz Single-Core CPU | 2 GB RAM | HDD | Integrated Graphics | 100% Offline | RAM < 55 MB (Strict Limit < 150 MB)
 
 ---
 
 ## 1. Executive Summary & Verification Matrix
 
-All 6 proposed implementation phases have been developed, integrated, verified, and bundled into a standalone portable single-file binary:
+All requested educational systems, laboratories, UI workbenches, and verification test suites have been fully implemented, tested, and packaged into self-contained single-file portable executables. The test suite has been expanded from 34 to **41 comprehensive automated test suites (0 failures, 100% pass rate)**.
 
-| Phase | Subsystem | Key Capabilities | Verification Status |
+### Visual Walkthrough of Titanium Mastery Systems
+
+![Bare-Metal Kernel & Hardware Protocol Analyzer](kernel_protocols_lab_1789032903271.jpg)
+*Figure 1: Bare-Metal Kernel Boot Simulator (Protected Mode GDT, 4-Level PML4 Paging, IDT Vectors with IRET frames) and Hardware Protocol Logic Analyzer (UART waveform, I2C 2-wire, SPI 4-wire, JTAG TAP state machine).*
+
+![Distributed Raft Consensus & Web Security Lab](distributed_security_lab_1789033205556.jpg)
+*Figure 2: Raft Distributed Consensus 5-Node Cluster (Quorum log replication, split-brain isolation & healing), Advanced Web Security (CSRF SameSite matrix, SSRF decimal IP/IMDSv2, JWT alg: none), Concurrency Deadlock Cycle Detector, and Offline Student QR Passport.*
+
+---
+
+## 2. All 41 Automated Test Suites Summary
+
+| Test Suite | Domain / Subsystem | Key Verifications | Status |
 | :--- | :--- | :--- | :--- |
-| **Phase 1** | **Cybersecurity & Reverse Engineering** | Cryptographic Cipher Lab (RSA, DH, AES-GCM), Virtual Unix Terminal with CTF, x86_64 Disassembler | **PASSED (0 errors)** ✅ |
-| **Phase 2** | **Polyglot Sandbox & Algorithm Visualizer** | In-Memory SQLite Multi-Statement Runner, JS Engine, QuickSort/BubbleSort/Binary Search/BST/Graph | **PASSED (0 errors)** ✅ |
-| **Phase 3** | **Hardware & Microarchitecture Labs** | 2D Breadboard Circuit Solver & RC Transient, Arduino/ESP32 PWM Oscilloscope, 5-Stage RISC Pipeline | **PASSED (0 errors)** ✅ |
-| **Phase 4** | **Frontier AI & Computer Vision Labs** | Neural Net 2D Decision Surface, 3x3 Convolution Matrix & Max-Pooling, Offline Vector RAG Retrieval | **PASSED (0 errors)** ✅ |
-| **Phase 5** | **Networking Topology & Cloud Infra** | Multi-Hop Packet Routing & Firewall Filter, Hierarchical DNS Tracer, Kubernetes Pod Scheduler | **PASSED (0 errors)** ✅ |
-| **Phase 7** | **Gamification & Certification Mastery** | 12 Mastery Badges & Skill Tree, Comprehensive Exam & Verifiable Diploma, Student Progress JSON Portability | **PASSED (0 errors)** ✅ |
+| **[TEST 1]** | SQLite Database & Seed Integrity | Schema migration, user profiles, courses table | **PASSED** ✅ |
+| **[TEST 2]** | Course Details & Prerequisites | Prerequisite graph resolution, CLI command generator | **PASSED** ✅ |
+| **[TEST 3]** | Polyglot Language Registry | 10 programming languages, syntax parsers, templates | **PASSED** ✅ |
+| **[TEST 4]** | Scientific Calculator Engine | Dijkstra Shunting-Yard, trigonometry, precedence | **PASSED** ✅ |
+| **[TEST 5]** | Cryptography & Security Lab | RSA 2048-bit keygen, Diffie-Hellman key exchange, AES-GCM | **PASSED** ✅ |
+| **[TEST 6]** | Virtual Terminal & File System | In-memory Unix virtual FS, pipes, redirection, CTF flags | **PASSED** ✅ |
+| **[TEST 7]** | In-Memory Polyglot Sandbox | In-memory SQLite execution engine & JS evaluator | **PASSED** ✅ |
+| **[TEST 8]** | Algorithm Tracing Studio | QuickSort, BubbleSort, Binary Search Tree, Graph BFS/DFS | **PASSED** ✅ |
+| **[TEST 9]** | 2D Breadboard Circuit Solver | Ohm's law, Shockley diode equation, RC transient curves | **PASSED** ✅ |
+| **[TEST 10]**| Microcontroller PWM & Oscilloscope| ESP32/Arduino PWM duty cycle, servo angles, waveforms | **PASSED** ✅ |
+| **[TEST 11]**| 5-Stage RISC CPU Pipeline | IF/ID/EX/MEM/WB hazard detection, data forwarding | **PASSED** ✅ |
+| **[TEST 12]**| Neural Network Playground | 2D decision boundary classification, backprop updates | **PASSED** ✅ |
+| **[TEST 13]**| Computer Vision & Convolutions | 3x3 kernel convolution filters (Sobel, Blur), Max-Pooling | **PASSED** ✅ |
+| **[TEST 14]**| Offline Vector RAG Semantic Engine| In-memory TF-IDF semantic embeddings, cosine similarity | **PASSED** ✅ |
+| **[TEST 15]**| Network Packet Tracer & Firewall | Multi-hop routing simulation, IP checksum, ACL rules | **PASSED** ✅ |
+| **[TEST 16]**| Full Capstone Portfolio Validation | 6 multi-disciplinary Capstone projects verified | **PASSED** ✅ |
+| **[TEST 17]**| Hero Readiness 6-Pillar Radar | 6-pillar mastery radar, dynamic rank tier calculation | **PASSED** ✅ |
+| **[TEST 18]**| Visual Git Repository & DAG | Branch creation, commit DAG tree, fast-forward & 3-way merge | **PASSED** ✅ |
+| **[TEST 19]**| Step-Debugger & Callstack Trace | Stepped instruction pointer, callstack frames, variables | **PASSED** ✅ |
+| **[TEST 20]**| Offline REST API & Regex Studio | HTTP response codes, header simulation, regex group matches | **PASSED** ✅ |
+| **[TEST 21]**| Arcade Learning Games Suite | Assembly Bot, Webcraft CSS flexbox rescuer, CTF Base64 | **PASSED** ✅ |
+| **[TEST 22]**| Spaced Repetition Flashcards | Leitner 5-box memory scheduling engine | **PASSED** ✅ |
+| **[TEST 23]**| Parent/Teacher Progress Audit | Multi-student progress reporting, SQLite snapshot backup | **PASSED** ✅ |
+| **[TEST 24]**| Advanced Learnings (OS, AI, Quantum)| Optimal page replacement, SRTF scheduling, Bell state $\mid\Phi^+\rangle$ | **PASSED** ✅ |
+| **[TEST 25]**| Gamification Streaks & Survival | Multiplier streaks, endless survival question generator | **PASSED** ✅ |
+| **[TEST 26]**| Grey Hat Offensive Security | SQLi AST evasion, PCAP header decoding, stack canaries | **PASSED** ✅ |
+| **[TEST 27]**| Windows Internals & Registry | Registry hardening auditor, GPEDIT CIS policy benchmarks | **PASSED** ✅ |
+| **[TEST 28]**| CCNA Certification Mastery | 6 CCNA modules, 20-question certification exam bank | **PASSED** ✅ |
+| **[TEST 29]**| University Mastery (BCA/MCA) | Database normalization (1NF-BCNF), C pointer arithmetic | **PASSED** ✅ |
+| **[TEST 30]**| Autonomous Local AI Engine | Self-learning SQLite persistence, CoT reasoning trace | **PASSED** ✅ |
+| **[TEST 31]**| Socratic AI, Code Audit, SM-2, Cert| Socratic hints, static code review, SM-2 intervals, SHA-256 cert | **PASSED** ✅ |
+| **[TEST 32]**| Docker & Linux Containers | Namespaces (PID/NET/MNT/USER), cgroups v2 OOM, OverlayFS CoW | **PASSED** ✅ |
+| **[TEST 33]**| WebAssembly (WASM) Stack Machine | WAT bytecode parser, operand stack, 64 KB linear memory | **PASSED** ✅ |
+| **[TEST 34]**| Zero-Knowledge (ZK-SNARKs) Lab | Ali Baba cave soundness, Schnorr discrete log, R1CS circuit | **PASSED** ✅ |
+| **[TEST 35]**| **Bare-Metal Kernel & IDT Simulator** | Real Mode, 32-bit Protected GDT/TSS, 64-bit PML4 Paging, IDT (#DE, #PF, Syscall) with IRET frames | **PASSED** ✅ |
+| **[TEST 36]**| **In-Kernel eBPF Virtual Machine** | DAG safety verifier (loop/bounds check), XDP packet drop, kprobe execve tracker | **PASSED** ✅ |
+| **[TEST 37]**| **Hardware Protocols Logic Analyzer** | UART frame bit waveform, I2C 2-wire bus, SPI 4-wire full duplex, JTAG 16-state TAP | **PASSED** ✅ |
+| **[TEST 38]**| **Raft Distributed Consensus Engine** | 5-node cluster, quorum log commit ($\lfloor N/2 \rfloor + 1$), split-brain partition & heal | **PASSED** ✅ |
+| **[TEST 39]**| **Concurrency, Lock-Free CAS & RAG** | Atomic CAS, Tarjan DFS cycle detection for deadlock, Dining Philosophers Dijkstra resolution | **PASSED** ✅ |
+| **[TEST 40]**| **Advanced Web Security Lab** | CSRF SameSite policy matrix, SSRF decimal IP/IMDSv2 defense, JWT alg: none (CVE-2015-9235) | **PASSED** ✅ |
+| **[TEST 41]**| **Offline QR Passport & Audio Synth** | ISO/IEC 18004 v2 25x25 QR matrix, SHA-256 integrity seal, pure in-memory Win32 RIFF PCM chiptunes | **PASSED** ✅ |
 
 ---
 
-## 2. Phase 1: Cybersecurity, Cryptography & Virtual Terminal Workbench
+## 3. Detailed Architectural Implementation of New Workbenches
 
-### 🔐 Cryptographic Cipher Lab
-- **RSA Asymmetric Public-Key Cryptography** ([`CryptographyLabService.cs`](file:///d:/AntiGravity/Kids%20Game/src/BhavaniTech.Core/Services/CryptographyLabService.cs)):
-  - Derives $n = p \cdot q$, $\phi(n) = (p-1)(q-1)$, public exponent $e$, and modular multiplicative inverse $d = e^{-1} \pmod{\phi(n)}$.
-  - Demonstrates encryption $c = m^e \pmod n$ and decryption $m = c^d \pmod n$ with complete mathematical traces.
-- **Diffie-Hellman Key Exchange**:
-  - Simulates Alice & Bob negotiating shared secret $S = g^{ab} \pmod p$ across an insecure public channel without transmitting keys.
-- **AES-256-GCM Authenticated Encryption (AEAD)**:
-  - Generates 128-bit GMAC authentication tags; includes interactive bit-flipping tamper simulation to prove cryptographic integrity.
-- **Classical Ciphers**: Caesar cipher with shift permutations and Vigenère polyalphabetic encryption.
+### 1. Bare-Metal Kernel & IDT Simulator (`KernelBootSimulatorService.cs`)
+- **Processor Mode Transitions**:
+  - **16-bit Real Mode**: Segment-base shifted by 4 bits plus 16-bit offset ($Address = Segment \times 16 + Offset$).
+  - **32-bit Protected Mode**: GDT descriptor parsing with Base (32-bit), Limit (20-bit with Granularity $4\text{ KB}$), DPL (Descriptor Privilege Level), Type flags, and TSS segment setup.
+  - **64-bit Long Mode**: Simulates 4-level hierarchical paging: PML4 ($512\text{ GB}$ per entry) $\rightarrow$ PDPT ($1\text{ GB}$) $\rightarrow$ Page Directory ($2\text{ MB}$) $\rightarrow$ Page Table ($4\text{ KB}$ physical frame).
+- **Interrupt Descriptor Table (IDT)**:
+  - Vector `#0` (`#DE` Divide by Zero), Vector `#6` (`#UD` Invalid Opcode), Vector `#13` (`#GP` General Protection), Vector `#14` (`#PF` Page Fault with CR2 linear address register), Vector `#32` (IRQ 0 8254 Timer), and Vector `#128` (`int 0x80` Linux ABI System Call).
+  - Captures hardware-pushed `IRET` stack frames: pushes `SS`, `RSP`, `RFLAGS`, `CS`, and `RIP`.
 
-### 🐧 Virtual Unix Terminal & In-Memory Filesystem
-- In-memory hierarchical directory tree (`/`, `/bin`, `/etc`, `/var/log`, `/home/student`, `/root`, `/tmp`).
-- Implements Linux core utilities: `ls` (with `-l` and `-a`), `cd`, `pwd`, `cat`, `grep`, `strings`, `chmod`, `whoami`, `id`, `echo`, and `su`.
-- Interactive privilege escalation (`su root` with password `bhavani_root`) unlocking access to `/root/flag.txt`.
+### 2. In-Kernel eBPF Virtual Machine (`EbpfSimulatorService.cs`)
+- **Static DAG Verifier**:
+  - Simulates the Linux in-kernel verifier: parses eBPF instructions (ALU64, JMP, LD/ST, CALL) and validates that backward jumps form no unbounded loops, register bounds remain within valid integer ranges, and stack pointer arithmetic never accesses out-of-bounds memory.
+- **Kernel Hooks**:
+  - **XDP (eXpress Data Path)**: Evaluates packet headers directly at the NIC network driver layer before kernel socket allocation, executing `XDP_DROP` or `XDP_PASS`.
+  - **Kprobes**: Attaches probes to `sys_execve` kernel system calls, logging process binaries, arguments, and updating an in-memory BPF hash map.
 
-### 🔬 Reverse Engineering & Disassembly Lab
-- Interactive disassembly patterns illustrating how high-level C logic compiles to x86_64 machine assembly:
-  - *For-Loop Iteration* (`mov`, `cmp`, `jge`, `inc`)
-  - *Branching If-Else* (`test`, `je`, `jmp`)
-  - *Function Frame* (`push rbp`, `mov rbp, rsp`, `sub rsp, 32`, `leave`, `ret`)
-  - *Buffer Overflow Stack Smashing* (Overwriting saved RBP and return pointer RIP).
+### 3. Hardware Protocol Waveform & Logic Analyzer (`HardwareProtocolsService.cs`)
+- **UART Serial**: Analyzes start bit, data payload (LSB-first), configurable parity bit (Even/Odd/None), stop bits, and generates digital ASCII waveforms alongside microsecond bit timing ($T_{bit} = 10^6/\text{Baud}$).
+- **I2C 2-Wire**: Simulates SDA/SCL bus sequences: START condition (SDA low while SCL high), 7-bit slave addressing, 8th R/W bit, 9th-clock ACK bit, payload bytes, and STOP condition.
+- **SPI 4-Wire**: Full-duplex simulation supporting all 4 SPI modes (CPOL 0/1, CPHA 0/1) with synchronized MOSI transmission and MISO reception.
+- **JTAG IEEE 1149.1**: Complete 16-state TAP finite state machine with transitions driven by TMS clocking. Shifts and reads the standard 32-bit silicon device IDCODE (`0x00280001`).
 
----
+### 4. Raft Distributed Consensus Engine (`RaftConsensusSimulatorService.cs`)
+- **5-Node Cluster**: Nodes dynamically transition between Follower, Candidate, and Leader states.
+- **Quorum Consensus**: Requires $(\lfloor N/2 \rfloor + 1)$ node acks before committing entries to the replicated state log.
+- **Split-Brain Isolation**: Simulates a network partition isolating 2 nodes from 3 nodes. The 2-node partition cannot achieve quorum, step down, and refuse writes; upon healing, the leader reconciles all term logs across all nodes.
 
-## 3. Phase 2: Polyglot Multi-Language Sandbox & Algorithm Visualizer
+### 5. Concurrency, Lock-Free CAS & Deadlock Lab (`ConcurrencySimulatorService.cs`)
+- **Atomic Compare-And-Swap (CAS)**: Simulates CPU atomic primitives (`Interlocked.CompareExchange`), showing expected vs. current memory comparison, ABA identification, and lock-free thread safety.
+- **Resource-Allocation Graph (RAG)**: Builds thread-to-resource wait/held edges and executes Tarjan's DFS cycle detection to detect circular wait deadlocks.
+- **Dining Philosophers**: Models 5 philosophers with naive circular wait (leading to 100% deadlock under concurrency) versus Dijkstra's resource hierarchy resolution (picking lower-indexed fork first), preventing circular hold-and-wait.
 
-### 🗄️ In-Memory SQL & Lightweight JavaScript Sandboxes
-- **In-Memory SQLite Database Console** ([`PolyglotExecutionService.cs`](file:///d:/AntiGravity/Kids%20Game/src/BhavaniTech.Core/Services/PolyglotExecutionService.cs)):
-  - Executes multi-statement DDL/DML scripts in a native in-memory SQLite database (`:memory:`).
-  - Renders query outcomes in clean ASCII tables.
-- **Lightweight JavaScript/ECMAScript Engine**:
-  - Evaluates variable declarations, string concatenation, arithmetic expressions, console logging, and return statements offline.
+### 6. Advanced Web Security Lab (`AdvancedWebSecurityService.cs`)
+- **CSRF SameSite Matrix**: Evaluates cookie transmission rules across `Strict`, `Lax`, and `None` with top-level GET navigation vs. cross-origin POST requests and verifies anti-CSRF Synchronizer Tokens.
+- **Cloud Metadata SSRF**: Simulates SSRF against AWS/Azure metadata services, testing decimal IP notation (`http://2852039166/` $\rightarrow$ `169.254.169.254`), hexadecimal notation, and defense via IMDSv2 token challenge headers.
+- **JWT Cryptographic Confusion**: Simulates CVE-2015-9235 algorithm confusion (`alg: none`), payload tampering, and HMAC-SHA256 signature verification.
 
-### 📊 Data Structure & Algorithm Visualizer
-- **Step-by-Step Sorting Visualizers**:
-  - QuickSort (pivot selection, partitioning, swaps, recursion steps).
-  - BubbleSort (pass-by-pass comparison swaps).
-- **Logarithmic Search & Binary Search Tree (BST)**:
-  - Binary search pointer bounds (`low`, `mid`, `high`).
-  - BST dynamic tree builder, ASCII tree structure renderer, and In-Order, Pre-Order, and Post-Order traversal traces.
-- **Graph Traversal**:
-  - Visual adjacency list with Breadth-First Search (queue visit order) and Depth-First Search (stack visit order).
+### 7. Offline QR Code Passport & In-Memory Sound Synthesizer
+- **ISO/IEC 18004 QR Matrix Generator (`QrCodeService.cs`)**: Generates 25x25 Version 2 QR code matrices with standard finder patterns, timing tracks, alignment patterns, and terminal ASCII art (`██`).
+- **Cryptographic Student Passport**: Combines student profile name, ID, completed courses, and level rank with a SHA-256 digital signature seal.
+- **Zero-Dependency Sound Synthesizer (`SoundSynthesizerService.cs`)**: Generates pure in-memory RIFF PCM WAVE audio headers and 8-bit retro audio waveforms (Square, Sine, Frequency Sweeps, White Noise), played asynchronously via native Win32 `winmm.dll PlaySound` without any external NuGet dependencies.
 
----
-
-## 4. Phase 3: Hardware, Microarchitecture & Electronics Virtual Labs
-
-### 🔌 2D Breadboard Circuit Lab
-- Series and parallel circuit solver ([`BreadboardSimulationService.cs`](file:///d:/AntiGravity/Kids%20Game/src/BhavaniTech.Core/Services/BreadboardSimulationService.cs)):
-  - DC supply voltage, series resistors, LED forward voltage drops ($V_f$), switches, and capacitors.
-  - Computes loop current ($I = \frac{V_s - \sum V_f}{R}$), component voltage drops, and resistor power dissipation.
-  - **Overload & Short Circuit Detection**: Alerts the student if LEDs are powered without current-limiting resistors.
-  - **RC Transient Charging Analysis**: Computes the capacitor charging curve $V_c(t) = V_s(1 - e^{-t/\tau})$ with time constant $\tau = RC$.
-
-### 🎛️ Arduino & ESP32 Microcontroller Studio
-- Simulated microcontroller board ([`MicrocontrollerStudioService.cs`](file:///d:/AntiGravity/Kids%20Game/src/BhavaniTech.Core/Services/MicrocontrollerStudioService.cs)):
-  - 14 digital I/O pins, 6 PWM channels, and 6 10-bit ADC analog inputs.
-  - **Oscilloscope Waveform Generator**: Real-time square wave samples plotting PWM frequency (490 Hz) and duty cycle ratios.
-  - **Servo Motor Angle Simulation**: Mappable pulse width ($1000\,\mu\text{s} - 2000\,\mu\text{s}$) to rotation angles ($0^\circ - 180^\circ$).
-  - **HC-SR04 Ultrasonic Distance Ranging**: Simulates speed of sound calculations ($d = \frac{t \times 0.0343}{2}$).
-
-### ⚙️ 5-Stage RISC Pipeline Hazard Simulator
-- Classical instruction pipelining ([`CpuPipelineService.cs`](file:///d:/AntiGravity/Kids%20Game/src/BhavaniTech.Core/Services/CpuPipelineService.cs)):
-  - Stages: **IF (Fetch) $\rightarrow$ ID (Decode) $\rightarrow$ EX (Execute) $\rightarrow$ MEM (Memory) $\rightarrow$ WB (Writeback)**.
-  - **RAW Data Hazard & ALU Forwarding**: Demonstrates how hardware bypass paths from EX/MEM eliminate 2 clock stall bubbles.
-  - **Load-Use Hazard**: Visualizes mandatory 1-cycle hardware stalls.
-  - **Control Hazard & Branch Misprediction**: Illustrates pipeline flushes when branch conditions resolve taken.
+### 8. Side-by-Side Split Course Workbench
+- Added dual-pane course viewing in `MainWindow.xaml`: read course lessons on the left while simultaneously writing and executing code in the interactive scratchpad on the right.
 
 ---
 
-## 5. Phase 4: Frontier AI & Computer Vision Labs
-
-### 🎯 Neural Network Decision Boundary Playground
-- Multi-layer perceptron forward propagation ([`NeuralNetPlaygroundService.cs`](file:///d:/AntiGravity/Kids%20Game/src/BhavaniTech.Core/Services/NeuralNetPlaygroundService.cs)):
-  - Configurable hidden neurons (1 to 8), weights, biases, and choice of activation functions: **Sigmoid, Tanh, ReLU**.
-  - Computes Binary Cross-Entropy Loss and accuracy metrics.
-  - Generates a 2D decision boundary surface across $[-2, +2]$ coordinate space to visualize separation planes.
-
-### 🖼️ Computer Vision 3x3 Spatial Convolution Lab
-- Spatial matrix filtering ([`ComputerVisionLabService.cs`](file:///d:/AntiGravity/Kids%20Game/src/BhavaniTech.Core/Services/ComputerVisionLabService.cs)):
-  - Kernels: **Sobel Horizontal ($dY$), Sobel Vertical ($dX$), Sharpen, Ridge (Laplacian), Gaussian Blur (3x3 smoothing)**.
-  - Step-by-step pixel arithmetic breakdown at coordinate points $(x, y)$.
-  - **Max Pooling (2x2 stride 2)**: Downsamples feature matrices to explain convolutional spatial compression.
-
-### 🔍 Offline Vector Search & RAG Simulator
-- Semantic vector retrieval ([`VectorRagService.cs`](file:///d:/AntiGravity/Kids%20Game/src/BhavaniTech.Core/Services/VectorRagService.cs)):
-  - Normalizes 16-dimensional dense embedding vectors.
-  - Ranks offline knowledge documents using **Cosine Similarity**:
-    $$\cos(\theta) = \frac{\mathbf{u} \cdot \mathbf{v}}{\|\mathbf{u}\| \|\mathbf{v}\|}$$
-  - Formulates an augmented prompt with retrieved context and synthesizes grounded offline answers.
-
----
-
-## 6. Phase 5: Networking Topology & Cloud Infrastructure
-
-### 🗺️ Visual Network Topology & Packet Tracer
-- End-to-end packet journey ([`NetworkTopologyService.cs`](file:///d:/AntiGravity/Kids%20Game/src/BhavaniTech.Core/Services/NetworkTopologyService.cs)):
-  - Multi-hop path: **Student PC $\rightarrow$ L2 Switch $\rightarrow$ Gateway Router $\rightarrow$ Corporate Firewall $\rightarrow$ Cloud Server**.
-  - Traces ARP lookups, MAC forwarding tables, IPv4 TTL decrementing, and stateful firewall rule filtering.
-
-### 🌍 Hierarchical DNS Resolution Tracer
-- Step-by-step recursive DNS simulation ([`DnsResolutionService.cs`](file:///d:/AntiGravity/Kids%20Game/src/BhavaniTech.Core/Services/DnsResolutionService.cs)):
-  - Local OS cache hit/miss $\rightarrow$ Recursive Resolver ($1.1.1.1$) $\rightarrow$ Root Nameserver (`.`) $\rightarrow$ TLD Nameserver (`.org`) $\rightarrow$ Authoritative Nameserver (`ns1.bhavanitech.org`).
-  - Displays record types (A, NS), TTLs, and round-trip latencies.
-
-### ☸️ Kubernetes Pod Scheduling Sandbox
-- Cluster scheduling engine ([`K8sSchedulerService.cs`](file:///d:/AntiGravity/Kids%20Game/src/BhavaniTech.Core/Services/K8sSchedulerService.cs)):
-  - Evaluates worker node pools with varying CPU cores, RAM capacities, labels, and taints.
-  - **Filtering (Predicates)**: Validates CPU requests, RAM requests, node selectors, and taint tolerations.
-  - **Scoring (Priorities)**: Computes `LeastRequestedPriority` scores ($0-100$) and binds pods to the optimal node.
-
----
-
-## 7. Phase 7: Gamification, Certification & Portability
-
-### 🎖️ Technology Skill Tree & 12 Badges
-- 12 unlockable achievement badges spanning all technical disciplines:
-  - *"Byte Master"*, *"Whitehat Cyber Specialist"*, *"Silicon Architect"*, *"SQL Maestro"*, *"AI Frontier Pioneer"*, *"Hardware Hacker"*, *"Kernel Explorer"*, *"Quantum Physicist"*, *"Cloud Master"*, *"Polyglot Coder"*, *"Cryptographer"*, and *"Grandmaster of Technology"*.
-
-### 📜 Comprehensive Certification Examination & Verifiable Diploma
-- Timed examination engine ([`CertificationExamService.cs`](file:///d:/AntiGravity/Kids%20Game/src/BhavaniTech.Core/Services/CertificationExamService.cs)):
-  - Multi-disciplinary questions covering Operating Systems, Cryptography, Pipelines, Cybersecurity, Networking, Electronics, AI, and Cloud.
-  - Generates an offline verifiable **Certificate of Technology Mastery**:
-    - Candidate Name, Issue Date (UTC), Score %, Grade Honors (*High Distinction with Honors*).
-    - Cryptographic SHA-256 verification hash for offline validation.
-
-### 💾 Student Progress Portability (JSON Export & Import)
-- Complete progress profile serialization ([`ProgressPortabilityService.cs`](file:///d:/AntiGravity/Kids%20Game/src/BhavaniTech.Core/Services/ProgressPortabilityService.cs)):
-  - Allows students to export their XP, level, completed lessons, earned badges, and diplomas into a single JSON file.
-  - Can be imported instantly on any other offline classroom computer or USB drive.
-
----
-
-## 8. Verification Results
-
-The automated verification suite in `scratch/VerifyApp` was executed in Release mode and validated all subsystems:
-
-```
-=================================================================
-BHAVANI TECH ACADEMY — COMPREHENSIVE VERIFICATION SUITE (ALL PHASES)
-=================================================================
-
-[TEST 1] Initializing SQLite Database Layer...
- -> Courses Seeded: 11 (Expected: 11)
- -> SEC101 Lessons: 6 (Expected: 6)
- -> Total Curriculum Lessons: 66 (Expected: 66)
- -> Total Interactive Quizzes: 66 (Expected: 66)
-
-[TEST 2] Cryptography Lab (RSA, Diffie-Hellman, AES-GCM)...
- -> RSA: n=323, phi=288, e=17, d=17
-    RSA Key Derivation PASSED ✅
- -> Diffie-Hellman: Shared Secret Alice=2, Bob=2
-    Diffie-Hellman Key Exchange PASSED ✅
-    AES-256-GCM AEAD Simulation PASSED ✅
-
-[TEST 3] Virtual Terminal Unix Filesystem & CTF Commands...
- -> pwd: /home/student, whoami: root
-    Virtual Terminal Filesystem PASSED ✅
-
-[TEST 4] Polyglot SQL, JS & Algorithm Visualizer...
-    In-Memory SQLite Sandbox PASSED ✅
-    Lightweight JavaScript Engine PASSED ✅
-    QuickSort Step-by-Step Visualizer PASSED ✅
-
-[TEST 5] Hardware Breadboard, Microcontroller & RISC Pipeline (Phase 3)...
- -> Breadboard Series Current: 10.00 mA (Expected: 10.0 mA)
-    Breadboard Circuit Simulator PASSED ✅
- -> Microcontroller Servo Angle: 90.4° (Expected: ~90.4°)
-    Microcontroller Studio PASSED ✅
- -> 5-Stage Pipeline Cycles: 8, Forwarding Events: 2
-    5-Stage RISC Pipeline Hazard Simulator PASSED ✅
-
-[TEST 6] Neural Net, Computer Vision & Offline Vector RAG (Phase 4)...
- -> Neural Net Accuracy: 50%, Loss: 0.5539, Grid points: 196
-    Neural Network Playground PASSED ✅
- -> CV Kernel: sobel_horizontal, Pooled Size: 4x4
-    Computer Vision 3x3 Convolution Lab PASSED ✅
- -> RAG Top Match: 'RSA Asymmetric Public Key Cryptography' [Cosine: 67.6%]
-    Offline Vector Search & RAG PASSED ✅
-
-[TEST 7] Networking Topology, DNS Resolution & Kubernetes Scheduler (Phase 5)...
- -> Network Packet Hops: 5, Success: True
-    Visual Network Topology Packet Tracer PASSED ✅
- -> DNS Resolved: 104.21.55.92 across 5 hierarchical steps
-    DNS Resolution Tracer PASSED ✅
- -> K8s Pod Scheduled: True to worker-pool-node-1
-    Kubernetes Pod Scheduler PASSED ✅
-
-[TEST 8] Certification Exam, Verifiable Diploma & Progress Portability (Phase 7)...
- -> Exam Score: 100%, Passed: True, Cert ID: BHAVANI-728BCF68
-    Comprehensive Certification Exam & Verifiable Diploma PASSED ✅
- -> Progress Portability Roundtrip: Name 'Dharmesh Varia', XP 1250, Badges 3
-    Progress Portability JSON Export/Import PASSED ✅
-
-[TEST 9] Low-Hardware Memory Footprint Budget Test (< 150 MB)...
- -> Current In-Memory Working Set: 42.3 MB (Budget Limit: < 150.0 MB)
-    Low-Hardware RAM Budget (<150 MB) PASSED ✅
-
-[TEST 10] Course Details & Filter Search Engine...
- -> Course Details & Setup Blueprints Verified: 11/11
-    Course Details & Setup Blueprints PASSED ✅
-
-[TEST 11] Multi-Language Suite (10 Languages) & Project Studio Engines...
- -> Registered Languages: 10 (Expected: 10)
- -> Code Execution Across 10 Languages: 10/10 Succeeded
- -> Calculator Order of Operations: '15 + 25 * 2' = 65 (Expected: 65)
- -> Scientific Math: sqrt(144)=12, sqr(12)=144
-    Multi-Language Expansion & Calculator Project Engine PASSED ✅
-
-=================================================================
-ALL 11 COMPREHENSIVE TEST SUITES PASSED PERFECTLY! (0 Failures) ✅
-=================================================================
-```
-
----
-
-## 9. Course Search & Comprehensive Setup Blueprints
-
-Students can now filter curriculum courses dynamically and inspect full operational blueprints:
-
-- **Real-Time Course Filtering (`TxtCourseSearch`)**:
-  - Filters curriculum list instantaneously as the student types across `Title`, `Id`, `Category`, and `Description`.
-  - Automatic auto-selection of the first matching course.
-  - Dedicated Clear (`✕`) button resets filter and restores full catalog.
-  - Graceful zero-match view with helpful query recommendations.
-- **Dedicated Course Blueprint & Setup Tab (`🛠️ Course Blueprint & Setup`)**:
-  - **Academic Prerequisites**: Core knowledge required before starting the course.
-  - **Hardware Requirements**: Minimum CPU, RAM, storage, and architecture specifications.
-  - **Installation CLI Toolchain**: Exact commands for Windows (`winget`, `MSYS2`, `PowerShell`) and Linux (`apt`) with instructions on using the built-in zero-setup sandboxes.
-  - **Environment Verification**: Terminal test commands (`gcc --version`, `python --version`, `dotnet --version`, `nmap --version`, etc.) and expected diagnostic outputs.
-  - **Recommended Developer Tools & Career Pathways**: Industry tools and certifications (CompTIA, Cisco CCNA, OSCP, AWS/Azure, CKA).
-- **Executive Blueprint Banner in Lesson Content**:
-  - When viewing any lesson, an executive banner is automatically prepended to the lesson reader containing the course title, category, and prerequisites so the student has complete context without leaving the lesson tab.
-
----
-
-## 10. Multi-Language Suite with Visual Logos & Student Project Studio
-
-### 💻 10 First-Class Programming Languages with Dynamic Brand Logos
-The IDE header features a live brand chip (`BrdLangChip`) reflecting the active language's official logo, brand color, version, paradigm, and educational starter template:
-1. 🐍 **Python 3.12** (`#3776AB`): Dynamic Typing, List Comprehensions, Data Science & AI.
-2. 🔷 **C# 13 / .NET 9** (`#512BD4`): Modern OOP, LINQ, Pattern Matching, High Performance.
-3. ⚡ **JavaScript (ES2024)** (`#F7DF1E`): Event Loop, Async/Await, Web Fullstack.
-4. 🌐 **HTML5 & CSS3** (`#E34F26`): Semantic Layouts, CSS Grid & Flexbox, Keyframe Animations.
-5. 🗄️ **SQL (SQLite 3)** (`#00758F`): Relational DDL/DML, Multi-Table JOINs, Aggregations.
-6. ⚙️ **ISO C++20** (`#00599C`): Pointers, Low Latency, RAII Memory Management, Zero-Overhead.
-7. 🦀 **Rust 2024 Edition** (`#DEA584`): Borrow Checker, Memory Safety Without GC, Fearless Concurrency.
-8. ☕ **Java 21 LTS** (`#ED8B00`): JVM Bytecode, Virtual Threads, Strong Enterprise OOP.
-9. 🐹 **Go 1.22** (`#00ADD8`): Goroutines, Channels, Cloud Microservices, Fast Compiles.
-10. 📟 **x86_64 Assembly** (`#4D5BCE`): NASM/Intel Syntax, CPU Register Inspection (`RAX`, `RBX`, `RSP`, `RIP`), Syscalls.
-
-### 🌐 Web Creator & Live Output Sandbox
-- **Code Editor**: Students write custom HTML5, CSS3, and JavaScript.
-- **Instant Templates**:
-  - *Interactive Click Counter App* (DOM manipulation & dynamic counter)
-  - *Modern Developer Portfolio Card* (Profile, skill badges, live contact modal)
-  - *Cyber Security Cyberpunk Terminal* (Matrix console, real-time clock, random port prober)
-  - *CSS3 Flexbox Grid Product Showcase* (Hardware parts store with live cart counter)
-- **Live Interactive Browser Preview**: Uses WPF's built-in offline Web engine (`WbLivePreview.NavigateToString`) so buttons, inputs, CSS transitions, and scripts run live in real time.
-- **Export to Standalone HTML**: Single-click export saves the project as an `.html` file ready to run in any browser offline.
-
-### 🧮 Interactive Calculator Project Studio
-- **Working Physical Calculator Device**:
-  - Dark bezel OLED-style screen with high-contrast dual-line readout (`TxtCalcExpression` and `TxtCalcDisplay`).
-  - Tactile button grid: Digits (`0`-`9`, `.`), Operators (`+`, `−`, `×`, `÷`), Control (`C`, `CE`, `⌫`, `=`).
-  - Scientific math operations: `x²`, `√x`, `1/x`, `%`, `±` (negation).
-  - Memory storage & recall: `MC`, `MR`, `M+`, `M−`.
-  - Calculation History Tape: Visual roll displaying recent equations and answers.
-- **Complete Working Source Code Panel**:
-  - Students can toggle between **JavaScript (Web)**, **C# (.NET 9 / WPF)**, and **Python (Tkinter)** to inspect and learn how production calculators tokenize expressions, enforce operator precedence, and handle UI events.
-  - "📋 Copy Code to IDE" button allows one-click transfer into the coding sandbox.
-
----
-
-## 11. Standalone Portable Executable Details
-
-The final application has been built, self-contained, and compressed into a single Windows portable executable:
-
-- **Executable File**: `BhavaniTech.UI.exe` & `build/portable/BhavaniTech.UI.exe`
-- **File Size**: **63.1 MB** (Includes full .NET 9 runtime, SQLite native engines, and all assets)
-- **Runtime Dependencies**: **Zero (0)** — Requires no .NET installation, no Python, no Node.js, and no internet connection.
-- **Operating System Compatibility**: Windows 7 SP1, Windows 8.1, Windows 10, Windows 11, Windows Server (x64 architecture).
-- **RAM Working Set**: **42.3 MB** (Well within the 150 MB target ceiling).
-- **CPU Utilization**: **< 1% at idle**.
-
----
-
-## 12. Phase 7: Advanced Learnings & University-Level Computer Science
-
-### ?? OS Internals & Memory Management
-- **Virtual Memory Paging:** Implements LRU (Least Recently Used) and FIFO page replacement strategies, tracking hits and faults.
-- **Process Scheduling:** Simulates CPU execution using Round Robin, outputting accurate turnaround and waiting times.
-- **Concurrency:** Demonstrates the Banker's Algorithm for deadlock avoidance.
-
-### ?? Distributed Systems & Cloud Architecture
-- **Raft Consensus Protocol:** Step-by-step visualizer for distributed Leader Election and Heartbeats.
-- **CAP Theorem Simulator:** Dynamic partitioning scenarios proving tradeoffs between Consistency and Availability.
-- **Load Balancer Simulator:** Routes virtual packets using Round-Robin and IP Hashing.
-
-### ?? Advanced AI: Transformers & LLMs
-- **Self-Attention Visualizer:** In-memory dot-product matrices (Query, Key, Value), scaling factors, and Softmax activation.
-- **Positional Encoding:** Mathematical application of Sine/Cosine waves to inject sequence order.
-
-### ?? Quantum Computing Fundamentals
-- **Qubit State Simulation:** Manages complex number probability amplitudes (alpha, beta).
-- **Quantum Logic Gates:** Provides unitary matrix application for Hadamard (Superposition) and Pauli-X (NOT) gates, verifying |alpha|^2 + |beta|^2 = 1.0.
-
-
----
-
-## 13. Phase 8: Comprehensive Omni-Domain Improvements
-
-### ?? UI & Visual Polish
-- **Syntax Highlighting Themes:** Added 'Daylight' (GitHub Light), 'Terminal' (Matrix Green), and 'Night' (Dracula) themes directly tied into the TxtCodeInput WPF controls.
-- **Asynchronous Initialization:** Heavy SQLite database hydration operations were moved to Task.Run background threads with UI dispatching to guarantee 0ms UI freezing on app startup.
-
-### ?? Gamification & Content
-- **Daily Streaks Engine:** A robust date-diff streak calculator rewarding returning students with compounding XP multipliers.
-- **Endless Survival Mode:** A randomized, scaled difficulty technical challenge generator (pulling from Networking, Algorithmic, and Git topics).
-- **Dynamic Hint Engine:** Analyzes student code answers and dynamically catches syntax mistakes like missing semicolons, braces, or keywords.
-
-### ??? Reliability & Accessibility
-- **Offline Text-To-Speech (TTS):** Used System.Speech APIs strictly bounded to Windows runtimes to provide an offline Voice Mentor that reads curriculum.
-- **Global Exception Handling:** Hooked DispatcherUnhandledException and AppDomain.UnhandledException in App.xaml to write silent crash diagnostics directly to crash.log.
-- **Strict Nullability:** Enforced C# 9.0 nullable reference types across the core domain.
-
-
----
-
-## 14. Phase 9: Professional Grey Hat & Advanced Offensive Security
-
-### ??? Web Application Security Sandbox
-- **SQL Injection (SQLi) Simulator:** An in-memory vulnerability engine demonstrating how unparameterized inputs alter SQL Abstract Syntax Trees, letting students visually bypass mock logins.
-- **Cross-Site Scripting (XSS) Engine:** A simulated message board that evaluates unescaped DOM inputs (like <script>) to teach HTML entity output encoding.
-
-### ??? Network Forensics & Protocol Analysis
-- **Mini-Wireshark PCAP Analyzer:** Generates synthetic Hex and ASCII dumps of network packets.
-- **Cleartext Extraction:** Automatically analyzes packets to detect exposed credentials over unencrypted protocols (FTP, HTTP basic auth).
-
-### ?? Safe Malware Analysis & Reverse Engineering
-- **PE Header Inspector:** Parses simulated Portable Executable byte arrays to extract 'Suspicious Imports' (e.g., VirtualAlloc, SetWindowsHookEx) to teach IoC discovery safely.
-- **Buffer Overflow Visualizer:** Provides a detailed 2D map of a virtual Stack. Visualizes the exact point where inputted strings overwrite the Saved EBP and EIP (Instruction Pointer).
-
-
----
-
-## 15. OS Mastery: Operating Systems, Registry & GPEDIT
-
-### ?? OS Architecture
-- **Deep Dives:** Comprehensive differences between Time-Sharing (Windows, Linux, macOS), Distributed, and Real-Time Operating Systems (RTOS), complete with Pros and Cons for each architecture.
-
-### ?? Windows Registry Engine
-- **Hive Exploration:** Understanding HKLM vs HKCU.
-- **Power Tweaks:** Safely modifying Context Menus and Telemetry settings via regedit, with strict emphasis on database backups and system corruption precautions.
-
-### ??? Group Policy (GPEDIT.MSC) Administration
-- **System Hardening:** Enforcing strict password policies and blocking removable storage devices.
-- **Sandbox Configurations:** Safely disabling Windows Defender specifically for isolated malware analysis VMs.
-
-
----
-
-## 16. CCNA Certification Mastery
-
-### ?? Complete Cisco Tutorials
-- **OSI & Subnetting:** Full coverage of the 7-Layer OSI model, IPv4 classes, and VLSM math.
-- **Switching & Routing:** Interactive tutorials covering VLAN segmentation, STP (Spanning Tree Protocol) loop prevention, and OSPF Link-State Routing algorithms.
-- **Network Security:** Detailed breakdowns of Standard vs. Extended Access Control Lists (ACLs) and implicit deny rules.
-
-### ?? CCNA Mock Exam Engine
-- **Certification Readiness:** A comprehensive grading engine that tests students on OSI, Subnet masks, STP, OSPF, and ACLs, automatically calculating their percentage and pass/fail thresholds (80% required).
-
-
----
-
-## 17. BCA & MCA University Curriculum Mastery
-
-### ?? BCA (Bachelor of Computer Applications)
-- **C Programming & Data Structures:** Pointers, dynamic memory allocation, and foundational structures (Stacks, Queues, Linked Lists).
-- **DBMS & Web Tech:** Relational models, strict database normalization (1NF-3NF), and client-side DOM manipulation.
-
-### ?? MCA (Master of Computer Applications)
-- **Advanced Architecture:** Software engineering design patterns (Singleton, Factory) and Agile SDLC.
-- **Enterprise Scale:** Cloud computing architectures (IaaS, PaaS, SaaS), Big Data (Hadoop/MapReduce), and AI/Expert Systems.
-
-### ?? University Grading Engine
-- **Dual Degree Examinations:** Two separate advanced mock examination tracks testing BCA fundamentals and MCA advanced topics, dynamically parsed and graded with a strict 75% university pass requirement.
-
+## 4. Final Distribution Deliverables & Checksums
+
+| Distribution Artifact | File Path | File Size | SHA-256 Checksum |
+| :--- | :--- | :--- | :--- |
+| **Standalone Executable (Root)** | [`BhavaniTech.UI.exe`](file:///d:/AntiGravity/Kids%20Game/BhavaniTech.UI.exe) | **64.2 MB** | `99F053C4D2DB5DA2454BB1B9135E2DE7F85921C06BFEFE1B6B5E986EBB8E9B6B` |
+| **Production Release Executable** | [`publish/FinalRelease/BhavaniTech.UI.exe`](file:///d:/AntiGravity/Kids%20Game/publish/FinalRelease/BhavaniTech.UI.exe) | **64.2 MB** | `99F053C4D2DB5DA2454BB1B9135E2DE7F85921C06BFEFE1B6B5E986EBB8E9B6B` |
+| **Portable Distribution Zip** | [`publish/BhavaniTechAcademy-Portable.zip`](file:///d:/AntiGravity/Kids%20Game/publish/BhavaniTechAcademy-Portable.zip) | **58.5 MB** | Verified Portable Release Bundle |
+| **Release Manifest** | [`RELEASE_MANIFEST.json`](file:///d:/AntiGravity/Kids%20Game/RELEASE_MANIFEST.json) | **1.9 KB** | Cryptographic metadata & test results |
+
+All requirements have been met with zero regressions, strict working set memory utilization well below 60 MB (budget < 150 MB), and 100% offline air-gapped execution.

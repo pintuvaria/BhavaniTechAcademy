@@ -60,6 +60,16 @@ namespace BhavaniTech.UI
         private readonly ContainerLabService _containerLab = new();
         private readonly WebAssemblyLabService _wasmLab = new();
         private readonly ZeroKnowledgeLabService _zkLab = new();
+        private readonly KernelBootSimulatorService _kernelSimulator = new();
+        private readonly EbpfSimulatorService _ebpfSimulator = new();
+        private readonly HardwareProtocolsService _hardwareProtocols = new();
+        private readonly ConcurrencySimulatorService _concurrencySimulator = new();
+        private readonly RaftClusterSimulation _raftSimulator = new(5);
+        private readonly AdvancedWebSecurityService _advancedWebSec = new();
+        private readonly QrCodeService _qrService = new();
+        private readonly SoundSynthesizerService _soundSynthesizer = new();
+        private bool _soundFxEnabled = true;
+        private bool _isSplitWorkbenchActive = false;
 
         public MainWindow()
         {
@@ -651,6 +661,48 @@ namespace BhavaniTech.UI
                     ViewLabs.Visibility = Visibility.Visible;
                     if (TabsCreativeLabs != null) TabsCreativeLabs.SelectedIndex = 4;
                     TxtActiveTabTitle.Text = "Creative Workbenches: Zero-Knowledge Proofs (ZK-SNARKs)";
+                    if (NavLabs != null) NavLabs.IsChecked = true;
+                    break;
+
+                case "Kernel":
+                    ViewLabs.Visibility = Visibility.Visible;
+                    if (TabsCreativeLabs != null) TabsCreativeLabs.SelectedIndex = 12;
+                    TxtActiveTabTitle.Text = "Creative Workbenches: Bare-Metal Kernel & IDT Lab";
+                    if (NavLabs != null) NavLabs.IsChecked = true;
+                    break;
+
+                case "Protocols":
+                    ViewLabs.Visibility = Visibility.Visible;
+                    if (TabsCreativeLabs != null) TabsCreativeLabs.SelectedIndex = 13;
+                    TxtActiveTabTitle.Text = "Creative Workbenches: Hardware Protocols (UART/I2C/SPI/JTAG)";
+                    if (NavLabs != null) NavLabs.IsChecked = true;
+                    break;
+
+                case "Raft":
+                    ViewLabs.Visibility = Visibility.Visible;
+                    if (TabsCreativeLabs != null) TabsCreativeLabs.SelectedIndex = 14;
+                    TxtActiveTabTitle.Text = "Creative Workbenches: Raft Distributed Consensus Lab";
+                    if (NavLabs != null) NavLabs.IsChecked = true;
+                    break;
+
+                case "Concurrency":
+                    ViewLabs.Visibility = Visibility.Visible;
+                    if (TabsCreativeLabs != null) TabsCreativeLabs.SelectedIndex = 15;
+                    TxtActiveTabTitle.Text = "Creative Workbenches: Concurrency & Deadlock Lab";
+                    if (NavLabs != null) NavLabs.IsChecked = true;
+                    break;
+
+                case "AdvancedSecurity":
+                    ViewLabs.Visibility = Visibility.Visible;
+                    if (TabsCreativeLabs != null) TabsCreativeLabs.SelectedIndex = 16;
+                    TxtActiveTabTitle.Text = "Creative Workbenches: Advanced Web Security (CSRF/SSRF/JWT)";
+                    if (NavLabs != null) NavLabs.IsChecked = true;
+                    break;
+
+                case "QrPassport":
+                    ViewLabs.Visibility = Visibility.Visible;
+                    if (TabsCreativeLabs != null) TabsCreativeLabs.SelectedIndex = 17;
+                    TxtActiveTabTitle.Text = "Creative Workbenches: Offline QR Code Passport & Credentials";
                     if (NavLabs != null) NavLabs.IsChecked = true;
                     break;
             }
@@ -4647,6 +4699,12 @@ namespace BhavaniTech.UI
                 new("🔧", "IT Troubleshooting Workbench", "500+ Hardware, OS & Network Scenarios", "Fix", "Troubleshooting"),
                 new("📜", "Official Mastery Certificate", "Generate & Print Verifiable Offline PDF", "Cert", "Certificate"),
                 new("🎴", "Spaced Repetition Flashcards", "Leitner & SuperMemo SM-2 Interval Cards", "Flash", "Mastery"),
+                new("🔬", "Bare-Metal Kernel & IDT Lab", "16/32/64-Bit Modes, IDT Dispatches & eBPF", "Kernel", "Kernel"),
+                new("⚡", "Hardware Protocols Studio", "UART Waveforms, I2C 2-Wire, SPI Modes, JTAG TAP", "Bus", "Protocols"),
+                new("🌐", "Raft Consensus Simulator", "5-Node Cluster, Quorum Logs & Split-Brain", "Raft", "Raft"),
+                new("🔄", "Concurrency & Deadlock Lab", "Atomic CAS, RAG Cycles & Dining Philosophers", "Thread", "Concurrency"),
+                new("🛡️", "Advanced Web Security Lab", "CSRF SameSite, Cloud SSRF & JWT alg:none", "WebSec", "AdvancedSecurity"),
+                new("📱", "Offline QR Code Passport", "ISO 18004 Matrix & Cryptographic Student Card", "QR", "QrPassport"),
                 new("⚙️", "Performance & Hardware Settings", "Low-Hardware Mode, SQLite Optimization", "Settings", "Settings")
             };
         }
@@ -5365,6 +5423,419 @@ namespace BhavaniTech.UI
             else
             {
                 TxtBackupStatus.Text = "⚠️ Database snapshot failed. Ensure disk write permissions.";
+            }
+        }
+
+        // =====================================================================
+        // AUDIO SYNTHESIZER & SPLIT-SCREEN DUAL WORKBENCH HANDLERS
+        // =====================================================================
+        private void BtnSoundFx_Click(object sender, RoutedEventArgs e)
+        {
+            _soundFxEnabled = !_soundFxEnabled;
+            if (BtnSoundFx != null)
+            {
+                BtnSoundFx.Content = _soundFxEnabled ? "🎵 Sound FX: ON" : "🔇 Sound FX: OFF";
+                BtnSoundFx.Background = _soundFxEnabled 
+                    ? new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(16, 185, 129)) 
+                    : new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(71, 85, 105));
+            }
+
+            if (_soundFxEnabled)
+            {
+                _soundSynthesizer.PlaySound(SoundType.LevelUp);
+            }
+        }
+
+        private void BtnSplitWorkbench_Click(object sender, RoutedEventArgs e)
+        {
+            _isSplitWorkbenchActive = !_isSplitWorkbenchActive;
+
+            if (_isSplitWorkbenchActive)
+            {
+                SwitchTab("Courses");
+                if (ColCoursesSidebar != null) ColCoursesSidebar.Width = new GridLength(240);
+                if (ColCoursesWorkbench != null) ColCoursesWorkbench.Width = new GridLength(1, GridUnitType.Star);
+                if (BrdSplitWorkbench != null) BrdSplitWorkbench.Visibility = Visibility.Visible;
+                if (BtnSplitWorkbench != null)
+                {
+                    BtnSplitWorkbench.Content = "◫ Split: ON";
+                    BtnSplitWorkbench.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(16, 185, 129));
+                }
+                if (_soundFxEnabled) _soundSynthesizer.PlaySound(SoundType.Click);
+            }
+            else
+            {
+                if (ColCoursesSidebar != null) ColCoursesSidebar.Width = new GridLength(310);
+                if (ColCoursesWorkbench != null) ColCoursesWorkbench.Width = new GridLength(0);
+                if (BrdSplitWorkbench != null) BrdSplitWorkbench.Visibility = Visibility.Collapsed;
+                if (BtnSplitWorkbench != null)
+                {
+                    BtnSplitWorkbench.Content = "◫ Split Mode";
+                    BtnSplitWorkbench.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(51, 65, 85));
+                }
+            }
+        }
+
+        private void BtnCloseSplitWorkbench_Click(object sender, RoutedEventArgs e)
+        {
+            BtnSplitWorkbench_Click(sender, e);
+        }
+
+        private void BtnRunSplitCode_Click(object sender, RoutedEventArgs e)
+        {
+            string code = TxtSplitCodeInput?.Text ?? "";
+            string lang = (CmbSplitLang?.SelectedItem as ComboBoxItem)?.Content?.ToString() ?? "Python";
+
+            if (string.IsNullOrWhiteSpace(code))
+            {
+                if (TxtSplitCodeOutput != null) TxtSplitCodeOutput.Text = "Please enter code in the scratchpad editor.";
+                return;
+            }
+
+            if (_soundFxEnabled) _soundSynthesizer.PlaySound(SoundType.Laser);
+
+            var execResult = CodeExecutionService.ExecuteCode(code, lang);
+            string output = !string.IsNullOrEmpty(execResult.Error) 
+                ? $"Error:\n{execResult.Error}\n\nOutput:\n{execResult.Output}" 
+                : execResult.Output;
+            if (TxtSplitCodeOutput != null) TxtSplitCodeOutput.Text = output;
+            AwardUserXp(10);
+        }
+
+        // =====================================================================
+        // TAB 13: BARE-METAL KERNEL, IDT & EBPF HANDLERS
+        // =====================================================================
+        private void BtnKernelRealMode_Click(object sender, RoutedEventArgs e)
+        {
+            string msg = _kernelSimulator.TransitionToRealMode();
+            if (TxtKernelModeStatus != null) TxtKernelModeStatus.Text = "CURRENT MODE: 16-bit Real Mode | Paging: Disabled | Address Space: 1 MB (Segmented CS:IP)";
+            if (TxtKernelConsole != null) TxtKernelConsole.Text = msg;
+            if (_soundFxEnabled) _soundSynthesizer.PlaySound(SoundType.Click);
+        }
+
+        private void BtnKernelProtMode_Click(object sender, RoutedEventArgs e)
+        {
+            string msg = _kernelSimulator.TransitionToProtectedMode();
+            if (TxtKernelModeStatus != null) TxtKernelModeStatus.Text = $"CURRENT MODE: 32-bit Protected Mode | GDT: Active ({_kernelSimulator.GdtTable.Count} descriptors) | Address Space: 4 GB Flat";
+            if (TxtKernelConsole != null) TxtKernelConsole.Text = msg;
+            if (_soundFxEnabled) _soundSynthesizer.PlaySound(SoundType.Click);
+        }
+
+        private void BtnKernelLongMode_Click(object sender, RoutedEventArgs e)
+        {
+            string msg = _kernelSimulator.TransitionToLongMode();
+            if (TxtKernelModeStatus != null) TxtKernelModeStatus.Text = "CURRENT MODE: 64-bit Long Mode | 4-Level Paging (PML4) Active | GDT Selectors: 5";
+            if (TxtKernelConsole != null) TxtKernelConsole.Text = msg;
+            if (_soundFxEnabled) _soundSynthesizer.PlaySound(SoundType.Click);
+        }
+
+        private void BtnIdtDivideByZero_Click(object sender, RoutedEventArgs e)
+        {
+            var res = _kernelSimulator.TriggerInterrupt(0x00);
+            if (TxtKernelConsole != null) TxtKernelConsole.Text = $"{res.ExecutionLog}\nStack Frame (IRET):\n{string.Join(Environment.NewLine, res.StackFrameIret)}";
+            if (_soundFxEnabled) _soundSynthesizer.PlaySound(SoundType.ErrorBuzzer);
+        }
+
+        private void BtnIdtPageFault_Click(object sender, RoutedEventArgs e)
+        {
+            var res = _kernelSimulator.TriggerInterrupt(0x0E, 0x00007FFDEADBEEF0);
+            if (TxtKernelConsole != null) TxtKernelConsole.Text = $"{res.ExecutionLog}\nStack Frame (IRET):\n{string.Join(Environment.NewLine, res.StackFrameIret)}";
+            if (_soundFxEnabled) _soundSynthesizer.PlaySound(SoundType.ErrorBuzzer);
+        }
+
+        private void BtnIdtGeneralProtection_Click(object sender, RoutedEventArgs e)
+        {
+            var res = _kernelSimulator.TriggerInterrupt(0x0D, 0x0028);
+            if (TxtKernelConsole != null) TxtKernelConsole.Text = $"{res.ExecutionLog}\nStack Frame (IRET):\n{string.Join(Environment.NewLine, res.StackFrameIret)}";
+            if (_soundFxEnabled) _soundSynthesizer.PlaySound(SoundType.ErrorBuzzer);
+        }
+
+        private void BtnIdtTimerTick_Click(object sender, RoutedEventArgs e)
+        {
+            var res = _kernelSimulator.TriggerInterrupt(0x20);
+            if (TxtKernelConsole != null) TxtKernelConsole.Text = $"{res.ExecutionLog}\nStack Frame (IRET):\n{string.Join(Environment.NewLine, res.StackFrameIret)}";
+            if (_soundFxEnabled) _soundSynthesizer.PlaySound(SoundType.Click);
+        }
+
+        private void BtnIdtSyscall_Click(object sender, RoutedEventArgs e)
+        {
+            var res = _kernelSimulator.TriggerInterrupt(0x80);
+            if (TxtKernelConsole != null) TxtKernelConsole.Text = $"{res.ExecutionLog}\nStack Frame (IRET):\n{string.Join(Environment.NewLine, res.StackFrameIret)}";
+            if (_soundFxEnabled) _soundSynthesizer.PlaySound(SoundType.FlagCapture);
+            AwardUserXp(20);
+        }
+
+        private void BtnRunEbpfProgram_Click(object sender, RoutedEventArgs e)
+        {
+            string progType = CmbEbpfProgram?.SelectedIndex == 0 ? "XDP" : "Kprobe";
+            var prog = _ebpfSimulator.GetSampleProgram(progType);
+            var verif = _ebpfSimulator.VerifyBytecode(prog);
+            var exec = _ebpfSimulator.ExecuteTrace(progType, progType == "XDP" ? "192.168.1.105" : "/usr/bin/curl");
+
+            var sb = new System.Text.StringBuilder();
+            sb.AppendLine(verif.VerificationReport);
+            sb.AppendLine("\nSafety Checks Passed:");
+            foreach (var c in verif.SafetyChecks) sb.AppendLine($"  • {c}");
+            sb.AppendLine("\n=== IN-KERNEL eBPF RUNTIME EXECUTION ===");
+            sb.AppendLine($"Exit Register R0: {exec.ReturnValue}");
+            sb.AppendLine("Trace Log:");
+            foreach (var t in exec.TraceLog) sb.AppendLine($"  {t}");
+
+            if (TxtKernelConsole != null) TxtKernelConsole.Text = sb.ToString();
+            if (_soundFxEnabled) _soundSynthesizer.PlaySound(SoundType.LevelUp);
+            AwardUserXp(30);
+        }
+
+        // =====================================================================
+        // TAB 14: HARDWARE PROTOCOLS HANDLERS
+        // =====================================================================
+        private void BtnSimulateUart_Click(object sender, RoutedEventArgs e)
+        {
+            int baud = int.TryParse(TxtUartBaud?.Text, out int b) ? b : 115200;
+            char ch = (TxtUartChar?.Text.Length > 0) ? TxtUartChar.Text[0] : 'A';
+            var result = _hardwareProtocols.AnalyzeUart(ch, baud);
+            if (TxtProtocolHardwareOutput != null) TxtProtocolHardwareOutput.Text = result.ProtocolTrace;
+            if (_soundFxEnabled) _soundSynthesizer.PlaySound(SoundType.Click);
+            AwardUserXp(15);
+        }
+
+        private void BtnSimulateI2c_Click(object sender, RoutedEventArgs e)
+        {
+            byte addr = byte.TryParse(TxtI2cAddr?.Text, System.Globalization.NumberStyles.HexNumber, null, out byte a) ? a : (byte)0x50;
+            byte data = byte.TryParse(TxtI2cData?.Text, System.Globalization.NumberStyles.HexNumber, null, out byte d) ? d : (byte)0xAB;
+            var result = _hardwareProtocols.SimulateI2c(addr, false, data);
+            if (TxtProtocolHardwareOutput != null) TxtProtocolHardwareOutput.Text = result.ProtocolTrace;
+            if (_soundFxEnabled) _soundSynthesizer.PlaySound(SoundType.Click);
+            AwardUserXp(15);
+        }
+
+        private void BtnSimulateSpi_Click(object sender, RoutedEventArgs e)
+        {
+            int mode = CmbSpiMode?.SelectedIndex ?? 0;
+            var result = _hardwareProtocols.SimulateSpi(mode, 0x9F);
+            if (TxtProtocolHardwareOutput != null) TxtProtocolHardwareOutput.Text = result.ProtocolTrace;
+            if (_soundFxEnabled) _soundSynthesizer.PlaySound(SoundType.Click);
+            AwardUserXp(15);
+        }
+
+        private void BtnRunJtagScan_Click(object sender, RoutedEventArgs e)
+        {
+            var result = _hardwareProtocols.SimulateJtagBoundaryScan();
+            if (TxtProtocolHardwareOutput != null) TxtProtocolHardwareOutput.Text = result.ProtocolTrace;
+            if (_soundFxEnabled) _soundSynthesizer.PlaySound(SoundType.FlagCapture);
+            AwardUserXp(25);
+        }
+
+        // =====================================================================
+        // TAB 15: RAFT DISTRIBUTED CONSENSUS HANDLERS
+        // =====================================================================
+        private void BtnRaftPropose_Click(object sender, RoutedEventArgs e)
+        {
+            string cmd = TxtRaftCommand?.Text ?? "SET test=1";
+            _raftSimulator.ProposeCommand(cmd, out string msg);
+            if (TxtRaftTopology != null) TxtRaftTopology.Text = _raftSimulator.RenderClusterTopology();
+            if (_soundFxEnabled) _soundSynthesizer.PlaySound(SoundType.Click);
+            AwardUserXp(15);
+        }
+
+        private void BtnRaftPartition_Click(object sender, RoutedEventArgs e)
+        {
+            _raftSimulator.PartitionCluster(new List<int> { 4, 5 });
+            if (TxtRaftTopology != null) TxtRaftTopology.Text = _raftSimulator.RenderClusterTopology();
+            if (_soundFxEnabled) _soundSynthesizer.PlaySound(SoundType.ErrorBuzzer);
+        }
+
+        private void BtnRaftElectMinority_Click(object sender, RoutedEventArgs e)
+        {
+            _raftSimulator.TriggerElection(2);
+            if (TxtRaftTopology != null) TxtRaftTopology.Text = _raftSimulator.RenderClusterTopology();
+            if (_soundFxEnabled) _soundSynthesizer.PlaySound(SoundType.Click);
+        }
+
+        private void BtnRaftHeal_Click(object sender, RoutedEventArgs e)
+        {
+            _raftSimulator.HealPartition();
+            if (TxtRaftTopology != null) TxtRaftTopology.Text = _raftSimulator.RenderClusterTopology();
+            if (_soundFxEnabled) _soundSynthesizer.PlaySound(SoundType.LevelUp);
+            AwardUserXp(25);
+        }
+
+        private void BtnRaftReset_Click(object sender, RoutedEventArgs e)
+        {
+            if (TxtRaftTopology != null) TxtRaftTopology.Text = _raftSimulator.RenderClusterTopology();
+        }
+
+        // =====================================================================
+        // TAB 16: CONCURRENCY & DEADLOCK LAB HANDLERS
+        // =====================================================================
+        private void BtnRunAtomicCas_Click(object sender, RoutedEventArgs e)
+        {
+            var res1 = _concurrencySimulator.SimulateAtomicCas(100, 100, 101);
+            var res2 = _concurrencySimulator.SimulateAtomicCas(100, 99, 101);
+            var sb = new System.Text.StringBuilder();
+            sb.AppendLine("=== ATOMIC CAS (COMPARE-AND-SWAP) SIMULATION ===");
+            sb.AppendLine($"Trial 1 (Target=100, Expected=100, Desired=101): Success={res1.CasSucceeded}, Final={res1.FinalValue}");
+            sb.AppendLine($"  -> {res1.Explanation}\n");
+            sb.AppendLine($"Trial 2 (Target=100, Expected=99, Desired=101): Success={res2.CasSucceeded}, Final={res2.FinalValue}");
+            sb.AppendLine($"  -> {res2.Explanation}");
+
+            if (TxtConcurrencyOutput != null) TxtConcurrencyOutput.Text = sb.ToString();
+            if (_soundFxEnabled) _soundSynthesizer.PlaySound(SoundType.Click);
+            AwardUserXp(20);
+        }
+
+        private void BtnRunRagDeadlockCheck_Click(object sender, RoutedEventArgs e)
+        {
+            var waitGraph = new Dictionary<string, List<string>>
+            {
+                ["Thread 1"] = new() { "Thread 2 (Holding Lock B)" },
+                ["Thread 2"] = new() { "Thread 3 (Holding Lock C)" },
+                ["Thread 3"] = new() { "Thread 1 (Holding Lock A)" }
+            };
+            var res = _concurrencySimulator.DetectDeadlockInGraph(waitGraph);
+            var sb = new System.Text.StringBuilder();
+            sb.AppendLine(res.ResourceGraphAscii);
+            sb.AppendLine($"\nDeadlock Detected: {res.DeadlockDetected}");
+            sb.AppendLine($"Cycle Path: {string.Join(" -> ", res.CycleNodes)}");
+            sb.AppendLine($"\nRemediation: {res.PreventionRecommendation}");
+
+            if (TxtConcurrencyOutput != null) TxtConcurrencyOutput.Text = sb.ToString();
+            if (_soundFxEnabled) _soundSynthesizer.PlaySound(SoundType.ErrorBuzzer);
+            AwardUserXp(20);
+        }
+
+        private void BtnRunDiningPhilosophers_Click(object sender, RoutedEventArgs e)
+        {
+            bool safe = CmbPhilosophersMode?.SelectedIndex == 1;
+            var steps = _concurrencySimulator.SimulateDiningPhilosophers(safe);
+            var sb = new System.Text.StringBuilder();
+            sb.AppendLine($"=== DINING PHILOSOPHERS SIMULATION (Mode: {(safe ? "Dijkstra Resource Hierarchy" : "Naive Circular Wait")}) ===");
+            foreach (var s in steps)
+            {
+                sb.AppendLine($"Step {s.StepNumber}: {s.Action}");
+                sb.AppendLine($"  States: [ {string.Join(", ", s.PhilosopherStates)} ]");
+                if (s.IsDeadlocked) sb.AppendLine("  ⚠️ DEADLOCK STATE CONFIRMED: Circular wait detected.");
+            }
+
+            if (TxtConcurrencyOutput != null) TxtConcurrencyOutput.Text = sb.ToString();
+            if (_soundFxEnabled) _soundSynthesizer.PlaySound(safe ? SoundType.LevelUp : SoundType.ErrorBuzzer);
+            AwardUserXp(25);
+        }
+
+        // =====================================================================
+        // TAB 17: ADVANCED WEB SECURITY HANDLERS
+        // =====================================================================
+        private void BtnTestCsrf_Click(object sender, RoutedEventArgs e)
+        {
+            int sIdx = CmbCsrfSameSite?.SelectedIndex ?? 1;
+            var sameSite = sIdx switch { 0 => SameSitePolicy.None, 2 => SameSitePolicy.Strict, _ => SameSitePolicy.Lax };
+            string method = (CmbCsrfMethod?.SelectedItem as ComboBoxItem)?.Content?.ToString() ?? "POST";
+            bool hasToken = ChkCsrfToken?.IsChecked == true;
+
+            var res = _advancedWebSec.SimulateCsrfRequest("https://attacker-site.com", "https://bank.com", method, false, sameSite, hasToken);
+            var sb = new System.Text.StringBuilder();
+            sb.AppendLine("=== CSRF SAMESITE EVALUATION REPORT ===");
+            sb.AppendLine($"Cookie Transmitted: {res.CookieAttached}");
+            sb.AppendLine($"Request Permitted: {res.RequestAllowed}");
+            sb.AppendLine($"Attack Succeeded: {res.AttackSucceeded}");
+            sb.AppendLine($"\nAnalysis: {res.AnalysisDetails}");
+            sb.AppendLine($"\nRecommendation: {res.RemediationRecommendation}");
+
+            if (TxtAdvancedWebSecOutput != null) TxtAdvancedWebSecOutput.Text = sb.ToString();
+            if (_soundFxEnabled) _soundSynthesizer.PlaySound(res.AttackSucceeded ? SoundType.ErrorBuzzer : SoundType.FlagCapture);
+            AwardUserXp(20);
+        }
+
+        private void BtnTestSsrf_Click(object sender, RoutedEventArgs e)
+        {
+            string url = TxtSsrfUrl?.Text ?? "http://2852039166/latest/meta-data/";
+            bool imdsV2 = ChkSsrfImdsV2?.IsChecked == true;
+            bool dnsFilter = ChkSsrfDnsFilter?.IsChecked == true;
+
+            var res = _advancedWebSec.SimulateSsrf(url, imdsV2, dnsFilter);
+            var sb = new System.Text.StringBuilder();
+            sb.AppendLine("=== SSRF & CLOUD METADATA ATTACK EVALUATION ===");
+            sb.AppendLine($"Attack Type: {res.AttackType}");
+            sb.AppendLine($"Resolved Host IP: {res.ResolvedIp}");
+            sb.AppendLine($"Exploited: {res.Exploited}");
+            sb.AppendLine($"Verdict: {res.DefenseVerdict}");
+            sb.AppendLine($"\nExtracted Target Response:\n{res.ExtractedData}");
+            sb.AppendLine($"\nRemediation: {res.Remediation}");
+
+            if (TxtAdvancedWebSecOutput != null) TxtAdvancedWebSecOutput.Text = sb.ToString();
+            if (_soundFxEnabled) _soundSynthesizer.PlaySound(res.Exploited ? SoundType.ErrorBuzzer : SoundType.LevelUp);
+            AwardUserXp(25);
+        }
+
+        private void BtnTestJwt_Click(object sender, RoutedEventArgs e)
+        {
+            int attackIdx = CmbJwtAttack?.SelectedIndex ?? 0;
+            string originalToken = _advancedWebSec.CreateSampleToken("student_alice", "student");
+
+            var res = attackIdx == 0 
+                ? _advancedWebSec.SimulateAlgNoneAttack(originalToken, "admin")
+                : _advancedWebSec.SimulateSignatureTamper(originalToken, "admin");
+
+            var sb = new System.Text.StringBuilder();
+            sb.AppendLine("=== JWT CRYPTOGRAPHIC TAMPER EVALUATION ===");
+            sb.AppendLine($"Attack Vector: {res.VulnerabilityExploited}");
+            sb.AppendLine($"Server Accepted Tampered Token: {res.ServerAccepted}");
+            sb.AppendLine($"\nForged Token:\n{res.ModifiedToken}");
+            sb.AppendLine($"\nExplanation:\n{res.Explanation}");
+            sb.AppendLine($"\nDefense Recommendation:\n{res.PreventionRecommendation}");
+
+            if (TxtAdvancedWebSecOutput != null) TxtAdvancedWebSecOutput.Text = sb.ToString();
+            if (_soundFxEnabled) _soundSynthesizer.PlaySound(res.ServerAccepted ? SoundType.FlagCapture : SoundType.Click);
+            AwardUserXp(25);
+        }
+
+        // =====================================================================
+        // TAB 18: OFFLINE QR CODE PASSPORT HANDLERS
+        // =====================================================================
+        private void BtnGenerateQrPassport_Click(object sender, RoutedEventArgs e)
+        {
+            string name = _currentUser?.DisplayName ?? "Bhavani Scholar";
+            var passport = _qrService.CreateStudentPassport(name, "BTA-2026-9901", 108, _currentUser?.TotalXP ?? 4500, "FullStack,Cyber,Kernel");
+            string payload = $"{passport.StudentName}|{passport.StudentId}|{passport.CompletedLessons}|{passport.Xp}|{passport.IntegrityHash}";
+
+            var matrix = _qrService.GenerateQrMatrix(payload);
+            string ascii = matrix.ToAsciiString(2);
+
+            var sb = new System.Text.StringBuilder();
+            sb.AppendLine("╔══════════════════════════════════════════════════════════════════════════════════════╗");
+            sb.AppendLine("║                    BHAVANI ACADEMY OFFLINE QR CREDENTIAL PASSPORT                    ║");
+            sb.AppendLine("╚══════════════════════════════════════════════════════════════════════════════════════╝");
+            sb.AppendLine($"Student Name : {passport.StudentName}");
+            sb.AppendLine($"Student ID   : {passport.StudentId}");
+            sb.AppendLine($"Completed    : {passport.CompletedLessons} / 108 Lessons");
+            sb.AppendLine($"Total XP     : {passport.Xp} XP");
+            sb.AppendLine($"SHA-256 Seal : {passport.IntegrityHash}");
+            sb.AppendLine("\n" + ascii);
+            sb.AppendLine("\nScan with any camera or portable reader to verify offline academic credential!");
+
+            if (TxtQrDisplay != null) TxtQrDisplay.Text = sb.ToString();
+            if (TxtQrStudentName != null) TxtQrStudentName.Text = $"Student: {passport.StudentName}";
+            if (TxtQrStats != null) TxtQrStats.Text = $"Lessons: {passport.CompletedLessons}/108 | XP: {passport.Xp} | Seal: {passport.IntegrityHash}";
+
+            if (_soundFxEnabled) _soundSynthesizer.PlaySound(SoundType.LevelUp);
+            AwardUserXp(30);
+        }
+
+        private void BtnVerifyQrPassport_Click(object sender, RoutedEventArgs e)
+        {
+            string name = _currentUser?.DisplayName ?? "Bhavani Scholar";
+            var passport = _qrService.CreateStudentPassport(name, "BTA-2026-9901", 108, _currentUser?.TotalXP ?? 4500, "FullStack,Cyber,Kernel");
+            bool valid = _qrService.VerifyPassportHash(passport);
+
+            if (valid)
+            {
+                MessageBox.Show($"✅ VERIFIED AUTHENTIC CREDENTIAL!\n\nStudent: {passport.StudentName}\nID: {passport.StudentId}\nIntegrity Seal: {passport.IntegrityHash}\n\nThis student passport was cryptographically sealed using Bhavani Academy's offline salt.", "Passport Verified", MessageBoxButton.OK, MessageBoxImage.Information);
+                if (_soundFxEnabled) _soundSynthesizer.PlaySound(SoundType.FlagCapture);
+            }
+            else
+            {
+                MessageBox.Show("❌ VERIFICATION FAILED: Passport cryptographic seal is invalid or has been tampered with.", "Verification Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                if (_soundFxEnabled) _soundSynthesizer.PlaySound(SoundType.ErrorBuzzer);
             }
         }
     }

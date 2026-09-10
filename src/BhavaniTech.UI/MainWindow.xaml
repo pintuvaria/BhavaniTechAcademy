@@ -164,6 +164,8 @@
                         <Border Background="#334155" CornerRadius="4" Padding="8,4" Margin="4,0">
                             <TextBlock x:Name="TxtUserStreak" Text="🔥 3 Day Streak" FontSize="12" FontWeight="Bold" Foreground="#FB923C"/>
                         </Border>
+                        <Button x:Name="BtnSoundFx" Content="🎵 Sound FX" Click="BtnSoundFx_Click" Background="#334155" Foreground="White" Padding="8,4" FontSize="11" FontWeight="Bold" BorderThickness="0" Cursor="Hand" Margin="4,0" ToolTip="Toggle / Test pure in-memory Chiptune 8-bit audio synthesizer"/>
+                        <Button x:Name="BtnSplitWorkbench" Content="◫ Split Mode" Click="BtnSplitWorkbench_Click" Background="#334155" Foreground="White" Padding="8,4" FontSize="11" FontWeight="Bold" BorderThickness="0" Cursor="Hand" Margin="4,0" ToolTip="Toggle dual split-screen study hall with side-by-side interactive workbench"/>
                         <Button x:Name="BtnCommandPalette" Content="🔍 Quick Jump (Ctrl+K)" Click="BtnCommandPalette_Click" Background="#0284C7" Foreground="White" Padding="8,4" FontSize="11" FontWeight="Bold" BorderThickness="0" Cursor="Hand" Margin="4,0" ToolTip="Global Quick Search (Ctrl+K) to jump across all modules &amp; labs"/>
                         <Button x:Name="BtnExportCertHeader" Content="📜 Certificate" Click="BtnExportCertHeader_Click" Background="#D97706" Foreground="White" Padding="8,4" FontSize="11" FontWeight="Bold" BorderThickness="0" Cursor="Hand" Margin="4,0" ToolTip="Generate verified offline completion certificate"/>
                         <Button x:Name="BtnStopVoice" Content="⏹️ Stop Voice" Click="BtnStopVoice_Click" Background="#475569" Foreground="White" Padding="8,4" FontSize="11" FontWeight="Bold" BorderThickness="0" Cursor="Hand" Margin="4,0"/>
@@ -308,8 +310,9 @@
                 <!-- 2. COURSES & LESSONS VIEW (BASICS TO MASTERS) -->
                 <Grid x:Name="ViewCourses" Visibility="Collapsed">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="310"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition x:Name="ColCoursesSidebar" Width="310"/>
+                        <ColumnDefinition x:Name="ColCoursesLesson" Width="*"/>
+                        <ColumnDefinition x:Name="ColCoursesWorkbench" Width="0"/>
                     </Grid.ColumnDefinitions>
 
                     <!-- Course & Lesson List -->
@@ -502,6 +505,62 @@
                                     </Border>
                                 </TabItem>
                             </TabControl>
+                        </Grid>
+                    </Border>
+
+                    <!-- Dual Split Interactive Workbench -->
+                    <Border x:Name="BrdSplitWorkbench" Grid.Column="2" Background="#1E293B" CornerRadius="8" Padding="14" Margin="8,0,0,0" Visibility="Collapsed">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="130"/>
+                            </Grid.RowDefinitions>
+
+                            <Grid Grid.Row="0" Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="⚡ SIDE-BY-SIDE LAB WORKBENCH" FontSize="13" FontWeight="Bold" Foreground="#38BDF8"/>
+                                    <Border Background="#10B981" CornerRadius="4" Padding="6,1" Margin="8,0,0,0">
+                                        <TextBlock Text="LIVE" FontSize="9" FontWeight="Bold" Foreground="White"/>
+                                    </Border>
+                                </StackPanel>
+                                <Button Grid.Column="1" Content="✕ Close Split" Click="BtnCloseSplitWorkbench_Click" Background="#334155" Foreground="#CBD5E1" Padding="8,3" FontSize="10" FontWeight="Bold" BorderThickness="0" Cursor="Hand"/>
+                            </Grid>
+
+                            <Grid Grid.Row="1" Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <ComboBox x:Name="CmbSplitLang" SelectedIndex="0" Padding="6,3" FontSize="11" Width="140">
+                                    <ComboBoxItem Content="Python (🐍)"/>
+                                    <ComboBoxItem Content="C# (🔷)"/>
+                                    <ComboBoxItem Content="JavaScript (⚡)"/>
+                                    <ComboBoxItem Content="Shell (🐧)"/>
+                                </ComboBox>
+                                <Button Grid.Column="2" Content="▶ Run Sandbox" Click="BtnRunSplitCode_Click" Background="#16A34A" Foreground="White" Padding="12,4" FontSize="11" FontWeight="Bold" BorderThickness="0" Cursor="Hand"/>
+                            </Grid>
+
+                            <Border Grid.Row="2" Background="#020617" BorderBrush="#334155" BorderThickness="1" CornerRadius="6" Padding="8" Margin="0,0,0,8">
+                                <TextBox x:Name="TxtSplitCodeInput" AcceptsReturn="True" AcceptsTab="True" FontFamily="Consolas" FontSize="13" Background="Transparent" Foreground="#F8FAFC" BorderThickness="0" TextWrapping="NoWrap" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Text="# Dual Workbench Scratchpad&#x0a;print('Testing concept from lesson!')&#x0a;for i in range(1, 6):&#x0a;    print(f'Step {i}: verified')"/>
+                            </Border>
+
+                            <Border Grid.Row="3" Background="#0F172A" BorderBrush="#334155" BorderThickness="1" CornerRadius="6" Padding="8">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Text="EXECUTION OUTPUT:" FontSize="10" FontWeight="Bold" Foreground="#64748B" Margin="0,0,0,4"/>
+                                    <TextBox x:Name="TxtSplitCodeOutput" Grid.Row="1" IsReadOnly="True" Background="Transparent" Foreground="#4ADE80" FontFamily="Consolas" FontSize="11" BorderThickness="0" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Text="Ready for execution."/>
+                                </Grid>
+                            </Border>
                         </Grid>
                     </Border>
                 </Grid>
@@ -2478,6 +2537,349 @@
                                             </Border>
                                         </StackPanel>
                                     </ScrollViewer>
+                                </Border>
+                            </Grid>
+                        </TabItem>
+
+                        <!-- TAB 13: BARE-METAL KERNEL, IDT & EBPF LAB -->
+                        <TabItem Header="🔬 Bare-Metal Kernel &amp; IDT" Padding="14,8">
+                            <Grid Margin="0,8,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="340"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Left Control Panel -->
+                                <Border Grid.Column="0" Background="#1E293B" CornerRadius="8" Padding="14" Margin="0,0,8,0">
+                                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                        <StackPanel>
+                                            <TextBlock Text="BARE-METAL KERNEL &amp; IDT LAB" FontSize="15" FontWeight="Bold" Foreground="#38BDF8" Margin="0,0,0,4"/>
+                                            <TextBlock Text="Simulate x86_64 CPU mode switches, Interrupt Descriptor Table (IDT) dispatches, and in-kernel eBPF sandboxing." FontSize="11" Foreground="#94A3B8" TextWrapping="Wrap" Margin="0,0,0,12"/>
+
+                                            <TextBlock Text="1. CPU EXECUTION MODES:" FontSize="11" FontWeight="Bold" Foreground="#FACC15" Margin="0,0,0,6"/>
+                                            <UniformGrid Columns="3" Margin="0,0,0,12">
+                                                <Button Content="16-Bit Real" Click="BtnKernelRealMode_Click" Background="#334155" Foreground="White" Padding="4,6" FontSize="10" FontWeight="Bold" BorderThickness="0" Margin="1" Cursor="Hand"/>
+                                                <Button Content="32-Bit Prot" Click="BtnKernelProtMode_Click" Background="#0284C7" Foreground="White" Padding="4,6" FontSize="10" FontWeight="Bold" BorderThickness="0" Margin="1" Cursor="Hand"/>
+                                                <Button Content="64-Bit Long" Click="BtnKernelLongMode_Click" Background="#10B981" Foreground="White" Padding="4,6" FontSize="10" FontWeight="Bold" BorderThickness="0" Margin="1" Cursor="Hand"/>
+                                            </UniformGrid>
+
+                                            <TextBlock Text="2. IDT EXCEPTION / IRQ DISPATCH:" FontSize="11" FontWeight="Bold" Foreground="#F43F5E" Margin="0,0,0,6"/>
+                                            <StackPanel Margin="0,0,0,12">
+                                                <Button Content="⚡ Trigger #DE (Divide Error, Vec 0)" Click="BtnIdtDivideByZero_Click" Background="#881337" Foreground="#FECDD3" Padding="8,5" FontSize="11" FontWeight="Bold" BorderThickness="0" Margin="0,0,0,4" HorizontalContentAlignment="Left" Cursor="Hand"/>
+                                                <Button Content="⚡ Trigger #PF (Page Fault, Vec 14)" Click="BtnIdtPageFault_Click" Background="#881337" Foreground="#FECDD3" Padding="8,5" FontSize="11" FontWeight="Bold" BorderThickness="0" Margin="0,0,0,4" HorizontalContentAlignment="Left" Cursor="Hand"/>
+                                                <Button Content="⚡ Trigger #GP (General Protection, Vec 13)" Click="BtnIdtGeneralProtection_Click" Background="#881337" Foreground="#FECDD3" Padding="8,5" FontSize="11" FontWeight="Bold" BorderThickness="0" Margin="0,0,0,4" HorizontalContentAlignment="Left" Cursor="Hand"/>
+                                                <Button Content="⏱️ Trigger IRQ 0 (Timer Tick, Vec 32)" Click="BtnIdtTimerTick_Click" Background="#1E3A8A" Foreground="#BFDBFE" Padding="8,5" FontSize="11" FontWeight="Bold" BorderThickness="0" Margin="0,0,0,4" HorizontalContentAlignment="Left" Cursor="Hand"/>
+                                                <Button Content="🛡️ Trigger int 0x80 (Ring 3 -> Ring 0 Syscall)" Click="BtnIdtSyscall_Click" Background="#065F46" Foreground="#A7F3D0" Padding="8,5" FontSize="11" FontWeight="Bold" BorderThickness="0" HorizontalContentAlignment="Left" Cursor="Hand"/>
+                                            </StackPanel>
+
+                                            <TextBlock Text="3. IN-KERNEL EBPF SANDBOX VM:" FontSize="11" FontWeight="Bold" Foreground="#A855F7" Margin="0,0,0,6"/>
+                                            <ComboBox x:Name="CmbEbpfProgram" SelectedIndex="0" Background="#0F172A" Foreground="White" Padding="6,4" FontSize="11" Margin="0,0,0,6">
+                                                <ComboBoxItem Content="XDP Driver: Drop Malicious Packets"/>
+                                                <ComboBoxItem Content="KProbe: Monitor sys_execve Execution"/>
+                                            </ComboBox>
+                                            <Button Content="▶ Verify DAG &amp; Run In-Kernel eBPF" Click="BtnRunEbpfProgram_Click" Background="#9333EA" Foreground="White" Padding="10,6" FontSize="11" FontWeight="Bold" BorderThickness="0" Cursor="Hand"/>
+                                        </StackPanel>
+                                    </ScrollViewer>
+                                </Border>
+
+                                <!-- Right Output Console -->
+                                <Border Grid.Column="1" Background="#1E293B" CornerRadius="8" Padding="14">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Grid.Row="0" Text="KERNEL &amp; HARDWARE ARCHITECTURE TELEMETRY" FontSize="13" FontWeight="Bold" Foreground="#38BDF8" Margin="0,0,0,4"/>
+                                        <Border Grid.Row="1" Background="#0F172A" CornerRadius="6" Padding="10" Margin="0,0,0,8">
+                                            <TextBlock x:Name="TxtKernelModeStatus" Text="CURRENT MODE: 64-bit Long Mode | Paging: 4-Level (PML4 -> PDPT -> PD -> PT) | GDT: 5 Selectors Active | Ring: Ring 0" FontSize="11" FontWeight="Bold" Foreground="#4ADE80" FontFamily="Consolas" TextWrapping="Wrap"/>
+                                        </Border>
+                                        <TextBox x:Name="TxtKernelConsole" Grid.Row="2" IsReadOnly="True" Background="#020617" BorderBrush="#334155" BorderThickness="1" Foreground="#38BDF8" FontFamily="Consolas" FontSize="11" Padding="10" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/>
+                                    </Grid>
+                                </Border>
+                            </Grid>
+                        </TabItem>
+
+                        <!-- TAB 14: HARDWARE PROTOCOLS LAB (UART, I2C, SPI, JTAG) -->
+                        <TabItem Header="⚡ Hardware Protocols" Padding="14,8">
+                            <Grid Margin="0,8,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="340"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Left Controls -->
+                                <Border Grid.Column="0" Background="#1E293B" CornerRadius="8" Padding="14" Margin="0,0,8,0">
+                                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                        <StackPanel>
+                                            <TextBlock Text="HARDWARE PROTOCOLS LAB" FontSize="15" FontWeight="Bold" Foreground="#38BDF8" Margin="0,0,0,4"/>
+                                            <TextBlock Text="Simulate wire-level embedded signals: UART asynchronous frames, I2C 2-wire ACK/NACK, SPI 4-wire modes, and JTAG 16-state boundary scan." FontSize="11" Foreground="#94A3B8" TextWrapping="Wrap" Margin="0,0,0,12"/>
+
+                                            <TextBlock Text="1. UART ASYNCHRONOUS SERIAL:" FontSize="11" FontWeight="Bold" Foreground="#FACC15" Margin="0,0,0,4"/>
+                                            <Grid Margin="0,0,0,6">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <StackPanel Grid.Column="0" Margin="0,0,4,0">
+                                                    <TextBlock Text="Baud Rate:" FontSize="10" Foreground="#94A3B8"/>
+                                                    <TextBox x:Name="TxtUartBaud" Text="115200" FontSize="11" Padding="4" Background="#0F172A" Foreground="White" BorderBrush="#334155"/>
+                                                </StackPanel>
+                                                <StackPanel Grid.Column="1" Margin="4,0,0,0">
+                                                    <TextBlock Text="Char Data:" FontSize="10" Foreground="#94A3B8"/>
+                                                    <TextBox x:Name="TxtUartChar" Text="A" FontSize="11" Padding="4" Background="#0F172A" Foreground="White" BorderBrush="#334155"/>
+                                                </StackPanel>
+                                            </Grid>
+                                            <Button Content="▶ Generate UART Waveform (8N1)" Click="BtnSimulateUart_Click" Background="#0284C7" Foreground="White" Padding="8,5" FontSize="11" FontWeight="Bold" BorderThickness="0" Margin="0,0,0,12" Cursor="Hand"/>
+
+                                            <TextBlock Text="2. I2C 2-WIRE BUS PROTOCOL:" FontSize="11" FontWeight="Bold" Foreground="#38BDF8" Margin="0,0,0,4"/>
+                                            <Grid Margin="0,0,0,6">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <StackPanel Grid.Column="0" Margin="0,0,4,0">
+                                                    <TextBlock Text="7-Bit Addr (Hex):" FontSize="10" Foreground="#94A3B8"/>
+                                                    <TextBox x:Name="TxtI2cAddr" Text="50" FontSize="11" Padding="4" Background="#0F172A" Foreground="White" BorderBrush="#334155"/>
+                                                </StackPanel>
+                                                <StackPanel Grid.Column="1" Margin="4,0,0,0">
+                                                    <TextBlock Text="Data (Hex):" FontSize="10" Foreground="#94A3B8"/>
+                                                    <TextBox x:Name="TxtI2cData" Text="AB" FontSize="11" Padding="4" Background="#0F172A" Foreground="White" BorderBrush="#334155"/>
+                                                </StackPanel>
+                                            </Grid>
+                                            <Button Content="▶ Simulate I2C Transaction &amp; ACK" Click="BtnSimulateI2c_Click" Background="#0284C7" Foreground="White" Padding="8,5" FontSize="11" FontWeight="Bold" BorderThickness="0" Margin="0,0,0,12" Cursor="Hand"/>
+
+                                            <TextBlock Text="3. SPI 4-WIRE SYNCHRONOUS BUS:" FontSize="11" FontWeight="Bold" Foreground="#10B981" Margin="0,0,0,4"/>
+                                            <ComboBox x:Name="CmbSpiMode" SelectedIndex="0" Background="#0F172A" Foreground="White" Padding="6,4" FontSize="11" Margin="0,0,0,6">
+                                                <ComboBoxItem Content="Mode 0: CPOL=0, CPHA=0 (Sample on Rise)"/>
+                                                <ComboBoxItem Content="Mode 1: CPOL=0, CPHA=1 (Sample on Fall)"/>
+                                                <ComboBoxItem Content="Mode 2: CPOL=1, CPHA=0 (Sample on Fall)"/>
+                                                <ComboBoxItem Content="Mode 3: CPOL=1, CPHA=1 (Sample on Rise)"/>
+                                            </ComboBox>
+                                            <Button Content="▶ Simulate Full-Duplex SPI (MOSI/MISO)" Click="BtnSimulateSpi_Click" Background="#059669" Foreground="White" Padding="8,5" FontSize="11" FontWeight="Bold" BorderThickness="0" Margin="0,0,0,12" Cursor="Hand"/>
+
+                                            <TextBlock Text="4. JTAG IEEE 1149.1 BOUNDARY-SCAN:" FontSize="11" FontWeight="Bold" Foreground="#EC4899" Margin="0,0,0,4"/>
+                                            <Button Content="▶ Run 16-State TAP Scan (Read IDCODE)" Click="BtnRunJtagScan_Click" Background="#DB2777" Foreground="White" Padding="8,5" FontSize="11" FontWeight="Bold" BorderThickness="0" Cursor="Hand"/>
+                                        </StackPanel>
+                                    </ScrollViewer>
+                                </Border>
+
+                                <!-- Right Wire Protocol Viewer -->
+                                <Border Grid.Column="1" Background="#1E293B" CornerRadius="8" Padding="14">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Grid.Row="0" Text="OSCILLOSCOPE &amp; LOGIC ANALYZER WIRE TRACE" FontSize="13" FontWeight="Bold" Foreground="#38BDF8" Margin="0,0,0,8"/>
+                                        <TextBox x:Name="TxtProtocolHardwareOutput" Grid.Row="1" IsReadOnly="True" Background="#020617" BorderBrush="#334155" BorderThickness="1" Foreground="#4ADE80" FontFamily="Consolas" FontSize="11" Padding="10" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/>
+                                    </Grid>
+                                </Border>
+                            </Grid>
+                        </TabItem>
+
+                        <!-- TAB 15: RAFT DISTRIBUTED CONSENSUS LAB -->
+                        <TabItem Header="🌐 Raft Consensus" Padding="14,8">
+                            <Grid Margin="0,8,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="340"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Left Control Panel -->
+                                <Border Grid.Column="0" Background="#1E293B" CornerRadius="8" Padding="14" Margin="0,0,8,0">
+                                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                        <StackPanel>
+                                            <TextBlock Text="RAFT DISTRIBUTED CONSENSUS" FontSize="15" FontWeight="Bold" Foreground="#38BDF8" Margin="0,0,0,4"/>
+                                            <TextBlock Text="Simulate a 5-node distributed state machine: Leader elections, quorum log replication ((N/2)+1), network split-brain isolation, and reconciliation." FontSize="11" Foreground="#94A3B8" TextWrapping="Wrap" Margin="0,0,0,12"/>
+
+                                            <TextBlock Text="1. CLIENT PROPOSALS (LOG REPLICATION):" FontSize="11" FontWeight="Bold" Foreground="#FACC15" Margin="0,0,0,4"/>
+                                            <TextBox x:Name="TxtRaftCommand" Text="SET config_status=operational" FontSize="11" Padding="6" Background="#0F172A" Foreground="White" BorderBrush="#334155" Margin="0,0,0,6"/>
+                                            <Button Content="▶ Propose Log Mutation to Leader" Click="BtnRaftPropose_Click" Background="#16A34A" Foreground="White" Padding="8,5" FontSize="11" FontWeight="Bold" BorderThickness="0" Margin="0,0,0,12" Cursor="Hand"/>
+
+                                            <TextBlock Text="2. FAULT INJECTION (SPLIT-BRAIN PARTITION):" FontSize="11" FontWeight="Bold" Foreground="#EF4444" Margin="0,0,0,4"/>
+                                            <TextBlock Text="Split 5-node cluster into Majority (Nodes 1,2,3) and Minority (Nodes 4,5):" FontSize="10" Foreground="#94A3B8" TextWrapping="Wrap" Margin="0,0,0,6"/>
+                                            <Button Content="⚡ Partition Cluster (Isolate Nodes 4 &amp; 5)" Click="BtnRaftPartition_Click" Background="#DC2626" Foreground="White" Padding="8,5" FontSize="11" FontWeight="Bold" BorderThickness="0" Margin="0,0,0,6" Cursor="Hand"/>
+                                            <Button Content="🗳️ Trigger Election in Minority Partition" Click="BtnRaftElectMinority_Click" Background="#B91C1C" Foreground="White" Padding="8,5" FontSize="11" FontWeight="Bold" BorderThickness="0" Margin="0,0,0,12" Cursor="Hand"/>
+
+                                            <TextBlock Text="3. RECOVERY &amp; RECONCILIATION:" FontSize="11" FontWeight="Bold" Foreground="#10B981" Margin="0,0,0,4"/>
+                                            <Button Content="💚 Heal Network Partition &amp; Sync Logs" Click="BtnRaftHeal_Click" Background="#059669" Foreground="White" Padding="8,5" FontSize="11" FontWeight="Bold" BorderThickness="0" Margin="0,0,0,6" Cursor="Hand"/>
+                                            <Button Content="🔄 Reset Cluster (5 Healthy Nodes)" Click="BtnRaftReset_Click" Background="#334155" Foreground="White" Padding="8,5" FontSize="11" FontWeight="Bold" BorderThickness="0" Cursor="Hand"/>
+                                        </StackPanel>
+                                    </ScrollViewer>
+                                </Border>
+
+                                <!-- Right Topology & Event Viewer -->
+                                <Border Grid.Column="1" Background="#1E293B" CornerRadius="8" Padding="14">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Grid.Row="0" Text="DISTRIBUTED CLUSTER TOPOLOGY &amp; QUORUM REPLICATION" FontSize="13" FontWeight="Bold" Foreground="#38BDF8" Margin="0,0,0,8"/>
+                                        <TextBox x:Name="TxtRaftTopology" Grid.Row="1" IsReadOnly="True" Background="#020617" BorderBrush="#334155" BorderThickness="1" Foreground="#38BDF8" FontFamily="Consolas" FontSize="11" Padding="10" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/>
+                                    </Grid>
+                                </Border>
+                            </Grid>
+                        </TabItem>
+
+                        <!-- TAB 16: CONCURRENCY & DEADLOCK LAB -->
+                        <TabItem Header="🔄 Concurrency &amp; Deadlock" Padding="14,8">
+                            <Grid Margin="0,8,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="340"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Left Control Panel -->
+                                <Border Grid.Column="0" Background="#1E293B" CornerRadius="8" Padding="14" Margin="0,0,8,0">
+                                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                        <StackPanel>
+                                            <TextBlock Text="CONCURRENCY &amp; DEADLOCK LAB" FontSize="15" FontWeight="Bold" Foreground="#38BDF8" Margin="0,0,0,4"/>
+                                            <TextBlock Text="Experiment with atomic lock-free CAS (Compare-And-Swap), Resource Allocation Graph (RAG) cycle detection, and Dining Philosophers deadlock resolution." FontSize="11" Foreground="#94A3B8" TextWrapping="Wrap" Margin="0,0,0,12"/>
+
+                                            <TextBlock Text="1. ATOMIC CAS LOCK-FREE BENCHMARK:" FontSize="11" FontWeight="Bold" Foreground="#FACC15" Margin="0,0,0,4"/>
+                                            <TextBlock Text="Runs 4 concurrent threads doing 5,000 increments using lock-free Interlocked.CompareExchange:" FontSize="10" Foreground="#94A3B8" TextWrapping="Wrap" Margin="0,0,0,6"/>
+                                            <Button Content="▶ Run Atomic CAS Lock-Free Test" Click="BtnRunAtomicCas_Click" Background="#0284C7" Foreground="White" Padding="8,5" FontSize="11" FontWeight="Bold" BorderThickness="0" Margin="0,0,0,12" Cursor="Hand"/>
+
+                                            <TextBlock Text="2. RAG DEADLOCK CYCLE DETECTOR:" FontSize="11" FontWeight="Bold" Foreground="#EF4444" Margin="0,0,0,4"/>
+                                            <TextBlock Text="Builds a Resource Allocation Graph and executes Tarjan DFS cycle detection:" FontSize="10" Foreground="#94A3B8" TextWrapping="Wrap" Margin="0,0,0,6"/>
+                                            <Button Content="🔍 Run RAG Deadlock Cycle Analysis" Click="BtnRunRagDeadlockCheck_Click" Background="#DC2626" Foreground="White" Padding="8,5" FontSize="11" FontWeight="Bold" BorderThickness="0" Margin="0,0,0,12" Cursor="Hand"/>
+
+                                            <TextBlock Text="3. DINING PHILOSOPHERS SIMULATION:" FontSize="11" FontWeight="Bold" Foreground="#10B981" Margin="0,0,0,4"/>
+                                            <ComboBox x:Name="CmbPhilosophersMode" SelectedIndex="0" Background="#0F172A" Foreground="White" Padding="6,4" FontSize="11" Margin="0,0,0,6">
+                                                <ComboBoxItem Content="Naive (Circular Wait Deadlock)"/>
+                                                <ComboBoxItem Content="Dijkstra Resource Hierarchy (Safe)"/>
+                                            </ComboBox>
+                                            <Button Content="▶ Simulate Dining Philosophers" Click="BtnRunDiningPhilosophers_Click" Background="#059669" Foreground="White" Padding="8,5" FontSize="11" FontWeight="Bold" BorderThickness="0" Cursor="Hand"/>
+                                        </StackPanel>
+                                    </ScrollViewer>
+                                </Border>
+
+                                <!-- Right Output Viewer -->
+                                <Border Grid.Column="1" Background="#1E293B" CornerRadius="8" Padding="14">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Grid.Row="0" Text="THREAD INTERLEAVING &amp; DEADLOCK GRAPH ANALYSIS" FontSize="13" FontWeight="Bold" Foreground="#38BDF8" Margin="0,0,0,8"/>
+                                        <TextBox x:Name="TxtConcurrencyOutput" Grid.Row="1" IsReadOnly="True" Background="#020617" BorderBrush="#334155" BorderThickness="1" Foreground="#4ADE80" FontFamily="Consolas" FontSize="11" Padding="10" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/>
+                                    </Grid>
+                                </Border>
+                            </Grid>
+                        </TabItem>
+
+                        <!-- TAB 17: ADVANCED WEB SECURITY LAB (CSRF / SSRF / JWT) -->
+                        <TabItem Header="🛡️ Advanced Web Sec" Padding="14,8">
+                            <Grid Margin="0,8,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="350"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Left Control Panel -->
+                                <Border Grid.Column="0" Background="#1E293B" CornerRadius="8" Padding="14" Margin="0,0,8,0">
+                                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                        <StackPanel>
+                                            <TextBlock Text="ADVANCED WEB SECURITY LAB" FontSize="15" FontWeight="Bold" Foreground="#38BDF8" Margin="0,0,0,4"/>
+                                            <TextBlock Text="Evaluate CSRF SameSite cookie boundaries, Cloud Metadata SSRF with IP obfuscation evasion, and JWT 'alg: none' tampering." FontSize="11" Foreground="#94A3B8" TextWrapping="Wrap" Margin="0,0,0,12"/>
+
+                                            <TextBlock Text="1. CSRF SAMESITE EVALUATOR:" FontSize="11" FontWeight="Bold" Foreground="#FACC15" Margin="0,0,0,4"/>
+                                            <Grid Margin="0,0,0,6">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <StackPanel Grid.Column="0" Margin="0,0,4,0">
+                                                    <TextBlock Text="SameSite:" FontSize="10" Foreground="#94A3B8"/>
+                                                    <ComboBox x:Name="CmbCsrfSameSite" SelectedIndex="1" Background="#0F172A" Foreground="White" Padding="4,2" FontSize="10">
+                                                        <ComboBoxItem Content="None"/>
+                                                        <ComboBoxItem Content="Lax"/>
+                                                        <ComboBoxItem Content="Strict"/>
+                                                    </ComboBox>
+                                                </StackPanel>
+                                                <StackPanel Grid.Column="1" Margin="4,0,0,0">
+                                                    <TextBlock Text="Method:" FontSize="10" Foreground="#94A3B8"/>
+                                                    <ComboBox x:Name="CmbCsrfMethod" SelectedIndex="1" Background="#0F172A" Foreground="White" Padding="4,2" FontSize="10">
+                                                        <ComboBoxItem Content="GET"/>
+                                                        <ComboBoxItem Content="POST"/>
+                                                    </ComboBox>
+                                                </StackPanel>
+                                            </Grid>
+                                            <CheckBox x:Name="ChkCsrfToken" Content="Anti-CSRF Token Present" Foreground="#CBD5E1" FontSize="11" Margin="0,0,0,6"/>
+                                            <Button Content="▶ Test CSRF Vulnerability" Click="BtnTestCsrf_Click" Background="#0284C7" Foreground="White" Padding="8,5" FontSize="11" FontWeight="Bold" BorderThickness="0" Margin="0,0,0,12" Cursor="Hand"/>
+
+                                            <TextBlock Text="2. CLOUD METADATA SSRF LAB:" FontSize="11" FontWeight="Bold" Foreground="#EF4444" Margin="0,0,0,4"/>
+                                            <TextBox x:Name="TxtSsrfUrl" Text="http://2852039166/latest/meta-data/" FontSize="11" Padding="4" Background="#0F172A" Foreground="White" BorderBrush="#334155" Margin="0,0,0,6" ToolTip="Try decimal IP 2852039166, hex 0xA9FEA9FE, or 169.254.169.254"/>
+                                            <CheckBox x:Name="ChkSsrfImdsV2" Content="Enforce Cloud IMDSv2 Tokens" Foreground="#CBD5E1" FontSize="11" Margin="0,0,0,4"/>
+                                            <CheckBox x:Name="ChkSsrfDnsFilter" Content="Enable DNS Preflight Filter" Foreground="#CBD5E1" FontSize="11" Margin="0,0,0,6"/>
+                                            <Button Content="▶ Test SSRF Exploitation" Click="BtnTestSsrf_Click" Background="#DC2626" Foreground="White" Padding="8,5" FontSize="11" FontWeight="Bold" BorderThickness="0" Margin="0,0,0,12" Cursor="Hand"/>
+
+                                            <TextBlock Text="3. JWT ALGORITHM CONFUSION:" FontSize="11" FontWeight="Bold" Foreground="#EC4899" Margin="0,0,0,4"/>
+                                            <ComboBox x:Name="CmbJwtAttack" SelectedIndex="0" Background="#0F172A" Foreground="White" Padding="6,4" FontSize="11" Margin="0,0,0,6">
+                                                <ComboBoxItem Content="CVE-2015-9235 (alg: none bypass)"/>
+                                                <ComboBoxItem Content="Tamper Payload (Keep Old Signature)"/>
+                                            </ComboBox>
+                                            <Button Content="▶ Test JWT Exploit" Click="BtnTestJwt_Click" Background="#DB2777" Foreground="White" Padding="8,5" FontSize="11" FontWeight="Bold" BorderThickness="0" Cursor="Hand"/>
+                                        </StackPanel>
+                                    </ScrollViewer>
+                                </Border>
+
+                                <!-- Right Output Viewer -->
+                                <Border Grid.Column="1" Background="#1E293B" CornerRadius="8" Padding="14">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Grid.Row="0" Text="VULNERABILITY ASSESSMENT &amp; REMEDIATION GUIDANCE" FontSize="13" FontWeight="Bold" Foreground="#38BDF8" Margin="0,0,0,8"/>
+                                        <TextBox x:Name="TxtAdvancedWebSecOutput" Grid.Row="1" IsReadOnly="True" Background="#020617" BorderBrush="#334155" BorderThickness="1" Foreground="#4ADE80" FontFamily="Consolas" FontSize="11" Padding="10" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/>
+                                    </Grid>
+                                </Border>
+                            </Grid>
+                        </TabItem>
+
+                        <!-- TAB 18: OFFLINE QR CODE PASSPORT & CREDENTIALS -->
+                        <TabItem Header="📱 QR Code Passport" Padding="14,8">
+                            <Grid Margin="0,8,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="340"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Left Control Panel -->
+                                <Border Grid.Column="0" Background="#1E293B" CornerRadius="8" Padding="14" Margin="0,0,8,0">
+                                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                        <StackPanel>
+                                            <TextBlock Text="OFFLINE QR PASSPORT CARD" FontSize="15" FontWeight="Bold" Foreground="#38BDF8" Margin="0,0,0,4"/>
+                                            <TextBlock Text="Encode student engineering progress, XP, completed tracks, and cryptographic tamper-evident SHA-256 seal into a 100% offline QR Code matrix." FontSize="11" Foreground="#94A3B8" TextWrapping="Wrap" Margin="0,0,0,14"/>
+
+                                            <Border Background="#0F172A" CornerRadius="6" Padding="10" Margin="0,0,0,12">
+                                                <StackPanel>
+                                                    <TextBlock Text="STUDENT PASSPORT CREDENTIALS:" FontSize="10" FontWeight="Bold" Foreground="#FACC15" Margin="0,0,0,6"/>
+                                                    <TextBlock x:Name="TxtQrStudentName" Text="Student: Bhavani Scholar" FontSize="12" Foreground="White" FontWeight="Bold"/>
+                                                    <TextBlock x:Name="TxtQrStudentId" Text="ID: BTA-2026-9901" FontSize="11" Foreground="#94A3B8"/>
+                                                    <TextBlock x:Name="TxtQrStats" Text="Lessons: 108/108 | Level: 5 | XP: 4,500" FontSize="11" Foreground="#38BDF8" Margin="0,4,0,0"/>
+                                                </StackPanel>
+                                            </Border>
+
+                                            <Button Content="▶ Generate Pure In-Memory QR Matrix" Click="BtnGenerateQrPassport_Click" Background="#16A34A" Foreground="White" Padding="10,6" FontSize="11" FontWeight="Bold" BorderThickness="0" Margin="0,0,0,8" Cursor="Hand"/>
+                                            <Button Content="🔐 Cryptographically Verify Passport Hash" Click="BtnVerifyQrPassport_Click" Background="#0284C7" Foreground="White" Padding="10,6" FontSize="11" FontWeight="Bold" BorderThickness="0" Cursor="Hand"/>
+                                        </StackPanel>
+                                    </ScrollViewer>
+                                </Border>
+
+                                <!-- Right QR Matrix & ASCII Art Viewer -->
+                                <Border Grid.Column="1" Background="#1E293B" CornerRadius="8" Padding="14">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Grid.Row="0" Text="ISO/IEC 18004 COMPLIANT QR MATRIX (OFFLINE ENCODING)" FontSize="13" FontWeight="Bold" Foreground="#38BDF8" Margin="0,0,0,8"/>
+                                        <TextBox x:Name="TxtQrDisplay" Grid.Row="1" IsReadOnly="True" Background="#020617" BorderBrush="#334155" BorderThickness="1" Foreground="#F8FAFC" FontFamily="Consolas" FontSize="10" Padding="10" TextWrapping="NoWrap" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"/>
+                                    </Grid>
                                 </Border>
                             </Grid>
                         </TabItem>

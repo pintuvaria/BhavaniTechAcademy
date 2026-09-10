@@ -1,5 +1,11 @@
 # Bhavani Technology - Technology Learning & Coding Academy
 
+![Bare-Metal Kernel & Hardware Protocol Analyzer](https://raw.githubusercontent.com/pintuvaria/BhavaniTechAcademy/master/assets/kernel_protocols.jpg)
+*Bare-Metal Kernel Boot (Protected GDT, 4-Level PML4 Paging, IDT Vectors) and Hardware Protocol Waveform Analyzer (UART, I2C, SPI, JTAG).*
+
+![Distributed Raft Consensus & Web Security Lab](https://raw.githubusercontent.com/pintuvaria/BhavaniTechAcademy/master/assets/distributed_security_qr.jpg)
+*Raft Distributed Consensus 5-Node Quorum & Partition Healing, Advanced Web Security (CSRF/SSRF/JWT), Atomic CAS / RAG Deadlock Cycle Detector, and Offline Student QR Passport.*
+
 ![Dashboard View](https://raw.githubusercontent.com/pintuvaria/BhavaniTechAcademy/master/assets/dashboard.jpg)
 *Main dashboard with Gamification, Streaks, and Course Pathways.*
 
@@ -45,7 +51,42 @@
 
 ## 🚀 Key Highlights & New Enhancements
 
-### 🧠 1. Autonomous Self-Learning Local AI (100% Offline & Air-Gapped)
+### 🖥️ 1. Bare-Metal Kernel, Paging & eBPF Virtual Machine
+- **x86/x64 Architecture Simulator**: Simulates 16-bit Real Mode (segment:offset addressing), 32-bit Protected Mode (Global Descriptor Table GDT, TSS, and CR0.PE protection bit), and 64-bit Long Mode (EFER.LME, CR4.PAE, and 4-Level PML4/PDPT/PD/PT hierarchical virtual-to-physical address translation).
+- **Interrupt Descriptor Table (IDT) & Traps**: Visualizes Ring 3 $\rightarrow$ Ring 0 privilege elevation, interrupt vectors (`#DE` Divide Error, `#UD` Invalid Opcode, `#GP` General Protection Fault, `#PF` Page Fault, IRQ 0 Timer, and `int 0x80` syscall dispatcher) with x86 hardware IRET stack frame preservation (SS, RSP, RFLAGS, CS, RIP).
+- **In-Kernel eBPF Virtual Machine & DAG Verifier**: Direct Acyclic Graph safety analysis verifying bounded execution, forward branches, register range validity, and zero out-of-bounds pointer arithmetic before program execution.
+- **XDP Driver Filters & Kprobe Hooks**: Live simulation of high-performance packet dropping (`XDP_DROP` / `XDP_PASS`) directly at the simulated network card driver layer, and `sys_execve` process creation tracing via eBPF maps.
+
+### 🔌 2. Hardware Protocol Waveform & Logic Analyzer
+- **UART Asynchronous Serial Protocol**: Computes precise bit timing ($T_{bit} = 10^6 / \text{Baud}$ µs) with parity computation (None, Even, Odd), start bit, 8 data bits (LSB-first), stop bits, and generates digital timing waveform diagrams.
+- **I2C 2-Wire Serial Bus**: Simulates START condition (SDA low while SCL high), 7-bit slave addressing with R/W bit, 9th-clock ACK/NACK verification, data transfer, and STOP condition.
+- **SPI 4-Wire Full-Duplex Bus**: Simulates all 4 SPI modes (Mode 0: CPOL 0/CPHA 0, Mode 1: CPOL 0/CPHA 1, Mode 2: CPOL 1/CPHA 0, Mode 3: CPOL 1/CPHA 1) with simultaneous MOSI/MISO full-duplex data clocking.
+- **JTAG IEEE 1149.1 Boundary Scan**: Implements the complete 16-state TAP (Test Access Port) controller finite state machine (Test-Logic-Reset, Run-Test/Idle, Select-DR, Capture-DR, Shift-DR, Exit1-DR, Pause-DR, Update-DR) and executes 32-bit silicon device IDCODE boundary-scan extraction.
+
+### 🌐 3. Raft Distributed Consensus Engine
+- **5-Node Distributed Cluster**: Simulates Leader, Follower, and Candidate state transitions with randomized heartbeat timeouts and term-based leader elections.
+- **Strict Quorum Log Replication**: Enforces the $(\lfloor N/2 \rfloor + 1)$ majority consensus rule before committing log entries to the distributed state machine.
+- **Split-Brain Isolation & Partition Healing**: Demonstrates network partition failures where minority partitions fail to reach quorum and automatically step down, while the majority continues progressing; upon healing, the cluster reconciles uncommitted logs to maintain strict consistency.
+
+### ⚡ 4. Concurrency, Lock-Free Atomics & Deadlock Lab
+- **Atomic Compare-And-Swap (CAS)**: Lock-free concurrency primitive simulation demonstrating ABA problem detection, hardware memory bus locking, and lock-free thread-safe updates.
+- **Resource-Allocation Graph (RAG) Cycle Detection**: Uses Tarjan's Depth-First Search (DFS) algorithm to identify circular wait cycles and prove deadlock states dynamically.
+- **Dining Philosophers Simulation**: Naive circular wait algorithm illustrating Coffman deadlock conditions vs. Dijkstra's resource hierarchy resolution algorithm guaranteeing 100% deadlock-free execution.
+
+### 🛡️ 5. Advanced Web Security Lab (CSRF, SSRF & JWT)
+- **Cross-Site Request Forgery (CSRF) SameSite Matrix**: Deep evaluation of `SameSite=Strict`, `SameSite=Lax`, and `SameSite=None` across cross-origin GET vs. POST verbs, top-level navigation boundaries, and Synchronizer Anti-CSRF Token defense verification.
+- **Cloud Metadata SSRF Obfuscation**: Demonstrates Server-Side Request Forgery against cloud metadata endpoints (`169.254.169.254`), decimal IP representation (`http://2852039166/`), hex notation (`0xA9FEA9FE`), and modern defense using AWS IMDSv2 session token exchange (`X-aws-ec2-metadata-token`).
+- **JWT Cryptographic Algorithm Confusion**: Interactive exploitation and defense against CVE-2015-9235 (`alg: none` header tampering), payload modification, and HMAC-SHA256 signature verification.
+
+### 📱 6. Offline QR Code Passport & In-Memory Sound Synthesizer
+- **ISO/IEC 18004 QR Matrix Generator**: 100% offline, pure C# generation of Version 2 (25x25) QR code matrices with standard finder patterns, timing tracks, alignment patterns, and ASCII art rendering for low-resource terminals.
+- **Cryptographic Student Skill Passport**: Encapsulates student curriculum mastery, completed modules, and level rank inside a verifiable SHA-256 digital seal.
+- **Pure In-Memory RIFF PCM Chiptune Audio Synthesizer**: Generates 8-bit retro sounds (Square, Sine, Frequency Sweep, and White Noise) entirely in RAM and plays them via native Win32 `winmm.dll PlaySound` with zero external audio packages.
+
+### ◫ 7. Side-by-Side Split Course Workbench
+- **Interactive Dual-Pane Learning**: Read course chapters and curriculum blueprints on the left while writing and running live code in the built-in scratchpad on the right—no window switching required.
+
+### 🧠 8. Autonomous Self-Learning Local AI (100% Offline & Air-Gapped)
 - **Zero Internet Requirement**: Completely self-contained neural-symbolic inference running in-memory with local SQLite persistence.
 - **Autonomous Knowledge Expansion**: The AI actively learns and assimilates new concepts in-memory and stores them in encrypted local SQLite (`LocalAiLearnedKnowledge`), expanding its knowledge without external internet or model re-downloading.
 - **🎓 Socratic Tutoring Mode**: Guided inquiry mode that asks probing questions and provides progressive conceptual hints instead of spoiling direct answers, cultivating critical problem-solving skills.
